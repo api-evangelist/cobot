@@ -1,0 +1,82 @@
+{
+    "name": "Cobot",
+    "description": "Cobot is the leading management software for coworking spaces, office hubs, and flexible workspaces around the world.",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/1374-cobot.jpg",
+    "tags": [
+        "accounting",
+        "api provider",
+        "coworking",
+        "crm",
+        "have api",
+        "office",
+        "projects",
+        "schedules"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/cobot\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Cobot",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/1374-cobot.jpg",
+            "humanURL": "https:\/\/www.cobot.me",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/cobot-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Base",
+            "url": "https:\/\/:*.cobot.me\/api\/"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.cobot.me\/"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/blog.cobot.me\/rss"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/cobot"
+        },
+        {
+            "type": "Developers",
+            "url": "https:\/\/www.cobot.me\/pages\/api\/"
+        },
+        {
+            "type": "Email",
+            "url": "info@cobot.me"
+        },
+        {
+            "type": "Email",
+            "url": "support@cobot.me"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/cobot"
+        },
+        {
+            "type": "Integrations",
+            "url": "https:\/\/www.cobot.me\/integrations"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/cobot_me"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/www.cobot.me"
+        }
+    ]
+}
