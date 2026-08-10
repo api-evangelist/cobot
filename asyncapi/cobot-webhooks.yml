@@ -1,0 +1,115 @@
+generated: '2026-08-09'
+method: searched
+source: https://dev.cobot.me/api-docs/webhooks-api
+type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Cobot ships a real, substantial event surface but publishes NO AsyncAPI document
+  (/asyncapi.yaml 404s on dev.cobot.me and soft-404s on www.cobot.me). This file captures the
+  documented webhook catalog verbatim; it is not an AsyncAPI and is not presented as one.
+summary: >-
+  Webhooks live only on the LEGACY v1 API. API 2's OpenAPI declares no `webhooks` block, so an
+  integrator working from the current machine-readable contract alone would never learn the event
+  surface exists. ~50 event types are documented, covering the full membership, booking,
+  invoicing, check-in and event lifecycle.
+
+subscription:
+  create:
+    method: POST
+    url: 'https://<subdomain>.cobot.me/api/subscriptions'
+    scope: write_subscriptions
+    requires: admin
+    body:
+      event: confirmed_membership
+      callback_url: http://my.server.com/callback
+  api_version: v1
+delivery:
+  method: POST
+  expected_response: any 2xx
+  retries: up to 10 retries with increasing intervals, up to 20 hours
+  deactivation: a 410 response deactivates the webhook immediately
+  payload: >-
+    JSON containing the resource URL, e.g.
+    {"url": "https://co-up.cobot.me/api/memberships/93207605"}. Payloads for deleted resources
+    include the full data object, since the URL would no longer resolve.
+  signing:
+    supported: false
+    note: >-
+      No signature, shared secret or HMAC verification is documented. A receiver can only trust
+      the callback by re-fetching the referenced URL with its own OAuth token — which the
+      URL-pointer payload design effectively forces, and which is a reasonable substitute, but
+      it is not payload authentication.
+
+event_count: 50
+events:
+  user_and_admin:
+  - connected_user
+  - updated_connected_user
+  - created_admin
+  - deleted_admin
+  bookings:
+  - created_booking
+  - updated_booking
+  - booking_will_begin
+  - booking_has_ended
+  - deleted_booking
+  resources_and_allocations:
+  - created_resource
+  - updated_resource
+  - deleted_resource
+  - created_allocation
+  - updated_allocation
+  - deleted_allocation
+  calendar_blockers:
+  - created_calendar_blocker
+  - updated_calendar_blocker
+  - deleted_calendar_blocker
+  memberships:
+  - confirmed_membership
+  - created_membership
+  - deleted_membership
+  - canceled_membership
+  - uncanceled_membership
+  - reactivated_membership
+  - membership_cancellation_date_reached
+  membership_changes:
+  - changed_membership_plan
+  - membership_plan_change_date_reached
+  - updated_membership_details
+  - updated_membership_picture
+  - updated_payment_method
+  check_ins:
+  - created_checkin
+  - created_checkout
+  - created_checkin_token
+  - deleted_checkin_token
+  invoicing:
+  - created_invoice
+  - updated_invoice
+  - wrote_off_invoice
+  - requested_e_invoice
+  - sent_invoice
+  - deleted_invoice
+  other:
+  - created_drop_in_pass
+  - created_guest_account
+  - approved_external_booking
+  - updated_custom_field
+  - changed_space_subscription
+  - membership_added_time_passes
+  - membership_removed_time_passes
+  - published_event
+  - created_event_attendance
+
+gaps:
+- >-
+  No AsyncAPI (or any machine-readable event contract) is published, so the event names above are
+  only discoverable by reading an HTML page on the legacy docs host.
+- >-
+  No payload schemas are published — only the URL-pointer shape and a note that deletes carry the
+  full object.
+- >-
+  No webhook signing/verification mechanism is documented.
+- >-
+  The event catalog is bound to API 1. There is no equivalent on API 2, and no statement about
+  what happens to webhooks if API 1 is eventually retired.

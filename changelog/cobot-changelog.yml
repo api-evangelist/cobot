@@ -1,0 +1,98 @@
+generated: '2026-08-09'
+method: searched
+source: https://www.cobot.me/pages/api_changes
+summary: >-
+  Cobot publishes a single dated API change log covering the LEGACY v1 API, running from 2012 to
+  2024 — 207 dated entries. It is a genuine, long-lived changelog and each entry names the exact
+  attribute or endpoint that changed. Two caveats a reader should not miss: the most recent entry
+  is 2024-07-25, and the log describes API 1 only. There is no published change log for API 2,
+  whose OpenAPI carries a flat info.version of 2.0 with no dated history.
+scheme:
+  versioning: major-version-per-surface (API 1, API 2)
+  current_version: '2.0'
+  current_version_source: openapi/cobot-api2-openapi.yml (info.version)
+  changelog_covers: API 1 (legacy)
+  changelog_for_api_2: none published
+  format: dated entries, newest first, on a single HTML page
+  feed: none (no RSS/Atom, no JSON)
+counts:
+  dated_entries: 207
+  first_entry: '2012-08-07'
+  most_recent_entry: '2024-07-25'
+entries:
+- date: '2024-07-25'
+  type: addition
+  breaking: false
+  summary: Added cost_center attribute to the service charge endpoint.
+- date: '2024-07-22'
+  type: addition
+  breaking: false
+  summary: Added cost_center attribute to invoice endpoints.
+- date: '2024-07-10'
+  type: addition
+  breaking: false
+  summary: Added support for paid_status=late in the invoices search.
+- date: '2024-06-25'
+  type: addition
+  breaking: false
+  summary: >-
+    Added remind_at, reminder_sent, reminder_status, last_reminder_sent_at and
+    sent_reminders_count to invoice details.
+- date: '2023-06-28'
+  type: addition
+  breaking: false
+  summary: Added title attribute for event bookings (the event title is used).
+- date: '2023-04-27'
+  type: addition
+  breaking: false
+  summary: >-
+    Allowed members to check themselves in and out via POST
+    memberships/:membership_id/work_sessions and DELETE
+    memberships/:membership_id/check_ins/current.
+- date: '2022-08-01'
+  type: addition
+  breaking: false
+  summary: Added total_amount and amount_remaining attributes to booking credits.
+- date: '2022-07-22'
+  type: addition
+  breaking: false
+  summary: Added updating the admin name.
+- date: '2022-07-14'
+  type: addition
+  breaking: false
+  summary: Added channels attribute to activities.
+- date: '2021-04-22'
+  type: addition
+  breaking: false
+  summary: Added has_custom_price attribute to bookings to indicate that a fixed price has been set.
+- date: '2020-11-30'
+  type: addition
+  breaking: false
+  summary: Added event attribute containing the id to bookings if they belong to an event.
+- date: '2020-11-19'
+  type: change
+  breaking: true
+  summary: >-
+    PUT and DELETE /bookings/:booking_id can now respond with 409 when the booking has an event.
+  note: >-
+    The only entry in the recent window flagged as a behavioral change rather than an addition.
+    Clients that did not handle 409 on those two operations would have broken.
+- date: '2020-10-21'
+  type: addition
+  breaking: false
+  summary: Added .zip format support to GET /api/invoices.
+- date: '2020-03-02'
+  type: addition
+  breaking: false
+  summary: Added updated_at and created_at to bookings.
+observations:
+- >-
+  Additive-by-default. Across the recent window only one entry (2020-11-19) changes existing
+  behavior, and it widens a response code rather than removing anything.
+- >-
+  No sunset or deprecation entries appear in the log at all, which is consistent with API 1 still
+  being live years after API 2 shipped.
+- >-
+  API 2 is the actively developed surface but has no dated change log, so a consumer of the
+  current API has no way to see what changed between two dates. That is the single biggest gap
+  in an otherwise strong change-communication posture.

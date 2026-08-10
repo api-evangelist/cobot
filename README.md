@@ -42,5 +42,14 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Cobot is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/cobot_stock/
+Cobot is coworking and flexible-workspace management software, built and operated by Upstream - Agile GmbH in Berlin, Germany. It runs memberships and plans, resource and meeting-room bookings, drop-in passes, events and ticketing, check-ins, automated invoicing and online payments, a white-label member portal and mobile app, analytics, and door access-control integrations.
+
+Cobot publishes a genuinely open developer surface: a 134-operation OpenAPI 3.1 contract for API 2 that follows the JSON:API standard, a legacy v1 REST API with a documented webhook event catalog, OAuth 2.0 with authorization-code + PKCE and dynamic client registration, OpenID Connect, an RFC 9727 `api-catalog` document, RFC 9728 protected-resource metadata, an `llms.txt`, and an OAuth-protected hosted MCP server.
+
+- Website: https://www.cobot.me/
+- Developer portal: https://dev.cobot.me/
+- API 2 reference: https://dev.cobot.me/api2
+- OpenAPI: https://dev.cobot.me/openapi.json
+- GitHub: https://github.com/cobot
+
+**Disambiguation.** This repo is *not* about Collaborative Robotics, Inc. ("Cobot") of Santa Clara, CA — the Brad Porter robotics company listed at https://forgeglobal.com/cobot_stock/, which the harvest backlog originally pointed at. That company is profiled separately in this network as `collaborative-robotics`.

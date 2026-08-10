@@ -1,0 +1,814 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/cobot-api2-openapi.yml
+model: json:api
+note: Derived from the JSON:API resource-object schemas in the OpenAPI. Every Cobot resource declares
+  its own `type` enum and an explicit `relationships` block whose linkage objects name the target `type`,
+  so the entity graph below is read straight out of the contract — no inference from field names was needed.
+entities:
+- type: articles
+  attributes:
+  - content
+  - title
+  attribute_count: 2
+  relationships:
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: true
+  schemas:
+  - -article-data
+- type: calendarBlockers
+  attributes:
+  - blockedFor
+  - from
+  - title
+  - to
+  attribute_count: 4
+  relationships:
+  - name: resources
+    cardinality: has_many
+    targets:
+    - resources
+    required: true
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: true
+  schemas:
+  - -calendar-blocker-data
+- type: checkIns
+  attributes:
+  - validFrom
+  - validUntil
+  attribute_count: 2
+  relationships:
+  - name: membership
+    cardinality: has_one
+    targets:
+    - memberships
+    required: true
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: true
+  schemas:
+  - -check-in-data
+- type: contacts
+  attributes:
+  - address
+  - email
+  - phone
+  - photo
+  attribute_count: 4
+  relationships:
+  - name: membership
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: false
+  schemas:
+  - -contact-data
+- type: discountCodes
+  attributes:
+  - name
+  - unit
+  - value
+  attribute_count: 3
+  relationships: []
+  schemas:
+  - -discount-code-data
+- type: dropInPassPurchases
+  attributes:
+  - acceptedTerms
+  - billingAddress
+  - comments
+  - company
+  - email
+  - name
+  - phone
+  - price
+  - structuredBillingAddress
+  - taxId
+  attribute_count: 10
+  relationships:
+  - name: dropInPasses
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: invoices
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: paymentMethod
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  schemas:
+  - -drop-in-pass-purchase-data
+- type: dropInPassTemplates
+  attributes:
+  - color
+  - description
+  - name
+  - onboardingInstructions
+  - photo
+  - price
+  - timeAvailability
+  attribute_count: 7
+  relationships:
+  - name: availability
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  schemas:
+  - -drop-in-pass-template-data
+- type: dropInPasses
+  attributes:
+  - billingAddress
+  - comments
+  - email
+  - name
+  - onboardingInstructions
+  - phone
+  - price
+  - status
+  - taxId
+  - timeAvailability
+  - validOn
+  attribute_count: 11
+  relationships:
+  - name: contact
+    cardinality: has_one
+    targets:
+    - contacts
+    required: false
+  - name: dropInPassPurchase
+    cardinality: has_one
+    targets:
+    - dropInPassPurchases
+    required: false
+  - name: dropInPassTemplate
+    cardinality: has_one
+    targets:
+    - dropInPassTemplates
+    required: false
+  - name: invoices
+    cardinality: has_many
+    targets:
+    - invoices
+    required: false
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: false
+  schemas:
+  - -drop-in-pass-data
+- type: eventAttendances
+  attributes:
+  - accountingCode
+  - createdAt
+  - name
+  - numberOfAttendees
+  - price
+  - visibility
+  attribute_count: 6
+  relationships:
+  - name: attendee
+    cardinality: has_one
+    targets:
+    - memberships
+    - contacts
+    required: true
+  - name: event
+    cardinality: has_one
+    targets:
+    - events
+    required: true
+  schemas:
+  - -event-attendance-data
+- type: eventMessages
+  attributes:
+  - body
+  - trigger
+  attribute_count: 2
+  relationships:
+  - name: event
+    cardinality: has_one
+    targets:
+    - events
+    required: true
+  schemas:
+  - -event-message-data
+- type: eventTicketPurchases
+  attributes:
+  - acceptedTerms
+  - billingAddress
+  - comments
+  - company
+  - email
+  - name
+  - phone
+  - price
+  - structuredBillingAddress
+  - taxId
+  attribute_count: 10
+  relationships:
+  - name: attendances
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: invoices
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: paymentMethod
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  schemas:
+  - -event-ticket-purchase-data
+- type: events
+  attributes:
+  - accountingCode
+  - audience
+  - canDepublish
+  - capacity
+  - color
+  - costCenter
+  - description
+  - expectedRevenue
+  - from
+  - image
+  - location
+  - price
+  - publicPage
+  - publicUrl
+  - publishedState
+  - revenueAccount
+  - tags
+  - title
+  - to
+  - videoUrl
+  - visitorAccountingCode
+  - visitorCostCenter
+  - visitorPrice
+  - visitorRevenueAccount
+  attribute_count: 24
+  relationships:
+  - name: attendances
+    cardinality: has_many
+    targets:
+    - eventAttendances
+    required: true
+  - name: bookings
+    cardinality: has_many
+    targets:
+    - bookings
+    required: true
+  - name: messages
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: publication
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: resources
+    cardinality: has_many
+    targets:
+    - resources
+    required: true
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: true
+  schemas:
+  - -event-data
+- type: externalResources
+  attributes:
+  - accountingCode
+  - area
+  - areaPreferredUnit
+  - bookingCutoff
+  - bookingTimes
+  - bookingTimesString
+  - bookingsRequireApproval
+  - cancellationPeriod
+  - capacity
+  - color
+  - costCenter
+  - description
+  - effectiveBookingCutoff
+  - instructions
+  - maxBookingDuration
+  - minBookingDuration
+  - name
+  - payLater
+  - photo
+  - priceCaps
+  - pricing
+  - resourceType
+  - revenueAccount
+  attribute_count: 23
+  relationships:
+  - name: media
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: products
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: resource
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: resourceAvailability
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: false
+  schemas:
+  - -external-resource-data
+- type: invoices
+  attributes:
+  - billingEmails
+  - canCharge
+  - canUpdate
+  - chargeAt
+  - customerNumber
+  - dueDate
+  - eInvoicingReady
+  - invoiceDate
+  - invoiceText
+  - items
+  - lastReminderSentAt
+  - notes
+  - number
+  - paidAmount
+  - paidDate
+  - paidStatus
+  - payableAmount
+  - pdf
+  - recipientAddress
+  - remindAt
+  - reminderStatus
+  - senderAddress
+  - senderTaxId
+  - sentRemindersCount
+  - sentStatus
+  - taxId
+  - taxIdName
+  - totalAmount
+  attribute_count: 28
+  relationships:
+  - name: contact
+    cardinality: has_one
+    targets:
+    - contacts
+    required: false
+  - name: correctedInvoice
+    cardinality: has_one
+    targets:
+    - invoices
+    required: false
+  - name: debitor
+    cardinality: has_one
+    targets:
+    - memberships
+    - teams
+    - contacts
+    required: false
+  - name: membership
+    cardinality: has_one
+    targets:
+    - memberships
+    required: false
+  - name: paymentMethods
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: true
+  - name: team
+    cardinality: has_one
+    targets:
+    - teams
+    required: false
+  schemas:
+  - -invoice-data
+- type: membershipPlans
+  attributes:
+  - accountingCode
+  - canceledAt
+  - cycleDuration
+  - description
+  - extras
+  - name
+  - pricePerCycle
+  - startsAt
+  attribute_count: 8
+  relationships:
+  - name: membership
+    cardinality: has_one
+    targets: []
+    required: false
+  schemas:
+  - -membership-plan-data
+- type: membershipProfiles
+  attributes:
+  - aboutMe
+  - birthday
+  - company
+  - email
+  - facebook
+  - github
+  - instagram
+  - linkedin
+  - location
+  - name
+  - phone
+  - photo
+  - pronouns
+  - published
+  - twitter
+  - website
+  attribute_count: 16
+  relationships:
+  - name: membership
+    cardinality: has_one
+    targets: []
+    required: false
+  schemas:
+  - -membership-profile-data
+- type: memberships
+  attributes:
+  - canceledAt
+  - company
+  - confirmedAt
+  - email
+  - name
+  - phone
+  - photo
+  attribute_count: 7
+  relationships:
+  - name: bookingCredits
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: team
+    cardinality: has_one
+    targets: []
+    required: false
+  schemas:
+  - -membership-data
+  - -network-membership-data
+- type: navigationLinks
+  attributes:
+  - label
+  - section
+  - userUrl
+  attribute_count: 3
+  relationships:
+  - name: singlePageApp
+    cardinality: has_one
+    targets:
+    - singlePageApps
+    required: false
+  - name: space
+    cardinality: has_one
+    targets:
+    - spaces
+    required: true
+  schemas:
+  - -navigation-link-data
+- type: products
+  attributes:
+  - accountingCode
+  - costCenter
+  - description
+  - enabledForScopes
+  - name
+  - pricing
+  - revenueAccount
+  attribute_count: 7
+  relationships:
+  - name: category
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  schemas:
+  - -product-data
+- type: spaces
+  attributes:
+  - countryCode
+  - createdAt
+  - defaultTaxes
+  - description
+  - email
+  - hourFormat
+  - inEu
+  - locale
+  - logo
+  - name
+  - priceDecimals
+  - priceDisplay
+  - subdomain
+  - timeZone
+  attribute_count: 14
+  relationships:
+  - name: accessToken
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: allocations
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: availableExternalResources
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: availableResources
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: bookings
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: calendarBlockers
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: costCenters
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: dropInPasses
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: events
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: externalBookings
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: externalBookingsPaymentMethods
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: externalResources
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: membershipProfile
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: membershipProfiles
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: missingTermsApproval
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: network
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: owner
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: paymentMethods
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: products
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: resources
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: revenueAccounts
+    cardinality: has_one
+    targets: []
+    required: true
+  - name: spaceProfile
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: teams
+    cardinality: has_one
+    targets: []
+    required: false
+  - name: urls
+    cardinality: has_one
+    targets: []
+    required: false
+  schemas:
+  - -space-data
+- type: subscriptions
+  attributes: []
+  attribute_count: 0
+  relationships:
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  schemas:
+  - -subscriptions-data
+- type: teams
+  attributes:
+  - billingAddress
+  - billingEmails
+  - customerNumber
+  - name
+  - photo
+  - taxId
+  attribute_count: 6
+  relationships:
+  - name: space
+    cardinality: has_one
+    targets: []
+    required: true
+  schemas:
+  - -team-data
+entity_count: 22
+relationships:
+- from: articles
+  to: spaces
+  via: space
+  cardinality: has_one
+- from: calendarBlockers
+  to: resources
+  via: resources
+  cardinality: has_many
+- from: calendarBlockers
+  to: spaces
+  via: space
+  cardinality: has_one
+- from: checkIns
+  to: memberships
+  via: membership
+  cardinality: has_one
+- from: checkIns
+  to: spaces
+  via: space
+  cardinality: has_one
+- from: dropInPasses
+  to: contacts
+  via: contact
+  cardinality: has_one
+- from: dropInPasses
+  to: dropInPassPurchases
+  via: dropInPassPurchase
+  cardinality: has_one
+- from: dropInPasses
+  to: dropInPassTemplates
+  via: dropInPassTemplate
+  cardinality: has_one
+- from: dropInPasses
+  to: invoices
+  via: invoices
+  cardinality: has_many
+- from: dropInPasses
+  to: spaces
+  via: space
+  cardinality: has_one
+- from: eventAttendances
+  to: memberships
+  via: attendee
+  cardinality: has_one
+- from: eventAttendances
+  to: contacts
+  via: attendee
+  cardinality: has_one
+- from: eventAttendances
+  to: events
+  via: event
+  cardinality: has_one
+- from: eventMessages
+  to: events
+  via: event
+  cardinality: has_one
+- from: events
+  to: eventAttendances
+  via: attendances
+  cardinality: has_many
+- from: events
+  to: bookings
+  via: bookings
+  cardinality: has_many
+- from: events
+  to: resources
+  via: resources
+  cardinality: has_many
+- from: events
+  to: spaces
+  via: space
+  cardinality: has_one
+- from: invoices
+  to: contacts
+  via: contact
+  cardinality: has_one
+- from: invoices
+  to: invoices
+  via: correctedInvoice
+  cardinality: has_one
+- from: invoices
+  to: memberships
+  via: debitor
+  cardinality: has_one
+- from: invoices
+  to: teams
+  via: debitor
+  cardinality: has_one
+- from: invoices
+  to: contacts
+  via: debitor
+  cardinality: has_one
+- from: invoices
+  to: memberships
+  via: membership
+  cardinality: has_one
+- from: invoices
+  to: spaces
+  via: space
+  cardinality: has_one
+- from: invoices
+  to: teams
+  via: team
+  cardinality: has_one
+- from: navigationLinks
+  to: singlePageApps
+  via: singlePageApp
+  cardinality: has_one
+- from: navigationLinks
+  to: spaces
+  via: space
+  cardinality: has_one
+relationship_count: 28
+most_referenced:
+- type: spaces
+  inbound: 7
+- type: memberships
+  inbound: 4
+- type: contacts
+  inbound: 4
+- type: resources
+  inbound: 2
+- type: invoices
+  inbound: 2
+- type: events
+  inbound: 2
+- type: teams
+  inbound: 2
+- type: dropInPassPurchases
+  inbound: 1
+- type: dropInPassTemplates
+  inbound: 1
+- type: eventAttendances
+  inbound: 1

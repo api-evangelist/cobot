@@ -1,0 +1,143 @@
+generated: '2026-08-09'
+method: searched
+source: https://dev.cobot.me/api2 (OpenAPI info.description) + openapi/cobot-api2-openapi.yml + probed /.well-known/* metadata
+summary: >-
+  Cobot API 2 is a JSON:API 1.0 implementation. Nearly every cross-cutting semantic a client needs
+  — media type, pagination, sparse fieldsets, error envelope, date handling, rate limits — is
+  standardized by JSON:API rather than invented, which makes the surface unusually predictable.
+  The one notable absence is idempotency: there is no Idempotency-Key mechanism anywhere in the
+  contract or the documentation, including on the payment and invoice write paths.
+
+standard:
+  name: JSON:API
+  url: https://jsonapi.org
+  version: '1.0'
+  required_request_headers:
+    Accept: application/vnd.api+json
+    Content-Type: application/vnd.api+json    # required on all non-GET requests
+  response_media_type: application/vnd.api+json
+
+authentication:
+  style: oauth2-bearer
+  header: 'Authorization: bearer <token>'
+  flow: authorization_code
+  pkce: S256
+  dynamic_client_registration: https://www.cobot.me/oauth/register
+  openid_connect: https://www.cobot.me/.well-known/openid-configuration
+  client_registration_ui: https://dev.cobot.me/oauth2_clients
+  public_access: >-
+    Publicly available information can be read without authentication; everything private requires
+    OAuth 2. All 134 API 2 operations declare a scope requirement.
+  detail: authentication/cobot-authentication.yml
+  scopes: scopes/cobot-scopes.yml
+
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    No occurrence of "idempoten" anywhere in the 813KB OpenAPI document, and no idempotency section
+    in the API 2 documentation. Retries of POST /payments, POST /invoices or POST /refunds carry
+    duplicate risk with no server-side dedupe key.
+  mitigation_available_to_clients: >-
+    Several write paths return 409 on repeat (drop-in pass already canceled, event already
+    published, external booking already canceled), which gives partial protection against
+    double-application — but only for state transitions, not for creations.
+
+pagination:
+  style: page-number
+  standard: https://jsonapi.org/format/#fetching-pagination
+  params:
+    number: page[number]
+    size: page[size]
+  default_page_size: 72
+  max_page_size: 200
+  response_fields:
+    meta: [totalPages, currentPage]
+    links: [self, first, prev, next, last]
+  applies_to: all collection endpoints
+
+sparse_fieldsets:
+  supported: true
+  standard: https://jsonapi.org/format/#fetching-sparse-fieldsets
+  param: 'fields[<resource-type>]'
+  example: 'GET https://api.cobot.me/user?fields[users]=email'
+
+query_params:
+  arrays: passed as a single comma-separated string, not repeated keys
+
+field_expansion:
+  mechanism: JSON:API relationships + linkage objects
+  note: >-
+    Related records are expressed as `relationships` linkage objects carrying {id, type}. The
+    entity graph derived from those linkages is in data-model/cobot-data-model.yml.
+
+metadata:
+  custom_fields: >-
+    Custom fields exist on the legacy v1 API (/api-docs/custom-fields) and have their own
+    `updated_custom_field` webhook event. API 2 does not expose a generic metadata bag.
+
+dates_and_times:
+  format: ISO 8601
+  date: '2021-01-07'
+  datetime: '2021-01-07T16:25:51Z'
+  time: '16:25:51'
+  milliseconds: truncated (16:25:51.811 becomes 16:25:51)
+  timezone: >-
+    Offsets must be supplied by the client on input; times are always returned in UTC.
+
+request_id_tracing:
+  header: X-Request-Id
+  observed: true
+  evidence: >-
+    Response headers on api.cobot.me carry x-request-id (e.g. 85de1b35-1a60-4c78-8343-77aa09867709)
+    and x-runtime. Not documented, but present on every response — useful when contacting support.
+
+rate_limiting:
+  default: 60 requests per minute per user
+  per_endpoint_overrides: documented on individual endpoints where they apply
+  exceeded_status: 429
+  retry_after: seconds, in the Retry-After response header
+  declared_in_openapi: false
+
+errors:
+  envelope: JSON:API errors array
+  format: jsonapi
+  not_rfc9457: true
+  detail: errors/cobot-problem-types.yml
+
+versioning:
+  scheme: major-version-per-surface
+  current: 'API 2 (info.version 2.0)'
+  previous: 'API 1 — still available, described by Cobot as legacy'
+  in_url: false
+  in_header: false
+  note: >-
+    The two versions are separated by HOST and PATH shape rather than a version segment: API 2 is
+    api.cobot.me, API 1 is <subdomain>.cobot.me/api. There is no published sunset date for API 1.
+  detail: lifecycle/cobot-lifecycle.yml
+
+cors:
+  enabled: true
+  scope: all endpoints
+  purpose: the API is usable directly from browsers, which underpins the SPA add-on model
+
+extensibility:
+  model: >-
+    Cobot's add-on story is first-class: OAuth apps can register navigation links and single-page
+    apps that Cobot embeds into its own admin/member UI (see the `Single page app` and
+    `Navigation Link` tags in the OpenAPI, and https://dev.cobot.me/page/extending-cobot).
+  embedding: [single-page-apps, iframes]
+  docs:
+  - https://dev.cobot.me/page/extending-cobot
+  - https://dev.cobot.me/page/embedding-add-ons-as-single-page-apps-spas
+  - https://dev.cobot.me/page/embedding-add-ons-via-iframes
+
+security_headers_observed:
+  host: api.cobot.me
+  headers:
+  - strict-transport-security: max-age=63072000; includeSubDomains
+  - x-content-type-options: nosniff
+  - x-frame-options: SAMEORIGIN
+  - referrer-policy: strict-origin-when-cross-origin
+  - content-security-policy: frame-ancestors 'self'
+  - x-permitted-cross-domain-policies: none

@@ -1,0 +1,422 @@
+generated: '2026-08-09'
+method: searched
+source: openapi/cobot-api2-openapi.yml + https://dev.cobot.me/api2 + probed /.well-known/* on www.cobot.me and api.cobot.me
+docs: https://dev.cobot.me/api2
+authorization_server: https://www.cobot.me
+authorization_endpoint: https://www.cobot.me/oauth/authorize
+token_endpoint: https://www.cobot.me/oauth/access_token
+registration_endpoint: https://www.cobot.me/oauth/register
+pkce: S256
+dynamic_client_registration: true
+client_registration_ui: https://dev.cobot.me/oauth2_clients
+scopes_published_at:
+- url: https://api.cobot.me/.well-known/oauth-protected-resource
+  status: 200
+  scopes: 58
+  note: RFC 9728 protected-resource metadata — matches the OpenAPI scope list exactly.
+- url: https://api.cobot.me/.well-known/oauth-protected-resource/mcp
+  status: 200
+  scopes: 14
+  note: The narrower scope set the MCP server exposes to agents.
+- url: https://www.cobot.me/.well-known/openid-configuration
+  status: 200
+  scopes: [openid, email, profile]
+  note: OIDC scopes for identity only; API authorization uses the 58 read_*/write_* scopes.
+scope_convention: >-
+  read_<resource> / write_<resource>, one pair per resource family. Every one of the 134
+  operations declares exactly the scope(s) it needs, and two operations (preview-space,
+  preview-user-email) declare OAuth2 with no scope at all.
+admin_permission_note: >-
+  Cobot documents that a user's effective scope can be narrower than the granted scope when they
+  act as a space admin whose admin permissions have been revoked — a token that once worked can
+  stop working without the grant changing.
+schemes:
+- name: OAuth2
+  source: openapi/cobot-api2-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.cobot.me/oauth/authorize
+    tokenUrl: https://www.cobot.me/oauth/access_token
+  description: |-
+    OAuth is "an open protocol to allow secure API authorization in a simple and
+    standard method from desktop and web applications.". "OAuth 2.0 is the
+    next evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client
+    developer simplicity [...]. It is supported by many popular sites such as
+    Facebook and there are client libraries available for many programming
+    languages.
+
+    For information about OAuth2 see the [oauth website](http://oauth.net/2/).
+
+    **For OAuth2 you need a client id and secret. In order to get those you have
+    to [register your application](/oauth2_clients).**
+
+    API authorization works by passing a bearer token via the HTTP Authorization header:
+
+        Authorization: bearer <token>
+
+    ## Permissions (Scope)
+
+    OAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to
+    restrict access to certain resources.
+
+    The required scope for each resource can be found within the documentation
+    for each endpoint.
+
+    Please note that a user's scope can be limited when they access the API as
+    an admin of a space and some of their admin permissions have been revoked.
+scopes:
+- scope: read_allocations
+  description: Read resource allocation data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_articles
+  description: Read help desk articles.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_booking_credits
+  description: Read information about a membership's booking credits.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_bookings
+  description: Read booking data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_built_in_email_customizations
+  description: Read built in email customizations.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_calendar_blockers
+  description: Read calendar blockers.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_check_ins
+  description: Read memberships' check-in data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_contacts
+  description: Read contacts.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_cost_centers
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_discount_codes
+  description: Read discount codes.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_drop_in_pass_templates
+  description: Read drop-in pass templates.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_drop_in_passes
+  description: Read drop-in passes.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_event_attendances
+  description: Read who is attending an event.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_event_messages
+  description: Read messages sent about events.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_events
+  description: Read events of a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_external_bookings
+  description: Read external booking data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_external_resources
+  description: Read resources enabled for external booking.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_invoices
+  description: Read invoices created for a membership in a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_membership_profiles
+  description: Read members' profile data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_memberships
+  description: Read information about memberships in a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_navigation_links
+  description: Read/list navigation links for a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_networks
+  description: Read information about a network.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_payment_methods
+  description: Read payment methods in order to process payments.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_products
+  description: Read information about products.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_published_membership_profiles
+  description: Read published members' profile data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_resource_categories
+  description: Read information about booking calendar categories.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_resources
+  description: Read information about booking calendar resources.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_revenue_accounts
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_single_page_apps
+  description: Read information about single page apps.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_space_billing_details
+  description: Read information relevant to billing the space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_space_payment_method
+  description: Read a space's payment method used to pay for the space's Cobot subscription.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_space_profiles
+  description: Read space profile information.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_space_subscriptions
+  description: Read a space's subscription.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_spaces
+  description: Read basic space information.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_teams
+  description: Read information about teams in a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_terms_approvals
+  description: Shows missing approvals for the current member.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_urls
+  description: Read the URLs to the Cobot web interface.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: read_user
+  description: Read the current user's information.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_bookings
+  description: Write booking data.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_check_ins
+  description: Check a member in at a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_customers
+  description: Convert a space to a customer.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_drop_in_pass_purchases
+  description: Create drop-in pass purchases.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_drop_in_passes
+  description: Cancel drop-in passes.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_event_attendances
+  description: Attend/unattend events.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_event_messages
+  description: Create/update messages sent about events.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_event_ticket_purchases
+  description: Create event ticket purchases.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_events
+  description: Write to events of a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_external_bookings
+  description: Create/update bookings as a non-member.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_external_resources
+  description: Create/update/delete resources enabled for non-memberss
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_invoice_reminders
+  description: Send invoice reminder emails.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_invoices
+  description: Create invoices for members in a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_membership_profiles
+  description: Manage the social profiles of members.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_navigation_links
+  description: Create/update/delete navigation links for a space.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_payments
+  description: Initiate payments for external bookings.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_resources
+  description: Create/update/delete booking calendar resources.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_single_page_apps
+  description: Create and update single page apps to be embedded on Cobot.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_space_billing_details
+  description: Update a space's billing details.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_space_payment_method
+  description: Update a space's payment method used to pay for the space's Cobot subscription.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_space_subscriptions
+  description: Change a space's subscription. Only trusted clients can request this scope. Contact
+    support.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- scope: write_terms_approvals
+  description: Approve different kinds of terms as a member.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cobot-api2-openapi.yml

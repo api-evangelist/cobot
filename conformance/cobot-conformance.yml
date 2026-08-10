@@ -1,0 +1,178 @@
+generated: '2026-08-09'
+method: searched
+source: >-
+  Live anonymous probes of www.cobot.me, api.cobot.me and dev.cobot.me (/.well-known/*, /mcp),
+  openapi/cobot-api2-openapi.yml, and the published documentation at dev.cobot.me/api2.
+summary: >-
+  Cobot conforms to an unusually current stack of discovery and authorization RFCs for a company
+  of its size — including RFC 9727 api-catalog and RFC 9728 protected-resource metadata, which
+  fewer than a handful of providers in this catalog serve at all. It does not conform to RFC 9457
+  problem details (it uses JSON:API errors instead) and publishes no idempotency, no security.txt,
+  and no named third-party security certification.
+
+standards:
+- id: jsonapi
+  name: JSON:API 1.0
+  conforms: true
+  evidence: >-
+    The OpenAPI info.description states the API follows jsonapi.org; every request and response
+    uses application/vnd.api+json; all 239 component schemas are JSON:API resource objects with
+    data/attributes/relationships; pagination, sparse fieldsets and the errors envelope all follow
+    the JSON:API spec verbatim.
+  source: https://dev.cobot.me/api2
+
+- id: openapi
+  name: OpenAPI 3.1.0
+  conforms: true
+  evidence: >-
+    https://dev.cobot.me/openapi.json returns a 813KB OpenAPI 3.1.0 document (YAML body) with 112
+    paths, 134 operations, 239 schemas and an operationId on 100% of operations. Also reachable at
+    https://dev.cobot.me/openapi and advertised as service-desc in the RFC 9727 api-catalog.
+  source: https://dev.cobot.me/openapi.json
+
+- id: oauth2
+  name: OAuth 2.0 (RFC 6749) authorization code
+  conforms: true
+  evidence: >-
+    securitySchemes.OAuth2 declares an authorizationCode flow with 58 scopes; authorization
+    endpoint https://www.cobot.me/oauth/authorize, token endpoint /oauth/access_token; every
+    operation carries a scope requirement.
+  source: openapi/cobot-api2-openapi.yml
+
+- id: oauth2-pkce
+  name: PKCE (RFC 7636)
+  conforms: true
+  evidence: 'code_challenge_methods_supported: ["S256"] in the authorization-server metadata.'
+  source: https://www.cobot.me/.well-known/openid-configuration
+
+- id: oauth2-dcr
+  name: Dynamic Client Registration (RFC 7591)
+  conforms: true
+  evidence: 'registration_endpoint: https://www.cobot.me/oauth/register is published in both the OIDC and RFC 8414 documents, and the developer portal advertises Dynamic Client Registration by name.'
+  source: https://www.cobot.me/.well-known/oauth-authorization-server
+
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata (RFC 8414)
+  conforms: true
+  evidence: '/.well-known/oauth-authorization-server returns 200 application/json with issuer, authorization_endpoint, token_endpoint, jwks_uri, registration_endpoint.'
+  source: https://www.cobot.me/.well-known/oauth-authorization-server
+
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata (RFC 9728)
+  conforms: true
+  evidence: >-
+    Served for three distinct resources — www.cobot.me, api.cobot.me (58 scopes) and
+    api.cobot.me/mcp (14 scopes) — and correctly referenced from the WWW-Authenticate challenge
+    on an unauthenticated request to the MCP endpoint.
+  source: https://api.cobot.me/.well-known/oauth-protected-resource/mcp
+
+- id: rfc9727
+  name: API Catalog (RFC 9727)
+  conforms: true
+  evidence: >-
+    /.well-known/api-catalog returns 200 with content-type
+    application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727", anchoring
+    https://api.cobot.me/ with service-desc, service-doc and status links.
+  source: https://www.cobot.me/.well-known/api-catalog
+
+- id: oidc
+  name: OpenID Connect Discovery 1.0
+  conforms: true
+  evidence: >-
+    /.well-known/openid-configuration returns issuer https://www.cobot.me, RS256 id_token signing,
+    jwks_uri, userinfo_endpoint /api/userinfo, claims [sub, email, iss, profile], scopes
+    [openid, email, profile]. The OpenAPI also declares an openIdConnect security scheme.
+  source: https://www.cobot.me/.well-known/openid-configuration
+
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  partial: true
+  evidence: >-
+    A live remote MCP server at https://api.cobot.me/mcp answers JSON-RPC over HTTP with a proper
+    401 + RFC 9728 WWW-Authenticate challenge. Conformance beyond the auth handshake could not be
+    verified anonymously — tools/list is gated.
+  source: mcp/cobot-mcp.yml
+
+- id: llmstxt
+  name: llms.txt
+  conforms: true
+  evidence: 'https://www.cobot.me/llms.txt returns 200 text/plain, 9.6KB, correct H1 + blockquote summary + sectioned link format. A second one is served at https://helpcenter.cobot.me/llms.txt.'
+  source: https://www.cobot.me/llms.txt
+
+- id: rfc9457
+  name: Problem Details for HTTP APIs (RFC 9457)
+  conforms: false
+  evidence: >-
+    No application/problem+json anywhere in the spec — all 164 declared response bodies are
+    application/vnd.api+json. Errors use the JSON:API errors array (source.pointer + detail).
+    This is a legitimate alternative, not a defect, but it is not RFC 9457.
+  source: errors/cobot-problem-types.yml
+
+- id: idempotency
+  name: Idempotency keys (draft-ietf-httpapi-idempotency-key-header)
+  conforms: false
+  evidence: >-
+    Zero occurrences of "idempoten" in the 813KB OpenAPI and no idempotency section in the docs,
+    including on POST /payments, POST /refunds and POST /invoices.
+  source: openapi/cobot-api2-openapi.yml
+
+- id: pagination
+  name: Standardized pagination
+  conforms: true
+  evidence: 'JSON:API page[number]/page[size] with meta.totalPages, meta.currentPage and full first/prev/next/last link set. Default 72, max 200.'
+  source: https://dev.cobot.me/api2
+
+- id: rfc6585-rate-limiting
+  name: Rate limiting with Retry-After
+  conforms: true
+  partial: true
+  evidence: >-
+    60 requests/minute/user, 429 on exceed, Retry-After in seconds — documented in prose but
+    declared on no operation in the OpenAPI, and no RateLimit-* (RFC 9982-style) headers are
+    documented.
+  source: https://dev.cobot.me/api2
+
+- id: securitytxt
+  name: security.txt (RFC 9116)
+  conforms: false
+  evidence: '/.well-known/security.txt returns 404 on both www.cobot.me and cobot.me.'
+  source: well-known/cobot-well-known.yml
+
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and the legacy /.well-known/agent.json return 404 on
+    www.cobot.me, api.cobot.me and dev.cobot.me. No card is published.
+  source: well-known/cobot-well-known.yml
+
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: >-
+    Cobot has a real event surface (~50 webhook event types on the v1 API) but publishes no
+    AsyncAPI document. /asyncapi.yaml 404s on dev.cobot.me and soft-404s on www.cobot.me.
+  source: asyncapi/cobot-webhooks.yml
+
+compliance_claims:
+- claim: GDPR compliance
+  published_by: Cobot
+  evidence: >-
+    Stated in https://www.cobot.me/llms.txt under "Privacy & Compliance" — "GDPR Compliance",
+    "Server in the EU", "Made in Germany" — and backed by a published privacy policy and a German
+    imprint (Upstream - Agile GmbH, Harzer Str. 39, 12059 Berlin, HRB 110149 B).
+  source: https://www.cobot.me/en/privacy-policy
+  third_party_certified: false
+- claim: Italian e-invoicing (Fattura Elettronica) and DATEV export
+  published_by: Cobot
+  evidence: Listed as billing features in llms.txt; `requested_e_invoice` is a real v1 webhook event.
+  source: https://www.cobot.me/llms.txt
+  third_party_certified: false
+
+not_found:
+- SOC 2 report or trust center
+- ISO 27001 certification
+- PCI DSS attestation (payments are delegated to Stripe / PayPal / GoCardless / Adyen / Authorize.net)
+- HIPAA / FedRAMP (not applicable to this market)
+- published vulnerability disclosure policy or bug bounty

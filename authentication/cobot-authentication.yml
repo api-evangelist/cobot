@@ -1,0 +1,78 @@
+generated: '2026-08-09'
+method: searched
+source: openapi/cobot-api2-openapi.yml + https://dev.cobot.me/api2 + probed /.well-known/* on www.cobot.me and api.cobot.me
+docs: https://dev.cobot.me/page/oauth-flow
+authorization_server_metadata:
+  openid_configuration:
+    url: https://www.cobot.me/.well-known/openid-configuration
+    status: 200
+  oauth_authorization_server:
+    url: https://www.cobot.me/.well-known/oauth-authorization-server
+    status: 200
+  issuer: https://www.cobot.me
+  authorization_endpoint: https://www.cobot.me/oauth/authorize
+  token_endpoint: https://www.cobot.me/oauth/access_token
+  registration_endpoint: https://www.cobot.me/oauth/register
+  userinfo_endpoint: https://www.cobot.me/api/userinfo
+  jwks_uri: https://www.cobot.me/jwks.json
+  grant_types_supported: [authorization_code]
+  response_types_supported: [code]
+  code_challenge_methods_supported: [S256]
+  token_endpoint_auth_methods_supported: [none]
+  id_token_signing_alg_values_supported: [RS256]
+  claims_supported: [sub, email, iss, profile]
+protected_resources:
+- resource: https://api.cobot.me
+  metadata: https://api.cobot.me/.well-known/oauth-protected-resource
+  status: 200
+  scopes: 58
+- resource: https://api.cobot.me/mcp
+  metadata: https://api.cobot.me/.well-known/oauth-protected-resource/mcp
+  status: 200
+  scopes: 14
+token_transport: 'Authorization: bearer <token>'
+public_access: >-
+  Publicly available information can be read without authentication; everything private requires
+  OAuth 2. Every declared operation in API 2 nonetheless carries a security requirement.
+assessment: >-
+  A modern, complete OAuth 2 / OIDC posture: authorization code with mandatory-capable PKCE S256,
+  public clients (token_endpoint_auth_methods "none"), dynamic client registration, RS256 id
+  tokens, and RFC 9728 protected-resource metadata for both the REST API and the MCP server.
+  Notably, the spec declares no 401 or 403 response on any operation despite universal scope
+  requirements.
+notes:
+- >-
+  Two authentication schemes are declared in the OpenAPI (OAuth2 and openIdConnect); they point at
+  the same authorization server.
+- >-
+  API keys, basic auth and mTLS are not offered anywhere on this surface.
+summary:
+  types:
+  - oauth2
+  - openIdConnect
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: OpenId
+  type: openIdConnect
+  openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+  sources:
+  - openapi/cobot-api2-openapi.yml
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.cobot.me/oauth/authorize
+    tokenUrl: https://www.cobot.me/oauth/access_token
+    scopes: 58
+  description: |-
+    OAuth is "an open protocol to allow secure API authorization in a simple and
+    standard method from desktop and web applications.". "OAuth 2.0 is the
+    next evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client
+    developer simplicity [...]. It is supported by many popular sites such as
+    Facebook and there are client libraries available for many programming
+    languages.
+
+    For information about OA
+  sources:
+  - openapi/cobot-api2-openapi.yml

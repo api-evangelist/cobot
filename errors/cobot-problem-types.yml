@@ -1,0 +1,152 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/cobot-api2-openapi.yml + https://dev.cobot.me/api2 (info.description, Errors section)
+format: jsonapi
+format_note: 'Cobot does NOT use RFC 9457 problem+json. It follows the JSON:API error object: every error
+  response is application/vnd.api+json with a top-level `errors` array whose members carry `source.pointer`
+  (a JSON Pointer into the submitted document) and `detail`. There is no machine-readable error code or
+  type vocabulary — remediation is driven by the HTTP status plus the human-readable detail string.'
+envelope:
+  media_type: application/vnd.api+json
+  root_field: errors
+  member_fields:
+  - source.pointer
+  - detail
+  example: "{\n  \"errors\": [\n    { \"source\": { \"pointer\": \"/data/attributes/name\" }, \"detail\"\
+    : \"can't be blank\" },\n    { \"source\": { \"pointer\": \"/data/attributes/password\" }, \"detail\"\
+    : \"is too short\" }\n  ]\n}\n"
+statuses:
+- status: 400
+  title: Bad Request
+  occurrences: 6
+  meaning: The request itself is malformed or the target resource is not in a bookable/valid state.
+  remediation: Correct the request or pick a bookable resource before retrying.
+  operations:
+  - operationId: create-admin-booking
+    detail: The booking's resource is not bookable.
+  - operationId: create-customers
+    detail: Missing billing details
+  - operationId: create-external-booking
+    detail: The booking's resource is not bookable.
+  - operationId: create-membership-booking
+    detail: The booking's resource is not bookable.
+  - operationId: post-refunds
+    detail: In case a refund was requested that does not match the invoice's payments.
+  - operationId: update-space-booking
+    detail: The booking's resource is not bookable.
+- status: 402
+  title: Payment Required
+  occurrences: 13
+  meaning: The operation touches a paid add-on the space has not purchased. Every 402 declared in the
+    spec is the external-resources add-on.
+  remediation: Enable the paid add-on on the space, or drop the external-resource operations from the
+    integration.
+  operations:
+  - operationId: create-external-booking
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: create-external-resource
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: delete-external-booking
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: delete-external-resource
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: external-booking-cancellation
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: get-available-external-resources
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: get-external-resource
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: get-external-resource-availbility
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: get-external-resources
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: patch-external-resource
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: preview-external-booking
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: show-external-booking
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+  - operationId: update-external-booking
+    detail: External resources are a paid add-on. The space does not have the required subscription.
+- status: 404
+  title: Not Found
+  occurrences: 3
+  meaning: The addressed record does not exist, or a prerequisite (Stripe payment method, subscription)
+    has never been set up on the space.
+  remediation: Verify the id, or complete the space setup the operation depends on.
+  operations:
+  - operationId: find-space-discount-code
+    detail: The discount code was not found or is not valid.
+  - operationId: get-current-subscription
+    detail: The space has no subscription yet (is still in trial).
+  - operationId: get-space-payment-method
+    detail: The space has no Stripe payment method set up.
+- status: 409
+  title: Conflict
+  occurrences: 11
+  meaning: State conflict — the record is already in the requested state, is owned by an event, is in
+    the past, or the value is taken.
+  remediation: Re-read the resource and reconcile state. Do not blind-retry; a 409 will repeat.
+  operations:
+  - operationId: attend-event
+    detail: In case the member is already attending or the event capacity is reached.
+  - operationId: delete-external-booking
+    detail: The external booking is already canceled, or in the past and not pending.
+  - operationId: delete-space-booking
+    detail: Booking has been made by an event and can't be deleted through this endpoint.
+  - operationId: depublish-admin-event
+    detail: In case event was already not published.
+  - operationId: drop-in-pass-cancellation
+    detail: The drop-in pass is already canceled.
+  - operationId: external-booking-cancellation
+    detail: The external booking is in the past or already canceled.
+  - operationId: preview-user-email
+    detail: Email address is taken.
+  - operationId: publish-admin-event
+    detail: In case event was already published.
+  - operationId: unattend-event
+    detail: In case event was not attended or has already started.
+  - operationId: unlock-invoice
+    detail: The invoice has an e-invoice or final PDF attached and cannot be unlocked.
+  - operationId: update-space-booking
+    detail: Booking has been made by an event and can't be changed through this endpoint.
+- status: 422
+  title: Unprocessable Entity
+  occurrences: 9
+  meaning: Validation failure, or a downstream payment/processing failure. This is the status the JSON:API
+    errors envelope is documented against.
+  remediation: Read source.pointer for the offending attribute and fix the payload; for payment failures
+    surface detail to the operator.
+  operations:
+  - operationId: change-subscription
+    detail: The requested `chosenSubscription` could not be found.
+  - operationId: create-check-in
+    detail: Checking in failed because a condition was not met.
+  - operationId: create-drop-in-pass-purchase
+    detail: When sending a payment and capturing the payment fails, an error is returned.
+  - operationId: create-event-ticket-purchase
+    detail: When sending a payment and capturing the payment fails, an error is returned.
+  - operationId: create-external-booking
+    detail: When sending a payment and capturing the payment fails, an error is returned.
+  - operationId: create-navigation-link
+    detail: Creating the navigation link failed because of missing/invalid data.
+  - operationId: create-payment
+    detail: Creating a payment failed because a condition was not met or the space's Stripe setup is incorrect.
+  - operationId: post-invoices
+    detail: Creating the invoice failed because of missing/invalid data.
+  - operationId: post-refunds
+    detail: In case something went wrong with processing the refund.
+- status: 429
+  title: Too Many Requests
+  occurrences: 0
+  declared_in_spec: false
+  documented_in: https://dev.cobot.me/api2
+  meaning: Rate limit exceeded — 60 requests per minute per user by default, with per-endpoint exceptions.
+  remediation: Honor the Retry-After header (seconds) before retrying.
+gaps:
+- No 401 or 403 response is declared on ANY of the 134 operations, even though every operation carries
+  an OAuth 2.0 scope requirement. A client generated from this spec has no typed handling for an expired
+  token or an insufficient scope.
+- No 429 is declared on any operation despite a documented 60 req/min limit with a Retry-After header.
+- No 5xx response is declared anywhere in the spec.
+- Error detail strings are free text with no stable code, so remediation cannot be branched on programmatically.

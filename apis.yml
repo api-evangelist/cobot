@@ -1,23 +1,202 @@
 aid: cobot
 name: Cobot
-description: 'Cobot is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+image: https://dev.cobot.me/api2_logo.webp
+description: >-
+  Cobot is coworking and flexible-workspace management software, built and operated by
+  Upstream - Agile GmbH in Berlin, Germany. It runs the day-to-day of a coworking space or
+  space network from one platform: memberships and plans, resource and meeting-room bookings,
+  drop-in passes, events and ticketing, check-ins, automated invoicing and online payments,
+  a white-label member portal and mobile app, analytics, and door access-control integrations
+  (Kisi, Salto KS, Tapkey, Sensorberg, dormakaba Exivo). Cobot publishes a genuinely open
+  developer surface: a 134-operation OpenAPI 3.1 contract for API 2 that follows the JSON:API
+  standard, a legacy v1 REST API with a documented webhook event catalog, OAuth 2.0 with
+  authorization-code + PKCE and dynamic client registration, OpenID Connect, an RFC 9727
+  api-catalog document, RFC 9728 protected-resource metadata, an llms.txt, and an
+  OAuth-protected hosted MCP server at api.cobot.me/mcp.
 url: https://raw.githubusercontent.com/api-evangelist/cobot/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment
+x-disambiguation: >-
+  The harvest backlog reached this slug via https://forgeglobal.com/cobot_stock/, which is a
+  secondary-market listing for Collaborative Robotics, Inc. ("Cobot") of Santa Clara, CA — a
+  DIFFERENT company, already profiled in the network as all/collaborative-robotics. This repo
+  profiles Cobot the coworking management software company (cobot.me, Upstream - Agile GmbH,
+  Berlin), which owns the cobot.me domain and ships the API surface described here.
 specificationVersion: '0.20'
 created: '2026-08-09'
 modified: '2026-08-09'
 tags:
 - Company
-apis: []
+- Coworking
+- Workspace Management
+- Space Management
+- Real Estate
+- Bookings
+- Reservations
+- Memberships
+- Invoicing
+- Payments
+- Events
+- Access Control
+- SaaS
+- Germany
+- JSON:API
+- OAuth
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: cobot-api
+  name: Cobot API
+  description: >-
+    Version 2.0 of the Cobot API — a JSON:API-conformant REST API over the coworking platform,
+    covering spaces and networks, memberships and membership profiles, plans and subscriptions,
+    resources and availability, bookings (including recurring, external and admin bookings),
+    drop-in passes, events and attendances, check-ins, invoices and invoice reminders, payments
+    and refunds, products, teams, contacts and single-page-app add-ons. 134 operations across
+    112 paths, every one carrying an operationId and an OAuth 2.0 scope requirement.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Coworking
+  - Bookings
+  - Memberships
+  - Invoicing
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-api2-openapi.yml
+  - type: Overlay
+    url: overlays/cobot-api2-overlay.yaml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot-api-v1
+  name: Cobot API v1 (legacy)
+  description: >-
+    The original Cobot REST API, still available and still the only surface that carries the
+    webhook subscription API. Documented per-resource on dev.cobot.me/api-docs; Cobot directs
+    new integrations to API 2. No machine-readable specification is published for v1.
+  humanURL: https://dev.cobot.me/api-docs
+  baseURL: https://www.cobot.me/api
+  tags:
+  - Coworking
+  - Webhooks
+  - Legacy
+  properties:
+  - type: Documentation
+    url: https://dev.cobot.me/api-docs
+  - type: Webhooks
+    url: asyncapi/cobot-webhooks.yml
+  - type: ChangeLog
+    url: https://www.cobot.me/pages/api_changes
+- aid: cobot-mcp
+  name: Cobot MCP Server
+  description: >-
+    A hosted, remote Model Context Protocol server operated by Cobot at api.cobot.me/mcp.
+    It is live and OAuth 2.0 protected — an anonymous tools/list returns 401 with an
+    RFC 9728 WWW-Authenticate challenge pointing at its own protected-resource metadata,
+    which advertises a 14-scope read/write capability surface over spaces, memberships,
+    bookings, check-ins, invoices, resources, products, contacts and teams.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me/mcp
+  tags:
+  - MCP
+  - Agents
+  - Coworking
+  properties:
+  - type: MCPServer
+    url: mcp/cobot-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/cobot-tool-crosswalk.yml
 common:
 - type: Website
-  url: https://forgeglobal.com/cobot_stock/
+  url: https://www.cobot.me/
+- type: DeveloperPortal
+  url: https://dev.cobot.me/
+- type: Documentation
+  url: https://dev.cobot.me/api2
+- type: APIReference
+  url: https://dev.cobot.me/api2
+- type: GettingStarted
+  url: https://dev.cobot.me/page/extending-cobot
+- type: Support
+  url: https://www.cobot.me/en/support
+- type: HelpCenter
+  url: https://helpcenter.cobot.me/en/
+- type: Blog
+  url: https://blog.cobot.me/
+- type: BlogRSS
+  url: https://blog.cobot.me/rss/
+- type: GitHubOrganization
+  url: https://github.com/cobot
+- type: Pricing
+  url: https://www.cobot.me/en/pricing
+- type: SignUp
+  url: https://www.cobot.me/sign-up-space
+- type: Login
+  url: https://www.cobot.me/login
+- type: TermsOfService
+  url: https://www.cobot.me/en/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.cobot.me/en/privacy-policy
+- type: StatusPage
+  url: https://www.cobotstatus.me/
+- type: ChangeLog
+  url: https://www.cobot.me/pages/api_changes
+- type: Integrations
+  url: https://www.cobot.me/en/integrations
+- type: Packages
+  url: packages/cobot-packages.yml
+- type: SDKs
+  url: packages/cobot-packages.yml
+- type: WellKnown
+  url: well-known/cobot-well-known.yml
+- type: LLMsTxt
+  url: llms/cobot-llms.txt
+- type: MCPServer
+  url: mcp/cobot-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/cobot-tool-crosswalk.yml
+- type: Webhooks
+  url: asyncapi/cobot-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conventions
+  url: conventions/cobot-conventions.yml
+- type: Conformance
+  url: conformance/cobot-conformance.yml
+- type: ErrorCatalog
+  url: errors/cobot-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/cobot-lifecycle.yml
+- type: DataModel
+  url: data-model/cobot-data-model.yml
+- type: ChangeLog
+  url: changelog/cobot-changelog.yml
+- type: DomainSecurity
+  url: security/cobot-domain-security.yml
+- type: Authentication
+  url: authentication/cobot-authentication.yml
+- type: OAuthScopes
+  url: scopes/cobot-scopes.yml
+x-enrichment:
+  date: '2026-08-09'
+  status: enriched
+  artifacts_added: 28
+  pass: local-v1

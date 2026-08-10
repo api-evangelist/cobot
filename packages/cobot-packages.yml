@@ -1,0 +1,67 @@
+generated: '2026-08-09'
+method: searched
+source: >-
+  RubyGems API (rubygems.org/api/v1), npm registry search, PyPI, and the GitHub organization
+  github.com/cobot ("Coworking Management Software. Made with <3 in Berlin.", blog
+  https://www.cobot.me/) — verified first-party by org ownership.
+summary: >-
+  Cobot maintains Ruby client libraries only. There is no first-party JavaScript, Python, Java,
+  Go, .NET or PHP SDK; the docs are explicit that "it doesn't matter what languages or tools you
+  use", and the platform leans on OAuth 2 + a JSON:API contract rather than generated SDKs.
+official_count: 2
+packages:
+- name: cobot_client
+  registry: rubygems
+  language: ruby
+  official: true
+  url: https://rubygems.org/gems/cobot_client
+  repository: https://github.com/cobot/cobot_client
+  version: 6.0.0
+  license: MIT
+  downloads: 147972
+  description: A client for the Cobot API plus helpers — high-level resource methods plus low-level get/post/put/delete.
+  evidence: https://rubygems.org/api/v1/gems/cobot_client.json
+- name: omniauth_cobot
+  registry: rubygems
+  language: ruby
+  official: true
+  url: https://rubygems.org/gems/omniauth_cobot
+  repository: https://github.com/cobot/omniauth_cobot
+  version: 1.0.0
+  downloads: 51128
+  description: OmniAuth strategy for signing in with Cobot (OAuth 2 authorization code).
+  evidence: https://rubygems.org/api/v1/gems/omniauth_cobot.json
+integrations:
+- name: Cobot Zapier Integration
+  official: true
+  kind: zapier-app
+  repository: https://github.com/cobot/zapier
+  language: typescript
+  note: >-
+    First-party Zapier integration source, actively pushed (2026-08-05). Distributed through
+    Zapier rather than a package registry, so it is recorded here and not as an SDK.
+third_party:
+- name: node-red-contrib-cobot
+  registry: npm
+  language: javascript
+  official: false
+  url: https://www.npmjs.com/package/node-red-contrib-cobot
+  repository: https://github.com/mrmakeit/node-red-contrib-cobot
+  description: Node-RED nodes providing access to Cobot's API. Community-maintained, not by Cobot.
+searched_and_missed:
+- registry: npm
+  query: cobot
+  result: no first-party package (only the community node-red nodes and unrelated names)
+- registry: pypi
+  query: cobot
+  result: name taken by an unrelated Nostr/Lightning agent project
+- registry: maven-central
+  result: none
+- registry: nuget
+  result: none
+- registry: packagist
+  result: none
+- registry: crates.io
+  result: none
+- registry: pkg.go.dev
+  result: none

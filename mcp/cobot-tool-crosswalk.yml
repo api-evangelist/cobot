@@ -1,0 +1,193 @@
+generated: '2026-08-09'
+method: derived
+source: >-
+  Derived by binding each OAuth scope the Cobot MCP server advertises in its RFC 9728
+  protected-resource metadata (well-known/cobot-mcp-oauth-protected-resource.json) to the
+  OpenAPI operations that declare the same scope (openapi/cobot-api2-openapi.yml, 134 ops).
+purpose: >-
+  The usual crosswalk binds MCP TOOL -> REST operationId. Cobot's MCP server is OAuth-gated,
+  so no tool names are publicly enumerable and none are invented here. What IS published is
+  the scope surface, and every scope maps deterministically onto real operations. This file
+  therefore crosswalks at the SCOPE level — the strongest binding the public evidence supports.
+  Upgrade to a tool-level crosswalk once an authenticated tools/list is captured.
+tool_level_crosswalk:
+  available: false
+  reason: tools/list returns 401; tool names and inputSchemas are not published anywhere.
+surfaces:
+  openapi: openapi/cobot-api2-openapi.yml   # OpenAPI 3.1.0, 112 paths, 134 operations, JSON:API
+  mcp: https://api.cobot.me/mcp             # live, OAuth 2.0 gated (401 anonymous)
+  graphql: null                              # Cobot publishes no GraphQL surface
+crosswalk:
+  - scope: read_allocations
+    category: read
+    rest: [get-allocation, get-space-allocations]
+    binding: scope
+    confidence: high
+  - scope: read_bookings
+    category: read
+    rest: [get-booking, get-membership-bookings, get-recurring-bookings, get-space-bookings]
+    binding: scope
+    confidence: high
+  - scope: read_check_ins
+    category: read
+    rest: [get-membership-check-ins, list-space-check-ins-current]
+    binding: scope
+    confidence: high
+  - scope: read_contacts
+    category: read
+    rest: [get-contact, get-space-contacts]
+    binding: scope
+    confidence: high
+  - scope: read_external_bookings
+    category: read
+    rest: [get-space-bookings, get-space-external-bookings, show-external-booking]
+    binding: scope
+    confidence: high
+  - scope: read_invoices
+    category: read
+    rest: [get-invoice, get-invoice-pdf, get-space-external-bookings, get-space-invoices, get-space-membership-invoice-previews, search-space-invoices, show-external-booking]
+    binding: scope
+    confidence: high
+  - scope: read_memberships
+    category: read
+    rest: [get-membership, get-network-memberships, get-space-membership-plans, get-space-memberships, post-bookings-preview, search-network-memberships]
+    binding: scope
+    confidence: high
+  - scope: read_products
+    category: read
+    rest: [get-product, get-products]
+    binding: scope
+    confidence: high
+  - scope: read_resources
+    category: read
+    rest: [get-available-network-resources, get-available-resources, get-network-resource-availabilities, get-network-resources, get-resource, get-resource-availabilities, get-resource-availbility, get-resources, post-bookings-preview]
+    binding: scope
+    confidence: high
+  - scope: read_spaces
+    category: read
+    rest: [get-space]
+    binding: scope
+    confidence: high
+  - scope: read_teams
+    category: read
+    rest: [get-space-teams, get-team]
+    binding: scope
+    confidence: high
+  - scope: read_user
+    category: read
+    rest: [get-user]
+    binding: scope
+    confidence: high
+  - scope: write_bookings
+    category: write
+    rest: [create-admin-booking, create-admin-event, create-membership-booking, delete-following-recurring-bookings, delete-space-booking, update-space-booking]
+    binding: scope
+    confidence: high
+  - scope: write_check_ins
+    category: write
+    rest: [create-check-in, create-check-out]
+    binding: scope
+    confidence: high
+rest_only:
+  note: >-
+    Scopes the REST API supports that the MCP server does NOT advertise — capability the
+    agent surface deliberately withholds. Every write path touching money, billing,
+    subscriptions, events and add-on installation sits here.
+  scopes:
+  - scope: read_articles
+    rest: [get-article, list-space-articles]
+  - scope: read_booking_credits
+    rest: [get-membership-booking-credits]
+  - scope: read_built_in_email_customizations
+    rest: [get-built-in-email-customization, get-built-in-email-customizations]
+  - scope: read_calendar_blockers
+    rest: [get-calendar-blocker, get-space-calendar-blockers]
+  - scope: read_cost_centers
+    rest: [list-space-cost-centers]
+  - scope: read_discount_codes
+    rest: [find-space-discount-code]
+  - scope: read_drop_in_pass_templates
+    rest: [get-drop-in-pass-template, get-drop-in-pass-template-availability]
+  - scope: read_drop_in_passes
+    rest: [get-drop-in-pass, list-space-drop-in-passes]
+  - scope: read_event_attendances
+    rest: [get-event-attendance, list-event-attendances]
+  - scope: read_event_messages
+    rest: [get-event-event-messages, get-event-message]
+  - scope: read_events
+    rest: [get-event, get-space-bookings, list-event-tags, list-events]
+  - scope: read_external_resources
+    rest: [get-available-external-resources, get-external-resource, get-external-resource-availbility, get-external-resources, preview-external-booking]
+  - scope: read_membership_profiles
+    rest: [get-membership-profile, get-network-membership-profiles, get-space-membership-profiles, search-network-membership-profiles]
+  - scope: read_navigation_links
+    rest: [get-navigation-link, get-space-navigation-links]
+  - scope: read_networks
+    rest: [get-network]
+  - scope: read_payment_methods
+    rest: [get-invoice-payment-methods, get-space-external-bookings-payment-methods, get-space-payment-methods]
+  - scope: read_published_membership_profiles
+    rest: [get-space-published-membership-profiles]
+  - scope: read_revenue_accounts
+    rest: [list-space-revenue-accounts]
+  - scope: read_single_page_apps
+    rest: [get-single-page-app, get-single-page-apps]
+  - scope: read_space_billing_details
+    rest: [get-space-billing-details]
+  - scope: read_space_payment_method
+    rest: [get-space-payment-method]
+  - scope: read_space_profiles
+    rest: [get-space-profile]
+  - scope: read_space_subscriptions
+    rest: [get-current-subscription, get-subscriptions, preview-subscription]
+  - scope: read_terms_approvals
+    rest: [get-missing-terms-approvals]
+  - scope: read_urls
+    rest: [get-space-urls]
+  - scope: write_customers
+    rest: [create-customers]
+  - scope: write_drop_in_pass_purchases
+    rest: [create-drop-in-pass-purchase]
+  - scope: write_drop_in_passes
+    rest: [drop-in-pass-cancellation]
+  - scope: write_event_attendances
+    rest: [attend-event, unattend-event]
+  - scope: write_event_messages
+    rest: [create-event-messages, delete-event-message, update-event-message]
+  - scope: write_event_ticket_purchases
+    rest: [create-event-ticket-purchase]
+  - scope: write_events
+    rest: [create-admin-event, delete-event, depublish-admin-event, publish-admin-event, update-event]
+  - scope: write_external_bookings
+    rest: [create-external-booking, delete-external-booking, external-booking-cancellation, update-external-booking]
+  - scope: write_external_resources
+    rest: [create-external-resource, delete-external-resource, patch-external-resource]
+  - scope: write_invoice_reminders
+    rest: [create-invoice-reminder]
+  - scope: write_invoices
+    rest: [attach-invoice-pdf, create-e-invoice, create-invoice-charges, lock-invoice, post-invoices, unlock-invoice]
+  - scope: write_membership_profiles
+    rest: [patch-membership-profile]
+  - scope: write_navigation_links
+    rest: [create-navigation-link, update-navigation-link]
+  - scope: write_payments
+    rest: [create-payment, post-refunds]
+  - scope: write_resources
+    rest: [patch-resource, post-resources]
+  - scope: write_single_page_apps
+    rest: [create-single-page-app, update-single-page-app]
+  - scope: write_space_billing_details
+    rest: [update-space-billing-details]
+  - scope: write_space_payment_method
+    rest: [update-space-payment-method]
+  - scope: write_space_subscriptions
+    rest: [change-subscription]
+  - scope: write_terms_approvals
+    rest: [create-terms-approvals]
+coverage:
+  openapi_operations: 134
+  openapi_scopes: 59
+  mcp_scopes: 14
+  operations_reachable_via_mcp_scopes: 45
+  operations_not_reachable_via_mcp_scopes: 89
+  mcp_scopes_with_no_api2_operation: 0

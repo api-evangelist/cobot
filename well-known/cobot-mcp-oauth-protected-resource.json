@@ -1,0 +1,1 @@
+{"resource":"https://api.cobot.me/mcp","authorization_servers":["https://www.cobot.me"],"scopes_supported":["read_allocations","read_bookings","read_check_ins","read_contacts","read_external_bookings","read_invoices","read_memberships","read_products","read_resources","read_spaces","read_teams","read_user","write_bookings","write_check_ins"]}

@@ -1,0 +1,91 @@
+generated: '2026-08-09'
+method: probed
+source: Live anonymous GET of /.well-known/* on every Cobot host (www.cobot.me, api.cobot.me, dev.cobot.me)
+notes: >-
+  Cobot serves a genuinely complete well-known surface: OpenID Connect discovery, RFC 8414
+  OAuth authorization-server metadata, RFC 9728 protected-resource metadata for BOTH the REST
+  API and the MCP server, and an RFC 9727 api-catalog linkset that points at the machine-readable
+  OpenAPI. There is no security.txt and no agent card.
+  IMPORTANT: www.cobot.me answers 200 with the site's en.json payload for ANY unknown *.json path
+  (control probe: /definitely-not-a-real-file-xyz.json -> 200, 7171 bytes, en.json). Only the
+  entries below returned a distinct, correctly-typed body and are recorded as real hits.
+hosts:
+- www.cobot.me
+- api.cobot.me
+- dev.cobot.me
+paths:
+- path: /.well-known/openid-configuration
+  host: www.cobot.me
+  url: https://www.cobot.me/.well-known/openid-configuration
+  status: 200
+  content_type: application/json
+  file: cobot-openid-configuration.json
+  summary: >-
+    OIDC discovery. issuer https://www.cobot.me, authorization_code only, PKCE S256,
+    RS256 id tokens, dynamic client registration endpoint, userinfo at /api/userinfo.
+- path: /.well-known/oauth-authorization-server
+  host: www.cobot.me
+  url: https://www.cobot.me/.well-known/oauth-authorization-server
+  status: 200
+  content_type: application/json
+  file: cobot-oauth-authorization-server.json
+  summary: RFC 8414 authorization-server metadata (identical body to the OIDC document).
+- path: /.well-known/oauth-protected-resource
+  host: www.cobot.me
+  url: https://www.cobot.me/.well-known/oauth-protected-resource
+  status: 200
+  content_type: application/json
+  file: cobot-oauth-protected-resource.json
+  summary: RFC 9728 protected-resource metadata for www.cobot.me — 58 supported scopes.
+- path: /.well-known/oauth-protected-resource
+  host: api.cobot.me
+  url: https://api.cobot.me/.well-known/oauth-protected-resource
+  status: 200
+  content_type: application/json
+  file: cobot-api-oauth-protected-resource.json
+  summary: RFC 9728 protected-resource metadata for the REST API — 58 supported scopes.
+- path: /.well-known/oauth-protected-resource/mcp
+  host: api.cobot.me
+  url: https://api.cobot.me/.well-known/oauth-protected-resource/mcp
+  status: 200
+  content_type: application/json
+  file: cobot-mcp-oauth-protected-resource.json
+  summary: >-
+    RFC 9728 metadata for the MCP server specifically — a NARROWER 14-scope surface than the
+    REST API. Discovered from the WWW-Authenticate challenge on an anonymous POST to /mcp.
+- path: /.well-known/api-catalog
+  host: www.cobot.me
+  url: https://www.cobot.me/.well-known/api-catalog
+  status: 200
+  content_type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+  file: cobot-api-catalog.json
+  summary: >-
+    RFC 9727 API catalog linkset — anchor https://api.cobot.me/, service-desc
+    https://dev.cobot.me/openapi (application/yaml), service-doc https://dev.cobot.me/api2,
+    status https://api.cobot.me/health.
+misses:
+- path: /.well-known/security.txt
+  host: www.cobot.me
+  status: 404
+- path: /.well-known/security.txt
+  host: cobot.me
+  status: 404
+- path: /.well-known/ai-plugin.json
+  host: www.cobot.me
+  status: 404
+- path: /.well-known/agent-card.json
+  host: www.cobot.me
+  status: 404
+- path: /.well-known/agent.json
+  host: www.cobot.me
+  status: 404
+- path: /.well-known/agent-card.json
+  host: api.cobot.me
+  status: 404
+- path: /.well-known/agent-card.json
+  host: dev.cobot.me
+  status: 404
+- path: /.well-known/oauth-authorization-server
+  host: api.cobot.me
+  status: 404
+  note: The authorization server lives on www.cobot.me; api.cobot.me is resource-only.

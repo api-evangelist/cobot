@@ -1,0 +1,51 @@
+generated: '2026-08-09'
+method: generated
+source: >-
+  Generated from openapi/cobot-api2-openapi.yml. Every operationId referenced in every skill was
+  grepped out of the spec — none are invented. Cobot publishes no AGENTS.md and no skills of its
+  own; a search of dev.cobot.me, www.cobot.me and github.com/cobot found none.
+provider: cobot
+api: https://api.cobot.me
+spec: openapi/cobot-api2-openapi.yml
+skills:
+- name: cobot-book-a-meeting-room
+  file: cobot-book-a-meeting-room.md
+  description: >-
+    Find an available resource across a space network, price the booking with the preview
+    endpoint before creating it, then create, amend or cancel it.
+  operations: 9
+  scopes: [read_user, read_spaces, read_resources, read_memberships, read_bookings, write_bookings]
+  mcp_reachable: true
+- name: cobot-invoice-a-member
+  file: cobot-invoice-a-member.md
+  description: >-
+    The money path — add charges to a membership, issue and lock the invoice, fetch the PDF,
+    send a reminder, record a payment.
+  operations: 9
+  scopes: [read_memberships, read_invoices, write_invoices, write_invoice_reminders, write_payments]
+  mcp_reachable: false
+  mcp_note: >-
+    read_invoices and read_memberships are inside the MCP scope set, but write_invoices,
+    write_invoice_reminders and write_payments are NOT — Cobot's MCP server cannot issue an
+    invoice or take a payment. Deliberate, and worth respecting.
+- name: cobot-check-in-a-member
+  file: cobot-check-in-a-member.md
+  description: >-
+    Check a member in, list who is currently on site, check them out. The front-desk and door
+    flow, and one of only two agent-writable capabilities Cobot exposes.
+  operations: 5
+  scopes: [read_memberships, read_check_ins, write_check_ins]
+  mcp_reachable: true
+shared_rules:
+  media_type: application/vnd.api+json
+  auth: 'Authorization: bearer <token>, OAuth 2 authorization code + PKCE S256'
+  pagination: page[number] / page[size], default 72, max 200
+  sparse_fieldsets: 'fields[<type>]=a,b'
+  idempotency: >-
+    NONE. No Idempotency-Key exists in the contract. Never blind-retry a POST — read first and
+    reconcile. This rule is repeated in every skill because it is the sharpest edge on this API.
+  errors: JSON:API errors[] with source.pointer + detail, not RFC 9457 problem+json
+  rate_limit: 60 requests per minute per user, 429 + Retry-After (seconds)
+  undeclared_statuses: >-
+    401, 403, 429 and 5xx are handled by the service but declared on no operation in the spec.
+    Handle them regardless of what a generated client says.

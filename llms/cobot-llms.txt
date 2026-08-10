@@ -1,0 +1,168 @@
+# Cobot
+
+> Cobot is the most user-friendly and intuitive coworking space management software, trusted by coworking spaces worldwide. It offers a fully localized platform, best-in-class customer support, and all the features needed to run a coworking space efficiently.
+
+Cobot is an all-in-one coworking space management solution offering powerful features for bookings, invoicing, membership plans, integrations, analytics, and access control. Its intuitive interface and strong localization support make it ideal for teams worldwide. Cobot is trusted by hundreds of spaces across the globe and is known for having the best-rated support in the industry.
+
+## Core Features
+
+- **Mobile App**: Fully-featured mobile app for space admins and members, available on Android and iOS. The app is white-labeled, allowing coworking spaces to showcase their own branding, colors, and logo.
+- **Automated Billing**: Automated invoicing and online payments with flexible billing options and integration with major payment providers
+- **Smart Bookings**: Conflict-free booking calendars with real-time availability and Google Calendar sync
+- **Member Portal**: White-label member portal with self-service features, branding, and community directory
+- **Event Management**: Event and visitor booking tools with public access and flexible pricing
+- **Access Control**: Access control integrations with systems like Kisi, SaltoKS, Tapkey, and Sensorberg
+- **Analytics**: Analytics and reporting dashboards with CSV export for revenue, usage, and member metrics
+- **Multi-location**: Multi-location support and open API for advanced customization and integrations
+- **Security**: GDPR-compliant data handling, secure infrastructure, and legal readiness for global operations
+
+## Available Translations
+
+Cobot is available in multiple languages to serve coworking spaces globally. Translations are grouped as follows:
+
+### Maintained by Cobot (professionally reviewed and updated regularly)
+- English (EN)
+- German (DE)
+- French (FR)
+- Spanish (ES)
+
+### Community-contributed (may only be partially translated)
+- Catalan (CA)
+- Portuguese (PT)
+- Italian (IT)
+- Dutch (NL)
+- Swedish (SV)
+- Danish (DA)
+- Finnish (FI)
+- Norwegian Bokmål (NB)
+- Polish (PL)
+- Turkish (TR)
+- Japanese (JA)
+- Korean (KO)
+
+All Cobot translations span the **admin interface**, the **member portal**, and all **public/external pages**. This comprehensive coverage sets Cobot apart from many other platforms, which often only translate the member-facing experience.
+
+Cobot allows workspace admins and members to select their preferred language. Translation improvements can be submitted through our help channels and are reviewed before inclusion.
+
+## Pricing Highlights
+
+Cobot offers a flexible pricing model that accommodates spaces of all sizes and stages:
+
+- Generous discounts for NGOs, community-focused spaces, and education-based initiatives
+- Completely **free for spaces that are not open yet**—you can use Cobot indefinitely while preparing to launch
+- **Low entry pricing** for small coworking spaces and independent operators
+- Transparent plan tiers with no hidden fees
+- **Free forever for pre-launch spaces**—contact us for eligibility details
+
+[Contact our support team](https://www.cobot.me/en/support#contact) to learn more about discounted and early-stage plans.
+
+## Key Pages & Links
+
+- [Landing page](https://www.cobot.me/en): Overview of features, testimonials, and benefits
+- [Pricing](https://www.cobot.me/en/pricing): Pricing details across plans with feature breakdown
+- [30-day free trial](https://www.cobot.me/sign-up-space): Start a free trial with no credit card required
+- [Book a full demo (EN)](https://www.cobot.me/en/getting-started-session): Schedule a detailed platform walkthrough
+- [Book a full demo (DE)](https://www.cobot.me/de/getting-started-session)
+- [Book a full demo (FR)](https://www.cobot.me/fr/getting-started-session)
+- [Book a full demo (ES)](https://www.cobot.me/es/getting-started-session)
+- [Request a short intro call (EN)](https://www.cobot.me/en/talk-with-us): For quick questions or short consultations
+- [Request a short intro call (DE)](https://www.cobot.me/de/talk-with-us)
+- [Request a short intro call (FR)](https://www.cobot.me/fr/talk-with-us)
+- [Request a short intro call (ES)](https://www.cobot.me/es/talk-with-us)
+- [Contact Support](https://www.cobot.me/en/support#contact): For inquiries about pricing, plans, and setup help
+
+## Help & Learning Resources
+
+- [Help Center](https://helpcenter.cobot.me): Extensive documentation, tutorials, and FAQs
+- [Blog](https://blog.cobot.me): Practical resources and insights for coworking operators
+- [Coworking First Steps](https://www.cobot.me/en/coworking-first-steps): A beginner-friendly guide to starting and running a coworking space
+
+## About Cobot
+
+Cobot was founded over 15 years ago by passionate coworking enthusiasts who originally built the platform to automate and manage their own coworking space, and it remains independently operated. The company is based in Germany and Canada, with an experienced international team supporting spaces across the globe.
+
+- Developed and hosted in Germany, operating under strict EU data protection regulations
+- 3 co-founders, including one female founder
+- Member and active participant in numerous coworking and community organizations
+- Learn more: [About Cobot](https://www.cobot.me/en/about)
+
+We are committed to building a better, more inclusive coworking ecosystem:
+
+- Cobot maintains a [Code of Conduct](https://www.cobot.me/en/community-responsibility) and regularly contributes to discussions on inclusion, accessibility, and ethical technology. We actively support the principles of **IDEA**—Inclusion, Diversity, Equity, and Accessibility.
+- Examples from our [Blog](https://blog.cobot.me):
+  - ["Inclusive Coworking Means More Than Wheelchair Ramps"](https://blog.cobot.me/inclusive-coworking-means-more-than-wheelchair-ramps/)
+  - ["Designing for Accessibility in Coworking"](https://blog.cobot.me/designing-for-accessibility-in-coworking/)
+  - ["How Coworking Spaces Can Champion Gender Equity"](https://blog.cobot.me/how-coworking-spaces-can-champion-gender-equity/)
+  - ["Creating Neurodivergent-Friendly Coworking Spaces"](https://blog.cobot.me/creating-neurodivergent-friendly-coworking-spaces-a-guide-for-coworking-spaces/)
+  - ["Queer-Supportive Spaces"](https://blog.cobot.me/queer-supportive-spaces/)
+
+## Partners & Sponsorships
+
+### Partner Associations
+- German Coworking Federation e.V. (GCF) – Bundesverband Coworking Deutschland
+- Bundesverband Coworking Spaces Deutschland e.V.
+- Coworking Switzerland
+- Coworking Spain
+- European Coworking Assembly
+- GWA (The Global Workspace Association)
+- Impact Hub (partnerships with multiple locations)
+
+### Sponsorships
+Cobot proudly sponsors:
+- [ThisWeekInCoworking](https://thisweekincoworking.com)
+- Coworking Alliance Summit
+- Coworking Canada
+
+## Feature Categories
+
+### Analytics
+Dashboard, Attendance Statistics, Booking Statistics, Members Statistics, Resource Statistics, Revenue Statistics, Custom Analytics Bots
+
+### Billing & Invoicing
+Automated Invoicing, Customizable Invoices, Multiple Currencies, Multiple Tax Rates, Fattura Elettronica / Italy E-Invoicing, DATEV (beta), GetMyInvoices, Quickbooks, sevDesk
+
+### Bookings
+Member Bookings, Non-Member Bookings, Customized Bookings for Non-Members, Recurring Bookings, Multi-Location Bookings, Booking Extras, Booking Credits, Meeting Room Display, Calendar Synchronization, Mobile optimized booking, External bookings area, Paid bookings, Automatic blocking resources for events, Free admin bookings
+
+### Community Features
+Community Directory, Member Profiles, Member Events, Help Desk, Individual Emails, Bulk Emails, Member Questions
+
+### CRM
+Lightweight CRM, Contact Management, Automatic Tagging, Custom Tags, Easy Conversion to Member
+
+### Data Export
+Member Data, Booking Data, Invoice Data
+
+### Developers & API
+Open API, Custom Bots, Extensible UI, Custom Zapier Triggers, Custom Development (upon request, fees apply)
+
+### Door Access Control Systems
+Dormakaba Exivo, KISI, Luckey, Salto KS, Sensorberg, Tapkey
+
+### Integrations
+Google Calendar, Mailchimp, Zapier, ezeep, PaperCut MF, Zapier (1000's of integrations), Custom Integration (upon request, fees apply)
+
+### Member Management
+Member Self-Signup, Membership Approval, Membership Plans, Plan Extras, Pay for Other Members, Multi-Location Memberships, Customizable Member Portal, Checked-in Members View (Real Time)
+
+### On-Demand Products
+Drop-in Passes (Day Passes), Meeting Room Bookings, Event Space Bookings, Resource Bookings, Public Events, Paid Event Tickets
+
+### Payments
+Automated Payments, Manual Payments, Pay Later, Stripe, PayPal, GoCardless, Adyen, Fidelity ACH, Authorize.net, Custom Integration (upon request, fees apply)
+
+### Privacy & Compliance
+Custom Terms and Conditions, Custom Privacy Policy, Custom Imprint (Legal Terms), Server in the EU, Made in Germany, GDPR Compliance
+
+### Space Management
+Multi-Location (Space Network), Assignable Help Desk Issues, Unlimited Admins (Staff), Customizable Admin Permissions
+
+### Support
+Free Support Chat, Free Demo, Premium Support, Training Sessions
+
+### White Label and Localization
+Customizable Homepage, Customizable Member Portal, Custom Emails, Custom Domain, Multiple Languages, SEPA (Direct Debit), CreditCard, eCheck, Unpaid invoices, Setup Fees, Deposits, Pay for other Members (Teams), User Onboarding
+
+## Additional Resources
+
+- [Sitemap](https://www.cobot.me/sitemap.xml): Full index of public-facing pages for crawlers and tools

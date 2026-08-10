@@ -1,0 +1,94 @@
+generated: '2026-08-09'
+method: searched
+source: >-
+  https://dev.cobot.me/api2, https://dev.cobot.me/api-docs, https://www.cobot.me/pages/api_changes,
+  https://www.cobotstatus.me/, https://api.cobot.me/health, openapi/cobot-api2-openapi.yml
+summary: >-
+  Two live API generations run side by side. API 2 is the actively developed surface and the only
+  one with a machine-readable contract; API 1 is described by Cobot as legacy but remains
+  available, remains the only home of webhooks, and carries no announced sunset. There is a real
+  hosted status page and a machine-readable health endpoint, a long dated change log for v1, and
+  no formal deprecation policy of any kind.
+
+versioning:
+  scheme: major-version-per-surface
+  current: '2.0'
+  current_source: openapi/cobot-api2-openapi.yml (info.version)
+  in_url: false
+  in_header: false
+  separation: >-
+    Versions are separated by host and path shape, not a version segment — API 2 is
+    https://api.cobot.me, API 1 is https://<subdomain>.cobot.me/api.
+  versions:
+  - version: '2.0'
+    status: current
+    docs: https://dev.cobot.me/api2
+    spec: https://dev.cobot.me/openapi.json
+    base_url: https://api.cobot.me
+    note: 134 operations, JSON:API, OAuth 2 scopes on every operation.
+  - version: '1.0'
+    status: legacy
+    docs: https://dev.cobot.me/api-docs
+    spec: none published
+    base_url: 'https://<subdomain>.cobot.me/api'
+    note: >-
+      Cobot's own words — "API 2 ... is our newest and actively developed version. API 1 is still
+      available but is now legacy." Still the only surface with webhooks and several resources
+      (custom fields, activities, help-desk issues, guest accounts, time passes) that API 2 does
+      not expose.
+
+deprecation:
+  policy_published: false
+  sunset_dates_announced: false
+  rfc8594_sunset_header: not observed
+  deprecation_header: not observed
+  deprecated_operations_in_spec: 0
+  evidence: >-
+    Zero operations in the API 2 OpenAPI carry `deprecated: true`. No sunset or deprecation entry
+    appears anywhere in the 207-entry v1 change log. No deprecation or API-lifecycle policy page
+    exists on dev.cobot.me or www.cobot.me.
+  assessment: >-
+    Generous in practice, undocumented in policy. Cobot has kept a legacy API alive for years
+    rather than forcing a migration, which is good for integrators — but an integrator has no
+    written commitment to rely on, and no notice period to plan against.
+
+change_communication:
+  changelog: https://www.cobot.me/pages/api_changes
+  changelog_artifact: changelog/cobot-changelog.yml
+  covers: API 1 only
+  entries: 207
+  most_recent: '2024-07-25'
+  feed: none
+  gap: >-
+    The actively developed surface (API 2) has no dated change log and no feed, so there is no way
+    to diff what changed between two dates on the API that Cobot tells you to build against.
+
+status:
+  status_page: https://www.cobotstatus.me/
+  status_page_kind: hosted status page (Statuspage-style, uptime + incident history)
+  health_endpoint: https://api.cobot.me/health
+  health_response: 204 No Content
+  health_advertised_in: https://www.cobot.me/.well-known/api-catalog (linkset "status" relation)
+  note: >-
+    The health endpoint being advertised in the RFC 9727 api-catalog is a genuinely modern touch —
+    a machine can discover Cobot's liveness probe from the well-known document alone.
+
+sla:
+  published: false
+  evidence: >-
+    No SLA, uptime commitment or support-response commitment is published on the pricing page,
+    terms of service or status page. Support is described as "free support chat" with a paid
+    premium support option.
+
+support:
+  help_center: https://helpcenter.cobot.me/en/
+  support: https://www.cobot.me/en/support
+  developer_portal: https://dev.cobot.me/
+  premium_support: offered as a paid add-on (llms.txt, "Support" section)
+
+operator:
+  legal_entity: Upstream - Agile GmbH
+  address: Harzer Str. 39, 12059 Berlin, Germany
+  register: HRB 110149 B
+  imprint: https://www.cobot.me/en/imprint
+  data_residency: EU (stated in llms.txt — "Server in the EU", "Made in Germany")
