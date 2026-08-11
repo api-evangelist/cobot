@@ -50,48 +50,12 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: cobot-api
-  name: Cobot API
-  description: >-
-    Version 2.0 of the Cobot API — a JSON:API-conformant REST API over the coworking platform,
-    covering spaces and networks, memberships and membership profiles, plans and subscriptions,
-    resources and availability, bookings (including recurring, external and admin bookings),
-    drop-in passes, events and attendances, check-ins, invoices and invoice reminders, payments
-    and refunds, products, teams, contacts and single-page-app add-ons. 134 operations across
-    112 paths, every one carrying an operationId and an OAuth 2.0 scope requirement.
-  humanURL: https://dev.cobot.me/api2
-  baseURL: https://api.cobot.me
-  tags:
-  - Coworking
-  - Bookings
-  - Memberships
-  - Invoicing
-  - Events
-  properties:
-  - type: OpenAPI
-    url: openapi/cobot-api2-openapi.yml
-  - type: Overlay
-    url: overlays/cobot-api2-overlay.yaml
-  - type: Documentation
-    url: https://dev.cobot.me/api2
-  - type: APIReference
-    url: https://dev.cobot.me/api2
-  - type: ErrorCatalog
-    url: errors/cobot-problem-types.yml
-  - type: DataModel
-    url: data-model/cobot-data-model.yml
-  - type: OAuthScopes
-    url: scopes/cobot-scopes.yml
-  - type: Authentication
-    url: authentication/cobot-authentication.yml
-  - type: Conventions
-    url: conventions/cobot-conventions.yml
 - aid: cobot-api-v1
   name: Cobot API v1 (legacy)
   description: >-
-    The original Cobot REST API, still available and still the only surface that carries the
-    webhook subscription API. Documented per-resource on dev.cobot.me/api-docs; Cobot directs
-    new integrations to API 2. No machine-readable specification is published for v1.
+    The original Cobot REST API, still available and still the only surface that carries the webhook subscription
+    API. Documented per-resource on dev.cobot.me/api-docs; Cobot directs new integrations to API 2. No
+    machine-readable specification is published for v1.
   humanURL: https://dev.cobot.me/api-docs
   baseURL: https://www.cobot.me/api
   tags:
@@ -108,11 +72,11 @@ apis:
 - aid: cobot-mcp
   name: Cobot MCP Server
   description: >-
-    A hosted, remote Model Context Protocol server operated by Cobot at api.cobot.me/mcp.
-    It is live and OAuth 2.0 protected — an anonymous tools/list returns 401 with an
-    RFC 9728 WWW-Authenticate challenge pointing at its own protected-resource metadata,
-    which advertises a 14-scope read/write capability surface over spaces, memberships,
-    bookings, check-ins, invoices, resources, products, contacts and teams.
+    A hosted, remote Model Context Protocol server operated by Cobot at api.cobot.me/mcp. It is live and
+    OAuth 2.0 protected — an anonymous tools/list returns 401 with an RFC 9728 WWW-Authenticate challenge
+    pointing at its own protected-resource metadata, which advertises a 14-scope read/write capability
+    surface over spaces, memberships, bookings, check-ins, invoices, resources, products, contacts and
+    teams.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me/mcp
   tags:
@@ -124,7 +88,1095 @@ apis:
     url: mcp/cobot-mcp.yml
   - type: ToolCrosswalk
     url: mcp/cobot-tool-crosswalk.yml
+- aid: cobot:cobot-allocation-api
+  name: Cobot Allocation API
+  description: A long-term allocation of a resource to a membership or team.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Allocation
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-allocation-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-approval-api
+  name: Cobot Approval API
+  description: Approving terms & conditions, privacy policies etc. as a member of a space.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Approval
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-approval-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-article-api
+  name: Cobot Article API
+  description: A help desk article explaning an aspect of the space.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Article
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-article-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-booking-api
+  name: Cobot Booking API
+  description: A booking of a resource in the booking calendar.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Booking
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-booking-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-booking-credit-api
+  name: Cobot Booking Credit API
+  description: >-
+    Booking credits are added to plans and give memberships free booking time or a fixed amount of free
+    bookings. The hourly rate of a resource can also be customized.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Booking Credit
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-booking-credit-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-built-in-email-customizations-api
+  name: Cobot Built-in Email Customizations API
+  description: Email customizations for emails that can be sent via Cobot.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Built-in Email Customizations
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-built-in-email-customizations-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-calendar-blocker-api
+  name: Cobot Calendar Blocker API
+  description: Blocks off a space for member/external bookings and drop-in passes.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Calendar Blocker
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-calendar-blocker-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-check-in-api
+  name: Cobot Check In API
+  description: Members check in to a space for attendance tracking and for using up their time passes.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Check-in
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-check-in-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-contact-api
+  name: Cobot Contact API
+  description: Non-member contacts a space has.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Contact
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-contact-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-cost-center-api
+  name: Cobot Cost Center API
+  description: >-
+    Cost centers are used to categorize invoice items. Anything
+
+    that can be invoiced can be assigned a cost center.
+
+    When a service/charge is added to an invoice, its cost center will be
+
+    assigned to the respective invoice item.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Cost Center
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-cost-center-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-customer-api
+  name: Cobot Customer API
+  description: A trial space can be converted to a customer
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Customer
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-customer-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-discount-code-api
+  name: Cobot Discount Code API
+  description: A discount code can be used to offer a discount for various products in a space.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Discount Code
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-discount-code-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-drop-in-pass-api
+  name: Cobot Drop-In Pass API
+  description: Purchased drop-in passes.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Drop-In Pass
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-drop-in-pass-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-drop-in-pass-purchase-api
+  name: Cobot Drop-In Pass Purchase API
+  description: A purchase of drop-in-passes, currently only supports buying one pass at a time.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Drop-In Pass Purchase
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-drop-in-pass-purchase-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-drop-in-pass-template-api
+  name: Cobot Drop-In Pass Template API
+  description: Drop-in pass templates are templates for drop-in passes that can be bought by visitors.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Drop-In Pass Template
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-drop-in-pass-template-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-event-api
+  name: Cobot Event API
+  description: >-
+    Spaces can run events for their members or the public.
+
+    Events are created and later published by admins, at which point members are able to see and attend
+    them.
+
+    Admins can also create messages for events, which are sent to attendees based on triggers such as
+    someone having
+
+    just attended an event.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Event
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-event-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-external-booking-api
+  name: Cobot External Booking API
+  description: >-
+    After a resource has been enabled for external booking (see _External Resource_) it can be
+
+    booked by visitors (non-members) using external booking endpoints.
+
+    Making an external booking also results in a Booking to be created.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - External Booking
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-external-booking-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-external-resource-api
+  name: Cobot External Resource API
+  description: >-
+    A space's resources can be enabled for external booking, which means they can be booked
+
+    by guests without a Cobot account or space membership. All resources enabled for external booking
+
+    appear under external resources.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - External Resource
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-external-resource-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-invoice-api
+  name: Cobot Invoice API
+  description: >-
+    Invoices are automatically generated once a month, based on members' activity. In addition, manual
+    invoices can be generated at any time.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Invoice
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-invoice-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-invoice-reminder-api
+  name: Cobot Invoice Reminder API
+  description: Admins can send invoice reminders for overdue invoices.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Invoice Reminder
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-invoice-reminder-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-membership-api
+  name: Cobot Membership API
+  description: Represents a person being a member in a space. Can optionally be connected to a User.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Membership
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-membership-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-membership-plan-api
+  name: Cobot Membership Plan API
+  description: >-
+    The plans belonging to a membership. When a membership is signed up one of the
+
+    space's plans is selected and a copy is created for the membership.
+
+    A membership's plan can be customized or changed over time, creating a new
+
+    membership plan object every time.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Membership Plan
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-membership-plan-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-membership-profile-api
+  name: Cobot Membership Profile API
+  description: Social profile for a membership.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Membership Profile
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-membership-profile-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-navigation-link-api
+  name: Cobot Navigation Link API
+  description: >-
+    Navigation links allow you to embed 3rd party apps on a space's Cobot UI. See also the single page
+    app endpoints.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Navigation Link
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-navigation-link-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-network-api
+  name: Cobot Network API
+  description: >-
+    Multiple spaces can form a network. This allows their members to access multiple spaces, for example
+    to book resources.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Network
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-network-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-payment-api
+  name: Cobot Payment API
+  description: >-
+    *The payment API is in development. Endpoints may be missing or not working yet.*
+
+
+    Payments allow any user (i.e. non-members) to pay for items on Cobot via the payment
+
+    methods a space has set up.
+
+    For now this only covers external bookings, but more could be added in the future.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-payment-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-payment-method-api
+  name: Cobot Payment Method API
+  description: >-
+    Spaces can set up payment methods that members can use to make payments to the space.
+
+    Payment methods can be automated via a payment provider such as Stripe or manual (e.g. cash, bank
+    transfer).
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Payment Method
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-payment-method-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-product-api
+  name: Cobot Product API
+  description: >-
+    Products can be set up by a space and then used as booking extras or to create charges from.
+
+    Examples are coffee, projectors, additional cleaning services etc.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Product
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-product-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-refund-api
+  name: Cobot Refund API
+  description: A full or partial refund of an invoice.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Refund
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-refund-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-resource-api
+  name: Cobot Resource API
+  description: >-
+    A resource can be booked on an hourly basis using the booking calendar. Examples are conference rooms,
+    presentation equipment, bikes etc.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Resource
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-resource-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-revenue-account-api
+  name: Cobot Revenue Account API
+  description: >-
+    Revenue accounts are used to categorize invoice items. Anything
+
+    that can be invoiced can be assigned a revenue account.
+
+    When a service/charge is added to an invoice, its revenue account will be
+
+    assigned to the respective invoice item.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Revenue Account
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-revenue-account-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-single-page-app-api
+  name: Cobot Single page app API
+  description: >-
+    A single page app consists of HTML, CSS and JavaScript code. It can be embedded into the Cobot UI
+    via navigation links.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Single page app
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-single-page-app-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-space-api
+  name: Cobot Space API
+  description: A coworking space. Spaces can form a network to allow members access to multiple spaces.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Space
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-space-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-space-billing-details-api
+  name: Cobot Space Billing Details API
+  description: Billing details of a space.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Space Billing Details
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-space-billing-details-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-space-payment-method-api
+  name: Cobot Space Payment Method API
+  description: The payment method a space uses to pay their Cobot subscription.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Space Payment Method
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-space-payment-method-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-space-preview-api
+  name: Cobot Space Preview API
+  description: Preview of a to-be-created space.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Space Preview
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-space-preview-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-space-profile-api
+  name: Cobot Space Profile API
+  description: Public profile information such as location, phone, website, social media links.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Space Profile
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-space-profile-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-subscription-api
+  name: Cobot Subscription API
+  description: >-
+    How much a space pays Cobot, how many members they can have and the extras they have booked.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Subscription
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-subscription-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-team-api
+  name: Cobot Team API
+  description: The Team API from Cobot — 2 operation(s) for team.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Team
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-team-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-url-api
+  name: Cobot URL API
+  description: >-
+    These  URLs/URL templates enable API clients to provide
+
+    links to the Cobot web interface without having to hard-code them.
+
+
+    Each Url includes a unique, never changing `identifier` and either a `url`
+
+    or `urlTemplate`. Templates must be expanded according to RFC 6570.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - Url
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-url-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-user-api
+  name: Cobot User API
+  description: >-
+    A user is used to log in to Cobot via email/password. Users can be admins/members (see Membership)
+    in multiple spaces.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-user-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
+- aid: cobot:cobot-user-email-preview-api
+  name: Cobot User Email Preview API
+  description: Confirms if a given email address is free to take.
+  humanURL: https://dev.cobot.me/api2
+  baseURL: https://api.cobot.me
+  tags:
+  - User Email Preview
+  properties:
+  - type: OpenAPI
+    url: openapi/cobot-user-email-preview-api-openapi.yml
+  - type: Documentation
+    url: https://dev.cobot.me/api2
+  - type: APIReference
+    url: https://dev.cobot.me/api2
+  - type: ErrorCatalog
+    url: errors/cobot-problem-types.yml
+  - type: DataModel
+    url: data-model/cobot-data-model.yml
+  - type: OAuthScopes
+    url: scopes/cobot-scopes.yml
+  - type: Authentication
+    url: authentication/cobot-authentication.yml
+  - type: Conventions
+    url: conventions/cobot-conventions.yml
 common:
+- type: Overlay
+  url: overlays/cobot-api2-overlay.yaml
 - type: Website
   url: https://www.cobot.me/
 - type: DeveloperPortal
