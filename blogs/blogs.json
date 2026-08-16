@@ -1,0 +1,21 @@
+{
+  "repo": "cobot",
+  "feeds": [
+    {
+      "source": "https://helpcenter.cobot.me/en/",
+      "feed_url": "https://helpcenter.cobot.me/en/feed.xml",
+      "title": "",
+      "saved": 8,
+      "method": "discovered"
+    },
+    {
+      "source": "https://blog.cobot.me/",
+      "feed_url": "https://blog.cobot.me/rss/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 8,
+  "fetched": "2026-08-15T12:22:01Z"
+}
