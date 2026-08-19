@@ -1,0 +1,293 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot External Resource API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "External Resource",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/external_resources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create an external resource for a resource. Attributes set on the external\nresource override the attributes of the related resource. Attributes left\nnull on the external resource will fall back to the related resource.\n\n**Access**: The current user must be an admin of the space the resource belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Single resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/external_resources/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the resource."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show a single resource enabled for external booking.\n\n**Access**: Any user can access any space's external resources.\n"
+        },
+        {
+          "info": {
+            "name": "Update resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.cobot.me/external_resources/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the external resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update a resource enabled for external booking.\n\n**Access**: The current user must be an admin of the space the resource belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Delete",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/external_resources/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the resource."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete an external resource. The original resource the external resource is connected to is not deleted.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/external_resources/:id/availability",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the external resource."
+              },
+              {
+                "name": "filter[from]",
+                "value": "",
+                "type": "query",
+                "description": "The time from when on to return the availability."
+              },
+              {
+                "name": "filter[to]",
+                "value": "",
+                "type": "query",
+                "description": "The time until when to return the availability."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "See the times an external resource is still available to book. Considers existing\nbookings, the resource's booking times and calendar blockers.\n\n**Access**: Any user can access any space's external resources.\n"
+        },
+        {
+          "info": {
+            "name": "List for space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/external_resources",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the resources for."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the resources enabled for external booking for a space.\n\nThese resources can be booked and paid for by non-members of a space.\n\n**Access**: Any user can access any space's external resources.\n"
+        },
+        {
+          "info": {
+            "name": "Available resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/external_resources/available",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the resources for."
+              },
+              {
+                "name": "filter[from]",
+                "value": "",
+                "type": "query",
+                "description": "The start of the timespan to check for availability."
+              },
+              {
+                "name": "filter[to]",
+                "value": "",
+                "type": "query",
+                "description": "The end of the timespan to check for availability."
+              },
+              {
+                "name": "filter[ignoreBookingTimes]",
+                "value": "",
+                "type": "query",
+                "description": "If set to true, returns resources as available even when the requested time is outside of the resource's booking times setting or blocked by calendar blockers. Option available only for admins of a space."
+              },
+              {
+                "name": "filter[ignoreExternalBookingId]",
+                "value": "",
+                "type": "query",
+                "description": "Id of an external booking to not consider when determining\navailability. Useful for determining availbility before moving an\nexternal booking to a different time.\n"
+              },
+              {
+                "name": "filter[minimumCapacity]",
+                "value": "",
+                "type": "query",
+                "description": "If set, returns only resources where capacity is greater than or equal to requested value.\n"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the external resources that are available to book at a given time.\nThis means there are fewer existing bookings than the resources' units.\n`booking_times`, min/max duration and calendar blockers are also taken into account.\n\n**Access**: Any user can access any space's external resources.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

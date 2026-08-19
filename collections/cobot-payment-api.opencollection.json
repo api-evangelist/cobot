@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Payment API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/payments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Initiates a new payment for a purchase, but does not complete it.\nSupported purchases are:\n\n* external bookings - initiate a payment for an external booking (needs to happen before making the booking)\n  * discount codes can be applied only to external bookings for now\n* drop-in passes - initiate a payment for a drop-in pass (needs to happen before buying the pass)\n* event attendances - initiate a payment for an event attendance (needs to happen before before creating the event attendance)\n\nAfter"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

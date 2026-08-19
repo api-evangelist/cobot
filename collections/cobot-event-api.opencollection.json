@@ -1,0 +1,622 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Event API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Event",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/events",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create events as an admin. To become visible to members, events\nhave to be published after being created.\nEvents can be associated with resources, in which cases the\nresources will be booked for the duration of the event.\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Single event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/events/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response as comma separated string.\n\nIncluding `attendances.attendee` will also return `attendances`.\nA maximum of 5 attendances per event is returned. If the current user is attending,\ntheir attendance will be included in the 5. The full count is returned in the meta section.\n\nIncluding `attendances` requires the `read_event_attendances` scope.\nIncluding `attendances.attendee` requires the `read_event_attendances`, `read_memberships` and `read_contacts` scopes.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show a single event.\n\n**Access**: The current user must either be an admin or a member of a space or the space's network unless the event is public.\nIncluding `attendances` or `attendances.attendee` requires the current user to be an admin or member of the space or the space's network.\n"
+        },
+        {
+          "info": {
+            "name": "Update event",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.cobot.me/events/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update the details of an event. Note that the `publishedStatus` attribute can only be\nchanged via the publish/depublish endpoints.\n\n**Access**: The current user must be an admin of the space the event belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Delete event",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/events/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deleting an event will notify all attendees and refund their tickets if applicable.\n**Access**: The current user must be an admin of the space the event belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Attend event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/event_attendances",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Attend an event as member. Automatically creates a `Charge`\non the membership if the event has a price.\n\n**Access**: The current user must be a member of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Single event attendance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/event_attendances/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event attendance to get."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include attendee. Requires `read_memberships` and `read_contacts` scope."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get details of a single event attendance.\n\n**Access**: The current user must be an admin of the space the event belongs to,\nor the event attendee, or a member of the space if the attendance visibility is 'members',\nor anyone if the attendance has 'public' visibility.\n"
+        },
+        {
+          "info": {
+            "name": "Unattend event",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/event_attendances/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event attendance to delete."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Unattend an event as member. This refunds the ticket price\nif applicable.\n\n**Access**: The current user must be connected to the\nmembership the attendance belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "List attendances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/events/:id/attendances",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include attendees. Requires `read_memberships` scope."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all the attendances for an event. Attendances connect an\nevent with a membership or contact and can have an optional price.\n\n**Access**: The current user must be an admin or member of the space the event belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Create message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/event_messages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a message for an event.\nMessages are sent by email based on triggers such as someone attending an event.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Single message",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/event_messages/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the message."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a message for an event.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Update message",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.cobot.me/event_messages/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the message."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a message.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Delete message",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/event_messages/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the message."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete a message.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "List messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/events/:id/messages",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns the messages for an event.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Publish as admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/events/:id/publication",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event to publish."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Publish an event as an admin. To become visible to members, events\nhave to be published. This changes the `publishedState` of the event\nfrom `draft` to `published`.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Depublish as admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/events/:id/publication",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the event to depublish."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Depublish an event as an admin. This changes the `publishedState` of the event\nfrom `published` to `draft` and members cannot see the event anymore.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Create an event ticket purchase",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/event_ticket_purchases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "A purchase of event tickets, currently only supports buying one ticket at a time.\nThis is for visitors / non-members attending events.\n\n**Access**: Any user can create an event ticket purchase.\n"
+        },
+        {
+          "info": {
+            "name": "List events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/events",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the events for."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response as comma separated string.\n\nIncluding `attendances.attendee` will also return `attendances`.\nA maximum of 5 attendances per event is returned. If the current user is attending,\ntheir attendance will be included in the 5. The full count is returned in the meta section.\n\nIncluding `attendances` requires the `read_event_attendances` scope.\nIncluding `attendances.attendee` requires the `read_event_attendances` and `read_memberships` scopes.\n"
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-04-12T10:00:00Z",
+                "type": "query",
+                "description": "The start of the time range."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-04-30T23:59:59Z",
+                "type": "query",
+                "description": "The end of the time range."
+              },
+              {
+                "name": "filter[publishedState]",
+                "value": "draft,published",
+                "type": "query",
+                "description": "Return draft/published events. Pass a comma separated list of states.\nOnly admins can request draft events.\n"
+              },
+              {
+                "name": "filter[tags]",
+                "value": "party,free",
+                "type": "query",
+                "description": "Comma separated list of tags to filter events by.\nTo include events with no tags pass an empty\ntag (alone: `filter[tags]=`, with other tags: `filter[tags]=tag1,,tag2`).\nWhen this parameter is left out, events with any or no tags are returned.\n"
+              },
+              {
+                "name": "filter[resourceIds]",
+                "value": "a4a99a71ac8df98d29de357180d273d3,13b73f71ac8df98129de357180d219a6",
+                "type": "query",
+                "description": "Filter events by the resources they use (list of resource ids separated by commas).\nTo include events with no resources pass an empty resource id\n(alone: `filter[resourceIds]=`, with other ids: `filter[resourceIds]=r1,,r2`).\nWhen this parameter is left out, events with any or no resources are returned.\n"
+              },
+              {
+                "name": "filter[attendeeIds]",
+                "value": "c2a99a71ac8df98d29de357180d273d2,9a673f71ac8df98129de357180d219a8",
+                "type": "query",
+                "description": "Filter events by who is attending. Pass a comma separated list of ids (for now only membership ids)."
+              },
+              {
+                "name": "filter[sortOrder]",
+                "value": "",
+                "type": "query",
+                "description": "Whether to sort events by date ascending or descending."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List/filter events for a time range.\n**Access**: Any user can see the list of events. Only admins of the space can see draft events.\n"
+        },
+        {
+          "info": {
+            "name": "List Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/events/tags",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the event tags for."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-01-01T00:00:00Z",
+                "type": "query",
+                "description": "The start of the time range. If omitted, 12 months ago."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-06-30T23:59:59Z",
+                "type": "query",
+                "description": "The end of the time range. If omitted, now."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the most popular tags used when creating events. Returns tags for events\nwith the start or end date within specified time range (last 365 days by default).\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

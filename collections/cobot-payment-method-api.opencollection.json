@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Payment Method API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Method",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List externals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/external_bookings_payment_methods",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the payment methods for."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the payment methods of a space that can be used to pay for an external booking. Payment methods can have a payment provider.\nIn this case, custom attributes needed for payment processing are returned via the\n`providerAttributes`.\n\n**Access**: Any user can list a space's payment methods.\n"
+        },
+        {
+          "info": {
+            "name": "List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/payment_methods",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the payment methods for."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the payment methods of a space. Payment methods can have a payment provider.\nIn this case, custom attributes needed for payment processing are returned via the\n`providerAttributes`.\n\n**Access**: Any user can list a space's payment methods.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

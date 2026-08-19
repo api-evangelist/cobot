@@ -1,0 +1,490 @@
+openapi: 3.2.0
+info:
+  title: Cobot Drop-In Pass Template API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Drop-In Pass Template
+  description: Drop-in pass templates are templates for drop-in passes that can be bought by visitors.
+paths:
+  /drop_in_pass_templates/{id}:
+    get:
+      summary: Get a template
+      description: 'Get a single drop-in pass template.
+
+        These represent the drop-in passes a space offers to visitors.
+
+
+        **Access**: Any user can access any space''s drop-in pass templates.
+
+        '
+      operationId: get-drop-in-pass-template
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the template.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_drop_in_pass_templates
+      tags:
+      - Drop-In Pass Template
+      responses:
+        '200':
+          description: Details of a drop-in pass template.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/drop-in-pass-template'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: bc302cc2-f3f6-563e-8c09-37fcae5088b8
+                      type: dropInPassTemplates
+                      attributes:
+                        name: Day pass
+                        description: Valid for one day
+                        onboardingInstructions: Come in and pick any free desk.
+                        price:
+                          net: '89.0'
+                          gross: '98.35'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.5'
+                            amount: '9.35'
+                        timeAvailability:
+                        - from: 01:00
+                          to: 05:00
+                          weekdays:
+                          - 1
+                          - 2
+                          - 5
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        color: '#ff0000'
+                      relationships:
+                        availability:
+                          links:
+                            related: https://api.cobot.me/drop_in_pass_templates/bc302cc2-f3f6-563e-8c09-37fcae5088b8/availability
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+  /drop_in_pass_templates/{id}/availability:
+    get:
+      summary: Get the availability of a template
+      description: 'Get the dates a drop-in pass template is available for purchase. Considers time availability of the template, max daily purchases, and calendar blockers.
+
+
+        **Access**: Any user can access any space''s drop-in pass templates.
+
+        '
+      operationId: get-drop-in-pass-template-availability
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the template.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The date from when on to return the availability. Must not be in the past and not be more than 2 months before the to date.
+        schema:
+          type: string
+          format: date
+      - name: filter[to]
+        in: query
+        required: true
+        description: The date until when to return the availability. Must not be more than 2 months after the from date.
+        schema:
+          type: string
+          format: date
+      security:
+      - OAuth2:
+        - read_drop_in_pass_templates
+      tags:
+      - Drop-In Pass Template
+      responses:
+        '200':
+          description: Dates a drop-in pass template is available for purchases.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/drop-in-pass-template-availability'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: bc302cc2-f3f6-563e-8c09-37fcae5088b8
+                      type: dropInPassTemplateAvailabilities
+                      attributes:
+                        availableDates:
+                        - from: '2025-01-01'
+                          to: '2025-01-02'
+                          numberOfPasses: 2
+                        - from: '2025-01-05'
+                          to: '2025-01-10'
+                          numberOfPasses: 1
+                      relationships:
+                        dropInPassTemplate:
+                          data:
+                            id: bc302cc2-f3f6-563e-8c09-37fcae5088b8
+                            type: dropInPassTemplates
+components:
+  schemas:
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    hours-minutes:
+      type: string
+      pattern: ^\d{2}:\d{2}$
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    drop-in-pass-template-availability:
+      id: drop-in-pass-template-availability.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - dropInPassTemplateAvailabilities
+            attributes:
+              type: object
+              required:
+              - availableDates
+              additionalProperties: false
+              properties:
+                availableDates:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - from
+                    - to
+                    - numberOfPasses
+                    additionalProperties: false
+                    properties:
+                      from:
+                        type: string
+                        format: date
+                      to:
+                        type: string
+                        format: date
+                      numberOfPasses:
+                        description: The number of passes remaining for the date range. If there is no limit configured, this will be null.
+                        oneOf:
+                        - type: 'null'
+                        - type: integer
+                          minimum: 1
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - dropInPassTemplate
+              properties:
+                dropInPassTemplate:
+                  $ref: '#/components/schemas/relationship-linkage'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    -drop-in-pass-template-data:
+      id: -drop-in-pass-template-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - dropInPassTemplates
+        attributes:
+          type: object
+          required:
+          - name
+          - description
+          - onboardingInstructions
+          - price
+          - photo
+          - color
+          - timeAvailability
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+            description:
+              oneOf:
+              - type: string
+              - type: 'null'
+            onboardingInstructions:
+              oneOf:
+              - type: string
+              - type: 'null'
+            timeAvailability:
+              $ref: '#/components/schemas/bookingTimes'
+            photo:
+              oneOf:
+              - type: object
+                properties:
+                  icon:
+                    $ref: '#/components/schemas/photo'
+                  default:
+                    $ref: '#/components/schemas/photo'
+                  small:
+                    $ref: '#/components/schemas/photo'
+                  medium:
+                    $ref: '#/components/schemas/photo'
+                  large:
+                    $ref: '#/components/schemas/photo'
+                additionalProperties: false
+              - type: 'null'
+            color:
+              $ref: '#/components/schemas/color'
+            price:
+              $ref: '#/components/schemas/price'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          - availability
+          properties:
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            availability:
+              $ref: '#/components/schemas/related-link'
+    drop-in-pass-template:
+      id: drop-in-pass_template.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-drop-in-pass-template-data'
+    color:
+      description: 'Color hex code, e.g. #FF0000'
+      type: string
+      pattern: ^#[a-fA-F0-9]{6}$
+    bookingTimes:
+      type: array
+      description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
+      items:
+        oneOf:
+        - type: object
+          additionalProperties: false
+          required:
+          - from
+          - to
+          - weekdays
+          properties:
+            from:
+              $ref: '#/components/schemas/hours-minutes'
+            to:
+              $ref: '#/components/schemas/hours-minutes'
+            weekdays:
+              description: If empty, times are valid on any weekday. 1 = monday, 7 = sunday (see ISO 8601).
+              type: array
+              items:
+                type: number
+                minimum: 1
+                maximum: 7
+        - type: object
+          additionalProperties: false
+          required:
+          - hours
+          - minutes
+          properties:
+            hours:
+              type: integer
+            minutes:
+              type: integer
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

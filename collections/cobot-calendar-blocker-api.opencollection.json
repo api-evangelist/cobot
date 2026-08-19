@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Calendar Blocker API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Calendar Blocker",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Show calendar blocker",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/calendar_blockers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the calendar blocker."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show a single calendar blocker.\n\n**Access**: Any user can read any space's calendar blockers.\n"
+        },
+        {
+          "info": {
+            "name": "List for space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/calendar_blockers",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the calendar blockers belong to."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-04-12",
+                "type": "query",
+                "description": "Start of the date range."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-04-12",
+                "type": "query",
+                "description": "End of the date range."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all the calendar blockers for a space in the given time.\n\n**Access**: Any user can read any space's calendar blockers.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

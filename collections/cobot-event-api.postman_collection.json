@@ -1,0 +1,2605 @@
+{
+  "item": [
+    {
+      "id": "b732b2d0-f9b9-4b69-beb6-1ff0b18ea171",
+      "name": "Event",
+      "description": {
+        "content": "Spaces can run events for their members or the public.\nEvents are created and later published by admins, at which point members are able to see and attend them.\nAdmins can also create messages for events, which are sent to attendees based on triggers such as someone having\njust attended an event.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a824d2f0-a97b-42ad-86e5-302c61facd4b",
+          "name": "Create event",
+          "request": {
+            "name": "Create event",
+            "description": {
+              "content": "Create events as an admin. To become visible to members, events\nhave to be published after being created.\nEvents can be associated with resources, in which cases the\nresources will be booked for the duration of the event.\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"title\": \"<string>\",\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"audience\": \"<string>\",\n      \"description\": \"<string>\",\n      \"color\": \"<string>\",\n      \"videoUrl\": \"<string>\",\n      \"publicPage\": \"<boolean>\",\n      \"image\": \"<null>\",\n      \"location\": \"<string>\",\n      \"capacity\": \"<integer>\",\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"price\": {\n        \"net\": \"<string>\",\n        \"currency\": \"<string>\"\n      },\n      \"visitorPrice\": {\n        \"net\": \"<string>\",\n        \"currency\": \"<string>\"\n      },\n      \"accountingCode\": \"<string>\",\n      \"visitorAccountingCode\": \"<string>\",\n      \"costCenter\": {\n        \"name\": \"<string>\",\n        \"number\": \"<string>\"\n      },\n      \"revenueAccount\": \"<null>\",\n      \"visitorCostCenter\": {\n        \"name\": \"<string>\",\n        \"number\": \"<string>\"\n      },\n      \"visitorRevenueAccount\": \"<null>\"\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"meta\": {\n              \"units\": \"<integer>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"meta\": {\n              \"units\": \"<integer>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c36c7a77-18d4-4fcd-91f4-40fb8358f205",
+              "name": "New event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"currency\": \"EUR\"\n      },\n      \"accountingCode\": \"EVT\",\n      \"costCenter\": {\n        \"name\": \"Events\",\n        \"number\": \"2018-1\"\n      },\n      \"visitorCostCenter\": {\n        \"name\": \"Visitor Events\",\n        \"number\": \"2018-1\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Events\",\n        \"number\": \"4000\"\n      },\n      \"visitorRevenueAccount\": {\n        \"name\": \"Visitor Events\",\n        \"number\": \"4001\"\n      },\n      \"audience\": \"membersOnly\",\n      \"image\": {\n        \"data\": \"data:image/png;base64,...\"\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n            \"type\": \"resources\",\n            \"meta\": {\n              \"units\": 3\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"visitorPrice\": null,\n      \"expectedRevenue\": [\n        {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        }\n      ],\n      \"audience\": \"membersOnly\",\n      \"color\": \"#FF0000\",\n      \"accountingCode\": \"EVT\",\n      \"visitorAccountingCode\": null,\n      \"costCenter\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"E17\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"4000\"\n      },\n      \"visitorCostCenter\": null,\n      \"visitorRevenueAccount\": null,\n      \"image\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85,\n      \"publishedState\": \"draft\",\n      \"publicPage\": false,\n      \"publicUrl\": null,\n      \"canDepublish\": false\n    },\n    \"relationships\": {\n      \"attendances\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances\"\n        }\n      },\n      \"bookings\": {\n        \"data\": [\n          {\n            \"id\": \"419cabc7547473ea91762671f4641701\",\n            \"type\": \"bookings\"\n          }\n        ]\n      },\n      \"messages\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages\"\n        }\n      },\n      \"publication\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4be54580-7548-420f-ab00-5fe62633a2e6",
+          "name": "Single event",
+          "request": {
+            "name": "Single event",
+            "description": {
+              "content": "Show a single event.\n\n**Access**: The current user must either be an admin or a member of a space or the space's network unless the event is public.\nIncluding `attendances` or `attendances.attendee` requires the current user to be an admin or member of the space or the space's network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response as comma separated string.\n\nIncluding `attendances.attendee` will also return `attendances`.\nA maximum of 5 attendances per event is returned. If the current user is attending,\ntheir attendance will be included in the 5. The full count is returned in the meta section.\n\nIncluding `attendances` requires the `read_event_attendances` scope.\nIncluding `attendances.attendee` requires the `read_event_attendances`, `read_memberships` and `read_contacts` scopes.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response as comma separated string.\n\nIncluding `attendances.attendee` will also return `attendances`.\nA maximum of 5 attendances per event is returned. If the current user is attending,\ntheir attendance will be included in the 5. The full count is returned in the meta section.\n\nIncluding `attendances` requires the `read_event_attendances` scope.\nIncluding `attendances.attendee` requires the `read_event_attendances`, `read_memberships` and `read_contacts` scopes.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d33410c6-bee3-43b8-aaec-f2beb0002867",
+              "name": "A single event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"visitorPrice\": null,\n      \"expectedRevenue\": [\n        {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        }\n      ],\n      \"audience\": \"membersOnly\",\n      \"color\": \"#FF0000\",\n      \"accountingCode\": \"EVT\",\n      \"visitorAccountingCode\": null,\n      \"costCenter\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"E17\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"4000\"\n      },\n      \"visitorCostCenter\": null,\n      \"visitorRevenueAccount\": null,\n      \"image\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85,\n      \"publishedState\": \"draft\",\n      \"publicPage\": false,\n      \"publicUrl\": null,\n      \"canDepublish\": false\n    },\n    \"relationships\": {\n      \"attendances\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances\"\n        }\n      },\n      \"bookings\": {\n        \"data\": [\n          {\n            \"id\": \"419cabc7547473ea91762671f4641701\",\n            \"type\": \"bookings\"\n          }\n        ]\n      },\n      \"messages\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages\"\n        }\n      },\n      \"publication\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0bbeef91-715b-461e-85b2-3778d2ac35d8",
+          "name": "Update event",
+          "request": {
+            "name": "Update event",
+            "description": {
+              "content": "Update the details of an event. Note that the `publishedStatus` attribute can only be\nchanged via the publish/depublish endpoints.\n\n**Access**: The current user must be an admin of the space the event belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"title\": \"<string>\",\n      \"audience\": \"<string>\",\n      \"description\": \"<string>\",\n      \"color\": \"<string>\",\n      \"videoUrl\": \"<string>\",\n      \"publicPage\": \"<boolean>\",\n      \"image\": \"<null>\",\n      \"location\": \"<string>\",\n      \"capacity\": \"<integer>\",\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"price\": {\n        \"net\": \"<string>\",\n        \"currency\": \"<string>\"\n      },\n      \"visitorPrice\": {\n        \"net\": \"<string>\",\n        \"currency\": \"<string>\"\n      },\n      \"accountingCode\": \"<string>\",\n      \"visitorAccountingCode\": \"<string>\",\n      \"costCenter\": {\n        \"name\": \"<string>\",\n        \"number\": \"<string>\"\n      },\n      \"revenueAccount\": \"<null>\",\n      \"visitorCostCenter\": {\n        \"name\": \"<string>\",\n        \"number\": \"<string>\"\n      },\n      \"visitorRevenueAccount\": \"<null>\"\n    },\n    \"relationships\": {\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"meta\": {\n              \"units\": \"<integer>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"meta\": {\n              \"units\": \"<integer>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7bf36f0b-43a1-4c5e-aa60-18a783f9faa1",
+              "name": "The updated event.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"currency\": \"EUR\"\n      },\n      \"audience\": \"membersOnly\",\n      \"accountingCode\": \"EVT\",\n      \"costCenter\": {\n        \"name\": \"Events\",\n        \"number\": \"2018-1\"\n      },\n      \"visitorCostCenter\": {\n        \"name\": \"Visitor Events\",\n        \"number\": \"2018-1\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Events\",\n        \"number\": \"4000\"\n      },\n      \"visitorRevenueAccount\": {\n        \"name\": \"Visitor Events\",\n        \"number\": \"4001\"\n      },\n      \"image\": {\n        \"data\": \"data:image/png;base64,...\"\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85\n    },\n    \"relationships\": {\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n            \"type\": \"resources\",\n            \"meta\": {\n              \"units\": \"all\"\n            }\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"visitorPrice\": null,\n      \"expectedRevenue\": [\n        {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        }\n      ],\n      \"audience\": \"membersOnly\",\n      \"color\": \"#FF0000\",\n      \"accountingCode\": \"EVT\",\n      \"visitorAccountingCode\": null,\n      \"costCenter\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"E17\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"4000\"\n      },\n      \"visitorCostCenter\": null,\n      \"visitorRevenueAccount\": null,\n      \"image\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85,\n      \"publishedState\": \"draft\",\n      \"publicPage\": false,\n      \"publicUrl\": null,\n      \"canDepublish\": false\n    },\n    \"relationships\": {\n      \"attendances\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances\"\n        }\n      },\n      \"bookings\": {\n        \"data\": [\n          {\n            \"id\": \"419cabc7547473ea91762671f4641701\",\n            \"type\": \"bookings\"\n          }\n        ]\n      },\n      \"messages\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages\"\n        }\n      },\n      \"publication\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ea8a4f44-0112-480b-9cc4-1c8f8c2b5b1b",
+          "name": "Delete event",
+          "request": {
+            "name": "Delete event",
+            "description": {
+              "content": "Deleting an event will notify all attendees and refund their tickets if applicable.\n**Access**: The current user must be an admin of the space the event belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cea4d578-7b3f-453f-ba37-43265638e9aa",
+              "name": "Empty response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c83f55aa-ca7b-4f39-9d48-a41415cce8d4",
+          "name": "Attend event",
+          "request": {
+            "name": "Attend event",
+            "description": {
+              "content": "Attend an event as member. Automatically creates a `Charge`\non the membership if the event has a price.\n\n**Access**: The current user must be a member of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_attendances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"attendee\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    },\n    \"attributes\": {\n      \"visibility\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a4a7c8c6-afea-4921-9798-c5cadeb0f5cc",
+              "name": "Attendance",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_attendances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"eventAttendances\",\n    \"attributes\": {\n      \"visibility\": \"public\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      },\n      \"attendee\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"3130b02817a5aab19255fb8f2c9d1ee3\",\n    \"type\": \"eventAttendances\",\n    \"attributes\": {\n      \"createdAt\": \"2024-10-27T11:48:24+01:00\",\n      \"numberOfAttendees\": 1,\n      \"name\": \"Earl McBride\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"amount\": \"2.0\",\n            \"name\": \"VAT\",\n            \"rate\": \"20.0\"\n          }\n        ]\n      },\n      \"accountingCode\": \"EVT\",\n      \"visibility\": \"public\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      },\n      \"attendee\": {\n        \"data\": {\n          \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c74f7b29-ca27-4634-a78c-ed398496f364",
+              "name": "In case the member is already attending or the event capacity is reached.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_attendances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"eventAttendances\",\n    \"attributes\": {\n      \"visibility\": \"public\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      },\n      \"attendee\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Already attending event.\",\n      \"source\": {\n        \"pointer\": \"/data/relationships/attendee\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e781df4-fd7c-4a57-be40-1aa742cb9905",
+          "name": "Single event attendance",
+          "request": {
+            "name": "Single event attendance",
+            "description": {
+              "content": "Get details of a single event attendance.\n\n**Access**: The current user must be an admin of the space the event belongs to,\nor the event attendee, or a member of the space if the attendance visibility is 'members',\nor anyone if the attendance has 'public' visibility.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_attendances",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>,<string>",
+                  "description": "Include attendee. Requires `read_memberships` and `read_contacts` scope."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event attendance to get."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d91a7ab5-678c-4b8f-8bc4-ac744028bc84",
+              "name": "The event attendance.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_attendances",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event attendance to get."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"3130b02817a5aab19255fb8f2c9d1ee3\",\n    \"type\": \"eventAttendances\",\n    \"attributes\": {\n      \"accountingCode\": \"EVT\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"amount\": \"2.0\",\n            \"name\": \"VAT\",\n            \"rate\": \"20.0\"\n          }\n        ]\n      },\n      \"visibility\": \"public\",\n      \"numberOfAttendees\": 1,\n      \"name\": \"Earl McBride\",\n      \"createdAt\": \"2024-10-27T11:48:24+01:00\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      },\n      \"attendee\": {\n        \"data\": {\n          \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  },\n  \"included\": [\n    {\n      \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"memberships\",\n      \"attributes\": {\n        \"name\": \"Jane Fonda\",\n        \"email\": \"foksol@di.es\",\n        \"phone\": \"(746) 760-3432\",\n        \"company\": null,\n        \"confirmedAt\": \"2020-02-01\",\n        \"canceledAt\": null,\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        }\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"team\": {\n          \"data\": {\n            \"id\": \"4db23e1a-62a6-5115-8034-fc18b13bffac\",\n            \"type\": \"teams\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c15aa452-6d88-4e53-b8a6-c31270dc1610",
+          "name": "Unattend event",
+          "request": {
+            "name": "Unattend event",
+            "description": {
+              "content": "Unattend an event as member. This refunds the ticket price\nif applicable.\n\n**Access**: The current user must be connected to the\nmembership the attendance belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_attendances",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event attendance to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e39e3016-146a-4ef1-a936-95ff38bc78b8",
+              "name": "Attendance deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_attendances",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event attendance to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "29f7633e-5e24-4527-8b2e-26ad6dec1153",
+              "name": "In case event was not attended or has already started.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_attendances",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event attendance to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"You are not attending the event / Event has already started.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "165848ce-d80c-4d3c-9b19-abacbb3f7aaa",
+          "name": "List attendances",
+          "request": {
+            "name": "List attendances",
+            "description": {
+              "content": "List all the attendances for an event. Attendances connect an\nevent with a membership or contact and can have an optional price.\n\n**Access**: The current user must be an admin or member of the space the event belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "attendances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>,<string>",
+                  "description": "Include attendees. Requires `read_memberships` scope."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a6e638a0-ecff-43e3-8fa6-ff78323d6fc1",
+              "name": "The list of attendances with included attendees (memberships or contacts).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "attendances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"3130b02817a5aab19255fb8f2c9d1ee3\",\n      \"type\": \"eventAttendances\",\n      \"attributes\": {\n        \"accountingCode\": \"EVT\",\n        \"price\": {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"amount\": \"2.0\",\n              \"name\": \"VAT\",\n              \"rate\": \"20.0\"\n            }\n          ]\n        },\n        \"visibility\": \"public\",\n        \"numberOfAttendees\": 1,\n        \"name\": \"Earl McBride\",\n        \"createdAt\": \"2024-10-27T11:48:24+01:00\"\n      },\n      \"relationships\": {\n        \"event\": {\n          \"data\": {\n            \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n            \"type\": \"events\"\n          }\n        },\n        \"attendee\": {\n          \"data\": {\n            \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"abcdb02817a5aab19255fb8f2c9d1ee3\",\n      \"type\": \"eventAttendances\",\n      \"attributes\": {\n        \"accountingCode\": \"EVT\",\n        \"price\": {\n          \"net\": \"20.0\",\n          \"gross\": \"24.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"amount\": \"4.0\",\n              \"name\": \"VAT\",\n              \"rate\": \"20.0\"\n            }\n          ]\n        },\n        \"visibility\": \"public\",\n        \"numberOfAttendees\": 2,\n        \"name\": \"Earl McBride\",\n        \"createdAt\": \"2024-10-27T11:48:24+01:00\"\n      },\n      \"relationships\": {\n        \"event\": {\n          \"data\": {\n            \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n            \"type\": \"events\"\n          }\n        },\n        \"attendee\": {\n          \"data\": {\n            \"id\": \"24c12f62ac8df98d29de357180d673e1\",\n            \"type\": \"contacts\"\n          }\n        }\n      }\n    }\n  ],\n  \"included\": [\n    {\n      \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"memberships\",\n      \"attributes\": {\n        \"name\": \"Jane Fonda\",\n        \"email\": \"foksol@di.es\",\n        \"phone\": \"(746) 760-3432\",\n        \"company\": null,\n        \"confirmedAt\": \"2020-02-01\",\n        \"canceledAt\": null,\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        }\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"team\": {\n          \"data\": {\n            \"id\": \"4db23e1a-62a6-5115-8034-fc18b13bffac\",\n            \"type\": \"teams\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"24c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"contacts\",\n      \"attributes\": {\n        \"email\": \"jane@example.com\",\n        \"phone\": \"555-55-355\",\n        \"address\": {\n          \"name\": \"Jane Smitherson\",\n          \"company\": \"ACME Inc.\",\n          \"fullAddress\": \"3 Coworking Road\"\n        },\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        }\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e12fa77d-4213-4c7e-a739-b8a59482c9e0",
+          "name": "Create message",
+          "request": {
+            "name": "Create message",
+            "description": {
+              "content": "Create a message for an event.\nMessages are sent by email based on triggers such as someone attending an event.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"trigger\": \"<string>\",\n      \"body\": \"<string>\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "83a00075-0567-4fa1-ba1a-6bd675a6879a",
+              "name": "The created message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"eventMessages\",\n    \"attributes\": {\n      \"trigger\": \"attended\",\n      \"body\": \"This is what you need to know.\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"3910b02817a5aab19255fb8f2c9d1ea3\",\n    \"type\": \"eventMessages\",\n    \"attributes\": {\n      \"trigger\": \"attended\",\n      \"body\": \"This is what you need to know.\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e09e7277-4930-467d-9d38-6f345118ef4f",
+          "name": "Single message",
+          "request": {
+            "name": "Single message",
+            "description": {
+              "content": "Returns a message for an event.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_messages",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the message."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9a06b658-37da-4750-9a85-34fe4d3f357d",
+              "name": "The message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_messages",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"3910b02817a5aab19255fb8f2c9d1ea3\",\n    \"type\": \"eventMessages\",\n    \"attributes\": {\n      \"trigger\": \"attended\",\n      \"body\": \"This is what you need to know.\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38d95d55-dc35-4bfe-9c6e-4e65129dc281",
+          "name": "Update message",
+          "request": {
+            "name": "Update message",
+            "description": {
+              "content": "Updates a message.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_messages",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the message."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"trigger\": \"<string>\",\n      \"body\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9c9b109-1fed-45d6-8a94-9c34ccc007f9",
+              "name": "The updated message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_messages",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"3910b02817a5aab19255fb8f2c9d1ea3\",\n    \"type\": \"eventMessages\",\n    \"attributes\": {\n      \"body\": \"This is what you also need to know.\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"3910b02817a5aab19255fb8f2c9d1ea3\",\n    \"type\": \"eventMessages\",\n    \"attributes\": {\n      \"trigger\": \"attended\",\n      \"body\": \"This is what you also need to know.\"\n    },\n    \"relationships\": {\n      \"event\": {\n        \"data\": {\n          \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n          \"type\": \"events\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e12e0d9-bd95-43e3-85d4-4267993c3eac",
+          "name": "Delete message",
+          "request": {
+            "name": "Delete message",
+            "description": {
+              "content": "Delete a message.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_messages",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the message."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9f95e4c8-ae09-40c3-a32f-f44a609efdc1",
+              "name": "The message was deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_messages",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "36f6a97b-985e-4624-a799-5fd8afa977c7",
+          "name": "List messages",
+          "request": {
+            "name": "List messages",
+            "description": {
+              "content": "Returns the messages for an event.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ec993560-b824-4dd3-9c3b-2ea1b6202917",
+              "name": "The messages associated with the event.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"3910b02817a5aab19255fb8f2c9d1ea3\",\n      \"type\": \"eventMessages\",\n      \"attributes\": {\n        \"trigger\": \"attended\",\n        \"body\": \"This is what you need to know.\"\n      },\n      \"relationships\": {\n        \"event\": {\n          \"data\": {\n            \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n            \"type\": \"events\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f914138-34b4-49bf-b637-36257291714f",
+          "name": "Publish as admin",
+          "request": {
+            "name": "Publish as admin",
+            "description": {
+              "content": "Publish an event as an admin. To become visible to members, events\nhave to be published. This changes the `publishedState` of the event\nfrom `draft` to `published`.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "publication"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event to publish."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dfedfbe2-5496-42f0-ad50-baf16679f7ab",
+              "name": "Published event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "publication"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event to publish."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"visitorPrice\": null,\n      \"accountingCode\": \"EVT\",\n      \"visitorAccountingCode\": null,\n      \"costCenter\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"E17\"\n      },\n      \"visitorCostCenter\": null,\n      \"revenueAccount\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"4000\"\n      },\n      \"visitorRevenueAccount\": null,\n      \"audience\": \"membersOnly\",\n      \"color\": \"#FF0000\",\n      \"image\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85,\n      \"canDepublish\": true,\n      \"publishedState\": \"published\",\n      \"publicPage\": true,\n      \"publicUrl\": \"https://demo.cobot.me/event/2018-01-01-12-00-launch-party\"\n    },\n    \"relationships\": {\n      \"attendances\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances\"\n        }\n      },\n      \"bookings\": {\n        \"data\": [\n          {\n            \"id\": \"419cabc7547473ea91762671f4641701\",\n            \"type\": \"bookings\"\n          }\n        ]\n      },\n      \"messages\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages\"\n        }\n      },\n      \"publication\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "03fdd416-ca3a-4a39-9c06-2c294dfd0bea",
+              "name": "In case event was already published.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "publication"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event to publish."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Event is already published.\",\n      \"source\": {\n        \"pointer\": \"/data/attributes/publishedState\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ddcaf80a-9cf9-4333-8592-9cdf8757c0ac",
+          "name": "Depublish as admin",
+          "request": {
+            "name": "Depublish as admin",
+            "description": {
+              "content": "Depublish an event as an admin. This changes the `publishedState` of the event\nfrom `published` to `draft` and members cannot see the event anymore.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "publication"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the event to depublish."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "665cb4c6-529b-45f6-b819-4bafbe28ab99",
+              "name": "Depublished event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "publication"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event to depublish."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"events\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"launch party\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"visitorPrice\": null,\n      \"expectedRevenue\": [\n        {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        }\n      ],\n      \"audience\": \"membersOnly\",\n      \"color\": \"#FF0000\",\n      \"accountingCode\": \"EVT\",\n      \"visitorAccountingCode\": null,\n      \"costCenter\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"E17\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Events Revenue\",\n        \"number\": \"4000\"\n      },\n      \"visitorCostCenter\": null,\n      \"visitorRevenueAccount\": null,\n      \"image\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"description\": \"We are relaunching our coworking space!\",\n      \"location\": \"Lobby\",\n      \"tags\": [\n        \"party\"\n      ],\n      \"videoUrl\": null,\n      \"capacity\": 85,\n      \"publishedState\": \"draft\",\n      \"publicPage\": false,\n      \"publicUrl\": null,\n      \"canDepublish\": false\n    },\n    \"relationships\": {\n      \"attendances\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances\"\n        }\n      },\n      \"bookings\": {\n        \"data\": [\n          {\n            \"id\": \"419cabc7547473ea91762671f4641701\",\n            \"type\": \"bookings\"\n          }\n        ]\n      },\n      \"messages\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages\"\n        }\n      },\n      \"publication\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d15d8f86-0f74-43a4-a748-ccf80f24fafa",
+              "name": "In case event was already not published.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "publication"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the event to depublish."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Event is already not published.\",\n      \"source\": {\n        \"pointer\": \"/data/attributes/publishedState\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4f667bbc-2be8-4b00-acd1-61bbd6d86245",
+          "name": "Create an event ticket purchase",
+          "request": {
+            "name": "Create an event ticket purchase",
+            "description": {
+              "content": "A purchase of event tickets, currently only supports buying one ticket at a time.\nThis is for visitors / non-members attending events.\n\n**Access**: Any user can create an event ticket purchase.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "event_ticket_purchases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"eventTickets\": [\n        {\n          \"type\": \"<string>\",\n          \"attributes\": {\n            \"numberOfTickets\": \"<integer>\"\n          },\n          \"relationships\": {\n            \"event\": {\n              \"data\": {\n                \"id\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          }\n        },\n        {\n          \"type\": \"<string>\",\n          \"attributes\": {\n            \"numberOfTickets\": \"<integer>\"\n          },\n          \"relationships\": {\n            \"event\": {\n              \"data\": {\n                \"id\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          }\n        }\n      ],\n      \"acceptedTerms\": \"<boolean>\",\n      \"name\": \"<string>\",\n      \"billingAddress\": {\n        \"name\": \"<string,null>\",\n        \"company\": \"<string,null>\",\n        \"street\": \"<string>\",\n        \"postCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"countryCode\": \"<string>\",\n        \"state\": \"<string>\"\n      },\n      \"email\": \"<string>\",\n      \"company\": \"<string,null>\",\n      \"phone\": \"<string,null>\",\n      \"taxId\": \"<string,null>\",\n      \"comments\": \"<string,null>\"\n    },\n    \"relationships\": {\n      \"payment\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "98b60354-c1aa-4e77-a49c-058b806bcb5b",
+              "name": "The created event ticket purchase.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_ticket_purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"eventTicketPurchases\",\n    \"attributes\": {\n      \"eventTickets\": [\n        {\n          \"type\": \"eventTickets\",\n          \"attributes\": {\n            \"numberOfTickets\": 1\n          },\n          \"relationships\": {\n            \"event\": {\n              \"data\": {\n                \"id\": \"aeb19e5a78cc64be5056f6ef9a44f7d5\",\n                \"type\": \"events\"\n              }\n            }\n          }\n        }\n      ],\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc\",\n      \"billingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"phone\": \"(959) 645-9532\",\n      \"taxId\": \"123456789A\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\"\n    },\n    \"relationships\": {\n      \"payment\": {\n        \"data\": {\n          \"id\": \"jd73gf5a78cc64be5056f6ef9a44fuzt\",\n          \"type\": \"payments\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"eventTicketPurchases\",\n    \"attributes\": {\n      \"acceptedTerms\": true,\n      \"comments\": \"Looking forward to seeing your space!\",\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"email\": \"hello@example.com\",\n      \"phone\": \"(959) 645-9532\",\n      \"taxId\": \"12345678A\",\n      \"billingAddress\": \"123 Main St\\\\nSpringfield, IL, 12345\",\n      \"structuredBillingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"fullAddress\": \"123 Main St\\\\nSpringfield, IL, 12345\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"price\": {\n        \"net\": \"986.0\",\n        \"gross\": \"1089.53\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"Main Tax\",\n            \"rate\": \"10.5\",\n            \"amount\": \"103.53\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"attendances\": {\n        \"data\": [\n          {\n            \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n            \"type\": \"attendances\"\n          }\n        ]\n      },\n      \"paymentMethod\": {\n        \"data\": {\n          \"id\": \"25fc37c06c4a183ea17ada5306725705\",\n          \"type\": \"paymentMethods\"\n        }\n      },\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n            \"type\": \"invoices\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c96ccc2-0894-4f00-ab69-c2fdba2a2c66",
+              "name": "When sending a payment and capturing the payment fails, an error is returned.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "event_ticket_purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"eventTicketPurchases\",\n    \"attributes\": {\n      \"eventTickets\": [\n        {\n          \"type\": \"eventTickets\",\n          \"attributes\": {\n            \"numberOfTickets\": 1\n          },\n          \"relationships\": {\n            \"event\": {\n              \"data\": {\n                \"id\": \"aeb19e5a78cc64be5056f6ef9a44f7d5\",\n                \"type\": \"events\"\n              }\n            }\n          }\n        }\n      ],\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc\",\n      \"billingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"phone\": \"(959) 645-9532\",\n      \"taxId\": \"123456789A\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\"\n    },\n    \"relationships\": {\n      \"payment\": {\n        \"data\": {\n          \"id\": \"jd73gf5a78cc64be5056f6ef9a44fuzt\",\n          \"type\": \"payments\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Payment could not be captured.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e16ef10b-877c-402e-9586-89ad8ced89bb",
+          "name": "List events",
+          "request": {
+            "name": "List events",
+            "description": {
+              "content": "List/filter events for a time range.\n**Access**: Any user can see the list of events. Only admins of the space can see draft events.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response as comma separated string.\n\nIncluding `attendances.attendee` will also return `attendances`.\nA maximum of 5 attendances per event is returned. If the current user is attending,\ntheir attendance will be included in the 5. The full count is returned in the meta section.\n\nIncluding `attendances` requires the `read_event_attendances` scope.\nIncluding `attendances.attendee` requires the `read_event_attendances` and `read_memberships` scopes.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response as comma separated string.\n\nIncluding `attendances.attendee` will also return `attendances`.\nA maximum of 5 attendances per event is returned. If the current user is attending,\ntheir attendance will be included in the 5. The full count is returned in the meta section.\n\nIncluding `attendances` requires the `read_event_attendances` scope.\nIncluding `attendances.attendee` requires the `read_event_attendances` and `read_memberships` scopes.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The start of the time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The end of the time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[publishedState]",
+                  "value": "<string>,<string>",
+                  "description": "(Required) Return draft/published events. Pass a comma separated list of states.\nOnly admins can request draft events.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[tags]",
+                  "value": "<string>,<string>",
+                  "description": "Comma separated list of tags to filter events by.\nTo include events with no tags pass an empty\ntag (alone: `filter[tags]=`, with other tags: `filter[tags]=tag1,,tag2`).\nWhen this parameter is left out, events with any or no tags are returned.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[resourceIds]",
+                  "value": "<string>,<string>",
+                  "description": "Filter events by the resources they use (list of resource ids separated by commas).\nTo include events with no resources pass an empty resource id\n(alone: `filter[resourceIds]=`, with other ids: `filter[resourceIds]=r1,,r2`).\nWhen this parameter is left out, events with any or no resources are returned.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[attendeeIds]",
+                  "value": "<string>,<string>",
+                  "description": "Filter events by who is attending. Pass a comma separated list of ids (for now only membership ids)."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[sortOrder]",
+                  "value": "asc",
+                  "description": "Whether to sort events by date ascending or descending."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space to get the events for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7329e110-02e8-4b0d-b315-7001ec5c41ad",
+              "name": "Event list according to search filter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[from]",
+                      "value": "2012-04-12T10:00:00Z"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "2012-04-30T23:59:59Z"
+                    },
+                    {
+                      "key": "filter[publishedState]",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "filter[tags]",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "filter[resourceIds]",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "filter[attendeeIds]",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "filter[sortOrder]",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space to get the events for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n      \"type\": \"events\",\n      \"attributes\": {\n        \"from\": \"2018-01-01T12:00:00Z\",\n        \"to\": \"2018-01-01T14:00:00Z\",\n        \"title\": \"launch party\",\n        \"price\": {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        },\n        \"visitorPrice\": null,\n        \"expectedRevenue\": [\n          {\n            \"net\": \"10.0\",\n            \"gross\": \"12.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"20.0\",\n                \"name\": \"Tax\"\n              }\n            ]\n          }\n        ],\n        \"audience\": \"membersOnly\",\n        \"color\": \"#FF0000\",\n        \"accountingCode\": \"EVT\",\n        \"visitorAccountingCode\": null,\n        \"costCenter\": {\n          \"name\": \"Events Revenue\",\n          \"number\": \"E17\"\n        },\n        \"revenueAccount\": {\n          \"name\": \"Events Revenue\",\n          \"number\": \"4000\"\n        },\n        \"visitorCostCenter\": null,\n        \"visitorRevenueAccount\": null,\n        \"image\": {\n          \"icon\": {\n            \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"default\": {\n            \"url\": \"https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n            \"width\": 800,\n            \"height\": 600\n          }\n        },\n        \"description\": \"We are relaunching our coworking space!\",\n        \"location\": \"Lobby\",\n        \"tags\": [\n          \"party\"\n        ],\n        \"videoUrl\": null,\n        \"capacity\": 85,\n        \"publishedState\": \"draft\",\n        \"publicPage\": false,\n        \"publicUrl\": null,\n        \"canDepublish\": false\n      },\n      \"relationships\": {\n        \"attendances\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances\"\n          }\n        },\n        \"bookings\": {\n          \"data\": [\n            {\n              \"id\": \"419cabc7547473ea91762671f4641701\",\n              \"type\": \"bookings\"\n            }\n          ]\n        },\n        \"messages\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages\"\n          }\n        },\n        \"publication\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication\"\n          }\n        },\n        \"resources\": {\n          \"data\": [\n            {\n              \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n              \"type\": \"resources\"\n            }\n          ]\n        },\n        \"space\": {\n          \"data\": {\n            \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1cba39d8-b807-4016-9d41-1f0e04c819e2",
+          "name": "List Tags",
+          "request": {
+            "name": "List Tags",
+            "description": {
+              "content": "List the most popular tags used when creating events. Returns tags for events\nwith the start or end date within specified time range (last 365 days by default).\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "events",
+                "tags"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "The start of the time range. If omitted, 12 months ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "The end of the time range. If omitted, now."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space to get the event tags for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ca471de3-5813-41aa-8786-4c233f4d2713",
+              "name": "A list of the 20 most popular tags used for events in the space.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "events",
+                    "tags"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "2012-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "2012-06-30T23:59:59Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space to get the event tags for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"28ef9e2617065920faa4b39892645121\",\n      \"type\": \"eventTags\",\n      \"attributes\": {\n        \"name\": \"Party\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "fe0c62fb-ecf1-4d35-af36-d8a370b77ef2",
+    "name": "Cobot Event API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

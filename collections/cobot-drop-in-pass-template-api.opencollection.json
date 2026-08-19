@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Drop-In Pass Template API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Drop-In Pass Template",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/drop_in_pass_templates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the template."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a single drop-in pass template.\nThese represent the drop-in passes a space offers to visitors.\n\n**Access**: Any user can access any space's drop-in pass templates.\n"
+        },
+        {
+          "info": {
+            "name": "Get the availability of a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/drop_in_pass_templates/:id/availability",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the template."
+              },
+              {
+                "name": "filter[from]",
+                "value": "",
+                "type": "query",
+                "description": "The date from when on to return the availability. Must not be in the past and not be more than 2 months before the to date."
+              },
+              {
+                "name": "filter[to]",
+                "value": "",
+                "type": "query",
+                "description": "The date until when to return the availability. Must not be more than 2 months after the from date."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get the dates a drop-in pass template is available for purchase. Considers time availability of the template, max daily purchases, and calendar blockers.\n\n**Access**: Any user can access any space's drop-in pass templates.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

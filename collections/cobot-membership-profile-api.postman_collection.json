@@ -1,0 +1,818 @@
+{
+  "item": [
+    {
+      "id": "07dfeba6-fe66-4500-ab42-c9a037c777ce",
+      "name": "Membership Profile",
+      "description": {
+        "content": "Social profile for a membership.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ecf3fb18-7cfe-4d3a-b378-17255f401c31",
+          "name": "Single profile",
+          "request": {
+            "name": "Single profile",
+            "description": {
+              "content": "Get a single membership profile by its id.\n\n**Access**: The current user must be an admin or member of the space the\nmembership profile belongs to. If the space is part of a network, the user\nmust be an admin or member of any space in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "membership_profiles",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the membership profile."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9314b4f7-6917-455b-b88e-9bf73d3a9dee",
+              "name": "Returns the profile data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "membership_profiles",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the membership profile."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"membershipProfiles\",\n    \"attributes\": {\n      \"name\": \"Co Bot\",\n      \"email\": \"info@cobot.me\",\n      \"phone\": \"555-123 456\",\n      \"company\": \"Cobot\",\n      \"photo\": {\n        \"thumb\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n          \"width\": 50,\n          \"height\": 50\n        },\n        \"small\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"large\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n          \"width\": 285,\n          \"height\": 285\n        },\n        \"xlarge\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n          \"width\": 600,\n          \"height\": 600\n        },\n        \"hd\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n          \"width\": 1200,\n          \"height\": 1200\n        }\n      },\n      \"location\": \"Berlin, Germany\",\n      \"birthday\": \"2009-11-05\",\n      \"aboutMe\": \"I am a coworking robot.\",\n      \"website\": \"https://cobot.me\",\n      \"twitter\": \"https://twitter.com/cobot_me\",\n      \"facebook\": \"https://www.facebook.com/cobot.me\",\n      \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n      \"github\": \"https://github.com/cobot\",\n      \"instagram\": \"https://www.instagram.com/cobot_me/\"\n    },\n    \"relationships\": {\n      \"membership\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "676205e7-ead7-4b38-aee7-5f52f147c4b4",
+          "name": "Update profile",
+          "request": {
+            "name": "Update profile",
+            "description": {
+              "content": "Lets members update their profile.\n\n**Access**: The current user must be the owner of the membership that\nthe profile belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "membership_profiles",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the membership profile."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"location\": \"<string>\",\n      \"birthday\": \"<string>\",\n      \"aboutMe\": \"<string>\",\n      \"twitter\": \"<string>\",\n      \"instagram\": \"<string>\",\n      \"facebook\": \"<string>\",\n      \"linkedin\": \"<string>\",\n      \"github\": \"<string>\",\n      \"website\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"email\": \"<string>\",\n      \"company\": \"<string>\",\n      \"pronouns\": \"<string>\",\n      \"published\": \"<boolean>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cc13bb71-261a-4fc9-9131-ed826eec30c0",
+              "name": "Returns the profile data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "membership_profiles",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the membership profile."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"84b3d762-ffe2-5bd2-a11a-a66251fc26e4\",\n    \"type\": \"membershipProfiles\",\n    \"attributes\": {\n      \"location\": \"Berlin, Germany\",\n      \"birthday\": \"2009-11-05\",\n      \"aboutMe\": \"I am a coworking robot.\",\n      \"website\": \"https://cobot.me\",\n      \"twitter\": \"https://twitter.com/cobot_me\",\n      \"facebook\": \"https://www.facebook.com/cobot.me\",\n      \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n      \"github\": \"https://github.com/cobot\",\n      \"instagram\": \"https://www.instagram.com/cobot_me/\",\n      \"phone\": \"555-123 456\",\n      \"email\": \"info@cobot.me\",\n      \"company\": \"Cobot\",\n      \"published\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"membershipProfiles\",\n    \"attributes\": {\n      \"name\": \"Co Bot\",\n      \"email\": \"info@cobot.me\",\n      \"phone\": \"555-123 456\",\n      \"company\": \"Cobot\",\n      \"photo\": {\n        \"thumb\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n          \"width\": 50,\n          \"height\": 50\n        },\n        \"small\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"large\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n          \"width\": 285,\n          \"height\": 285\n        },\n        \"xlarge\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n          \"width\": 600,\n          \"height\": 600\n        },\n        \"hd\": {\n          \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n          \"width\": 1200,\n          \"height\": 1200\n        }\n      },\n      \"location\": \"Berlin, Germany\",\n      \"birthday\": \"2009-11-05\",\n      \"aboutMe\": \"I am a coworking robot.\",\n      \"website\": \"https://cobot.me\",\n      \"twitter\": \"https://twitter.com/cobot_me\",\n      \"facebook\": \"https://www.facebook.com/cobot.me\",\n      \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n      \"github\": \"https://github.com/cobot\",\n      \"instagram\": \"https://www.instagram.com/cobot_me/\",\n      \"published\": true\n    },\n    \"relationships\": {\n      \"membership\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c9032932-65de-427c-9d38-cf454b25700f",
+          "name": "For network",
+          "request": {
+            "name": "For network",
+            "description": {
+              "content": "Get a list of membership profiles for a network.\n\n**Access**: The current user must be an admin of the space or any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "networks",
+                ":networkId",
+                "membership_profiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "networkId",
+                  "description": "(Required) Id of the network."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c2579b6b-725a-4c43-9791-2bf3e0754380",
+              "name": "Returns the membership profiles of all memberships in all spaces of the network.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "networks",
+                    ":networkId",
+                    "membership_profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "networkId",
+                      "description": "(Required) Id of the network."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"membershipProfiles\",\n      \"attributes\": {\n        \"name\": \"Co Bot\",\n        \"email\": \"info@cobot.me\",\n        \"phone\": \"555-123 456\",\n        \"company\": \"Cobot\",\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        },\n        \"location\": \"Berlin, Germany\",\n        \"birthday\": \"2009-11-05\",\n        \"aboutMe\": \"I am a coworking robot.\",\n        \"website\": \"https://cobot.me\",\n        \"twitter\": \"https://twitter.com/cobot_me\",\n        \"facebook\": \"https://www.facebook.com/cobot.me\",\n        \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n        \"github\": \"https://github.com/cobot\",\n        \"instagram\": \"https://www.instagram.com/cobot_me/\"\n      },\n      \"relationships\": {\n        \"membership\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38b9a28f-fd27-4bd0-a8f2-f140d318a1a0",
+          "name": "Search network",
+          "request": {
+            "name": "Search network",
+            "description": {
+              "content": "Search the list of membership profiles for a network.\n\n**Access**: The current user must be an admin of the space or any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "networks",
+                ":networkId",
+                "membership_profiles",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[query]",
+                  "value": "<string>",
+                  "description": "(Required) The search query. All profile fields are searched."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "networkId",
+                  "description": "(Required) Id of the network."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b16f776c-1257-4917-aaf8-e99e108b4fc1",
+              "name": "Returns the membership profiles of all memberships in all\nspaces of the network matching the query.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "networks",
+                    ":networkId",
+                    "membership_profiles",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[query]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "networkId",
+                      "description": "(Required) Id of the network."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"membershipProfiles\",\n      \"attributes\": {\n        \"name\": \"Co Bot\",\n        \"email\": \"info@cobot.me\",\n        \"phone\": \"555-123 456\",\n        \"company\": \"Cobot\",\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        },\n        \"location\": \"Berlin, Germany\",\n        \"birthday\": \"2009-11-05\",\n        \"aboutMe\": \"I am a coworking robot.\",\n        \"website\": \"https://cobot.me\",\n        \"twitter\": \"https://twitter.com/cobot_me\",\n        \"facebook\": \"https://www.facebook.com/cobot.me\",\n        \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n        \"github\": \"https://github.com/cobot\",\n        \"instagram\": \"https://www.instagram.com/cobot_me/\"\n      },\n      \"relationships\": {\n        \"membership\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "80bf9034-40ca-4077-8386-acf3e4f65c40",
+          "name": "For space",
+          "request": {
+            "name": "For space",
+            "description": {
+              "content": "Get a list of membership profiles for a space.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "membership_profiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[membershipIds]",
+                  "value": "<string>,<string>",
+                  "description": "Only return profiles for the given memberships ids."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) Id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ce43e1f4-f95f-417c-9a8e-9205ea55eae4",
+              "name": "Returns the membership profiles of all memberships in the space.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "membership_profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[membershipIds]",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) Id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"membershipProfiles\",\n      \"attributes\": {\n        \"name\": \"Co Bot\",\n        \"email\": \"info@cobot.me\",\n        \"phone\": \"555-123 456\",\n        \"company\": \"Cobot\",\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        },\n        \"location\": \"Berlin, Germany\",\n        \"birthday\": \"2009-11-05\",\n        \"aboutMe\": \"I am a coworking robot.\",\n        \"website\": \"https://cobot.me\",\n        \"twitter\": \"https://twitter.com/cobot_me\",\n        \"facebook\": \"https://www.facebook.com/cobot.me\",\n        \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n        \"github\": \"https://github.com/cobot\",\n        \"instagram\": \"https://www.instagram.com/cobot_me/\",\n        \"published\": true\n      },\n      \"relationships\": {\n        \"membership\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dc3c8074-ba89-4ba7-afc4-e4bf926ebbd2",
+          "name": "Published for space",
+          "request": {
+            "name": "Published for space",
+            "description": {
+              "content": "Get a list of published membership profiles for a space.\n\n**Access**: The current user must be an admin or member of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "membership_profiles",
+                "published"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[membershipIds]",
+                  "value": "<string>,<string>",
+                  "description": "Only return profiles for the given memberships ids."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) Id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cb05fbc6-7847-4e9c-bd4f-9c29b9aaa2f8",
+              "name": "Returns the published membership profiles of all memberships in the space.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "membership_profiles",
+                    "published"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[membershipIds]",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) Id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a8c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"membershipProfiles\",\n      \"attributes\": {\n        \"name\": \"Co Bot\",\n        \"email\": \"info@cobot.me\",\n        \"phone\": \"555-123 456\",\n        \"company\": \"Cobot\",\n        \"photo\": {\n          \"thumb\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png\",\n            \"width\": 50,\n            \"height\": 50\n          },\n          \"small\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"large\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png\",\n            \"width\": 285,\n            \"height\": 285\n          },\n          \"xlarge\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png\",\n            \"width\": 600,\n            \"height\": 600\n          },\n          \"hd\": {\n            \"url\": \"https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png\",\n            \"width\": 1200,\n            \"height\": 1200\n          }\n        },\n        \"location\": \"Berlin, Germany\",\n        \"birthday\": \"2009-11-05\",\n        \"aboutMe\": \"I am a coworking robot.\",\n        \"website\": \"https://cobot.me\",\n        \"twitter\": \"https://twitter.com/cobot_me\",\n        \"facebook\": \"https://www.facebook.com/cobot.me\",\n        \"linkedin\": \"https://www.linkedin.com/company/cobot\",\n        \"github\": \"https://github.com/cobot\",\n        \"instagram\": \"https://www.instagram.com/cobot_me/\",\n        \"published\": true\n      },\n      \"relationships\": {\n        \"membership\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "953e0d31-47ac-40ac-a873-9f0d9888068c",
+    "name": "Cobot Membership Profile API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

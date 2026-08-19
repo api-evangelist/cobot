@@ -1,0 +1,613 @@
+{
+  "item": [
+    {
+      "id": "47b293e0-787d-410f-98c6-50fb35cc9b05",
+      "name": "Check-in",
+      "description": {
+        "content": "Members check in to a space for attendance tracking and for using up their time passes.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fc179c65-81c4-4200-b087-9f36e1a6ce43",
+          "name": "Check membership in",
+          "request": {
+            "name": "Check membership in",
+            "description": {
+              "content": "Checks a membership in at a space, after validating that checking in is\npossible (enough time passes, time restrictions). Potentially uses a time pass.\n\nIf the space is part of a network, the membership can be checked in to any space\nof the network.\n\n**Access**: The current user must be an admin of the space the membership belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "check_ins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"checkInToken\": \"<string>\"\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "26e6c993-2c83-4975-944c-8454987219f9",
+              "name": "Checked in successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "check_ins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"checkIns\",\n    \"attributes\": {\n      \"checkInToken\": \"12345\"\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"12a8fa71ac8df98d29de357180d274d8\",\n    \"type\": \"checkIns\",\n    \"attributes\": {\n      \"validFrom\": \"2018-01-01T12:45:00Z\",\n      \"validUntil\": \"2018-01-01T18:00:00Z\"\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc2a226c-71dd-4a41-b51c-baec6282078f",
+              "name": "Checking in failed because a condition was not met.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "check_ins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"checkIns\",\n    \"attributes\": {\n      \"checkInToken\": \"12345\"\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"No time passes left.\",\n      \"source\": {\n        \"pointer\": \"/data/attributes/base\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84cb786f-accc-4fb0-9ef5-daee664f138a",
+          "name": "Check membership out",
+          "request": {
+            "name": "Check membership out",
+            "description": {
+              "content": "Checks a membership (that is currently checked in at a space) out.\n\nIf the space is part of a network, the membership can be checked out of any space\nof the network.\n\n**Access**: The current user must be an admin of the space the membership belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "check_ins",
+                ":id",
+                "check_out"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the check-in to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0463d80c-ed29-4424-ae77-183a03362ac9",
+              "name": "Checked out successfully. `validUntil` is updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "check_ins",
+                    ":id",
+                    "check_out"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the check-in to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"12a8fa71ac8df98d29de357180d274d8\",\n    \"type\": \"checkIns\",\n    \"attributes\": {\n      \"validFrom\": \"2018-01-01T12:45:00Z\",\n      \"validUntil\": \"2018-01-01T17:00:00Z\"\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8b377230-c3f3-41ea-864c-063020e4482e",
+          "name": "For membership/time",
+          "request": {
+            "name": "For membership/time",
+            "description": {
+              "content": "List all check-ins of the membership starting in the given time range.\nIf the membership's space belongs to a network, this\nincludes check-ins from all spaces in the network.\n\n**Access**: The current user must be the owner of the membership or an admin\nin the space the membership belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "memberships",
+                ":membershipId",
+                "check_ins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start of the time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) End of the time range."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "membershipId",
+                  "description": "(Required) The id of the membership the bookings belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "56de5020-c862-4793-95ef-b37a3e4d4c52",
+              "name": "Membership check-ins for a given time range.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "memberships",
+                    ":membershipId",
+                    "check_ins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "2012-04-12T10:00:00Z"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "2012-04-12T18:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "membershipId",
+                      "description": "(Required) The id of the membership the bookings belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"12a8fa71ac8df98d29de357180d274d8\",\n      \"type\": \"checkIns\",\n      \"attributes\": {\n        \"validFrom\": \"2018-01-01T12:45:00Z\",\n        \"validUntil\": \"2018-01-01T19:53:00Z\"\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "462ef58e-8761-442e-b2e0-897bbe44fd90",
+          "name": "Current by token",
+          "request": {
+            "name": "Current by token",
+            "description": {
+              "content": "List check-ins for a membership in a space that are still current, i.e.\ntheir `validUntil` attribute is in the future.\n\nThe membership is determined by passing a `checkInToken`.\nIf the space is part of a network, check-ins can be fetched for any space\nof the network.\n\n**Access**: The current user must be an admin of the space the membership belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "check_ins",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[checkInToken]",
+                  "value": "<string>",
+                  "description": "(Required) A check-in token of the membership the check-ins belong to. Check-in tokens\nare created via the check-in token API and are typically MAC addresses\nor RFID tokens.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space the check-ins belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4b3bde01-dc9e-498a-ab7b-cdb1189a601a",
+              "name": "List check-ins.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "check_ins",
+                    "current"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[checkInToken]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space the check-ins belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"12a8fa71ac8df98d29de357180d274d8\",\n      \"type\": \"checkIns\",\n      \"attributes\": {\n        \"validFrom\": \"2018-01-01T12:45:00Z\",\n        \"validUntil\": \"2018-01-01T23:59:59Z\"\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n            \"type\": \"memberships\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4640154b-b7c3-4fb7-bc90-5be35c93b5bb",
+    "name": "Cobot Check In API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

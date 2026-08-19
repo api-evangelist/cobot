@@ -1,0 +1,223 @@
+{
+  "item": [
+    {
+      "id": "0bbeaa2d-9a73-49f5-942c-862707940433",
+      "name": "Drop-In Pass Purchase",
+      "description": {
+        "content": "A purchase of drop-in-passes, currently only supports buying one pass at a time.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "79605e71-009c-4cb9-b974-00a62efbb689",
+          "name": "Create",
+          "request": {
+            "name": "Create",
+            "description": {
+              "content": "Create a drop-in pass purchase.\n\n**Access**: Any user can create a drop-in pass purchase.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "drop_in_pass_purchases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"dropInPasses\": [\n        {\n          \"type\": \"<string>\",\n          \"attributes\": {\n            \"validOn\": \"<string>\",\n            \"numberOfPasses\": \"<integer>\"\n          },\n          \"relationships\": {\n            \"dropInPassTemplate\": {\n              \"data\": {\n                \"id\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          }\n        },\n        {\n          \"type\": \"<string>\",\n          \"attributes\": {\n            \"validOn\": \"<string>\",\n            \"numberOfPasses\": \"<integer>\"\n          },\n          \"relationships\": {\n            \"dropInPassTemplate\": {\n              \"data\": {\n                \"id\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          }\n        }\n      ],\n      \"acceptedTerms\": \"<boolean>\",\n      \"name\": \"<string>\",\n      \"billingAddress\": {\n        \"name\": \"<string,null>\",\n        \"company\": \"<string,null>\",\n        \"street\": \"<string>\",\n        \"postCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"countryCode\": \"<string>\",\n        \"state\": \"<string>\"\n      },\n      \"email\": \"<string>\",\n      \"company\": \"<string,null>\",\n      \"phone\": \"<string,null>\",\n      \"taxId\": \"<string,null>\",\n      \"comments\": \"<string,null>\"\n    },\n    \"relationships\": {\n      \"payment\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "25ef5caf-f6a7-4cac-a91c-3a0e6a239718",
+              "name": "The created drop-in pass purchase.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "drop_in_pass_purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"dropInPassPurchases\",\n    \"attributes\": {\n      \"dropInPasses\": [\n        {\n          \"type\": \"dropInPasses\",\n          \"attributes\": {\n            \"validOn\": \"2018-01-01\",\n            \"numberOfPasses\": 1\n          },\n          \"relationships\": {\n            \"dropInPassTemplate\": {\n              \"data\": {\n                \"id\": \"aeb19e5a78cc64be5056f6ef9a44f7d5\",\n                \"type\": \"dropInPassTemplates\"\n              }\n            }\n          }\n        }\n      ],\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc\",\n      \"billingAddress\": \"1422 Nuede Extension\",\n      \"phone\": \"(959) 645-9532\",\n      \"taxId\": \"123456789A\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\"\n    },\n    \"relationships\": {\n      \"payment\": {\n        \"data\": {\n          \"id\": \"jd73gf5a78cc64be5056f6ef9a44fuzt\",\n          \"type\": \"payments\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"dropInPassPurchases\",\n    \"attributes\": {\n      \"acceptedTerms\": true,\n      \"comments\": \"Looking forward to seeing your space!\",\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"email\": \"hello@example.com\",\n      \"phone\": \"(959) 645-9532\",\n      \"taxId\": \"12345678A\",\n      \"billingAddress\": \"1422 Nuede Extension\",\n      \"structuredBillingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"fullAddress\": \"1422 Nuede Extension\",\n        \"street\": null,\n        \"postCode\": null,\n        \"city\": null,\n        \"state\": null,\n        \"countryCode\": null\n      },\n      \"price\": {\n        \"net\": \"986.0\",\n        \"gross\": \"1089.53\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"Main Tax\",\n            \"rate\": \"10.5\",\n            \"amount\": \"103.53\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"dropInPasses\": {\n        \"data\": [\n          {\n            \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n            \"type\": \"dropInPasses\"\n          }\n        ]\n      },\n      \"paymentMethod\": {\n        \"data\": {\n          \"id\": \"25fc37c06c4a183ea17ada5306725705\",\n          \"type\": \"paymentMethods\"\n        }\n      },\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n            \"type\": \"invoices\"\n          }\n        ]\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "830396ca-7ff3-4fd7-8989-832c70fb9c60",
+              "name": "When sending a payment and capturing the payment fails, an error is returned.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "drop_in_pass_purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"dropInPassPurchases\",\n    \"attributes\": {\n      \"dropInPasses\": [\n        {\n          \"type\": \"dropInPasses\",\n          \"attributes\": {\n            \"validOn\": \"2018-01-01\",\n            \"numberOfPasses\": 1\n          },\n          \"relationships\": {\n            \"dropInPassTemplate\": {\n              \"data\": {\n                \"id\": \"aeb19e5a78cc64be5056f6ef9a44f7d5\",\n                \"type\": \"dropInPassTemplates\"\n              }\n            }\n          }\n        }\n      ],\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc\",\n      \"billingAddress\": \"1422 Nuede Extension\",\n      \"phone\": \"(959) 645-9532\",\n      \"taxId\": \"123456789A\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\"\n    },\n    \"relationships\": {\n      \"payment\": {\n        \"data\": {\n          \"id\": \"jd73gf5a78cc64be5056f6ef9a44fuzt\",\n          \"type\": \"payments\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Payment could not be captured.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6399e104-2f64-466e-b5e4-800c27b18c48",
+    "name": "Cobot Drop-In Pass Purchase API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

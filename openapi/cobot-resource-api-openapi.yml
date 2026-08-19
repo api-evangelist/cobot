@@ -1,0 +1,2505 @@
+openapi: 3.2.0
+info:
+  title: Cobot Resource API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Resource
+  description: A resource can be booked on an hourly basis using the booking calendar. Examples are conference rooms, presentation equipment, bikes etc.
+paths:
+  /networks/{networkId}/resource_availabilities:
+    get:
+      summary: List network resource availabilities
+      description: 'List the availability of multiple resources across all spaces in a network for a given time range. Considers existing bookings, each resource''s booking times, cutoff, and calendar blockers.
+
+
+        Only resources that belong to spaces within the specified network will be included in the results. Resource IDs from outside the network will be filtered out.
+
+
+        **Access**: The current user must be an admin or member of any space in the network.
+
+        '
+      operationId: get-network-resource-availabilities
+      parameters:
+      - name: networkId
+        in: path
+        required: true
+        description: The id of the network.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The time from when on to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[to]
+        in: query
+        required: true
+        description: The time until when to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[resourceIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Comma-separated list of resource ids to return availabilities for. Only resources belonging to spaces in this network will be included.
+        schema:
+          type: array
+          items:
+            type: string
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: Availabilities for the requested resources within the network.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource-availabilities'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T10:00:00Z'
+                          to: '2018-01-01T12:00:00Z'
+                        - from: '2018-01-01T14:30:00Z'
+                          to: '2018-01-01T19:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                    - id: b7b99a71ac8df98d29de357180d273d4
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T09:00:00Z'
+                          to: '2018-01-01T11:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: b7b99a71ac8df98d29de357180d273d4
+                            type: resources
+  /networks/{networkId}/resources:
+    get:
+      summary: List for network
+      description: 'Get a list of resources for all spaces in a network.
+
+
+        **Access**: The current user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-network-resources
+      parameters:
+      - name: networkId
+        in: path
+        description: Id of the network.
+        required: true
+        schema:
+          type: string
+      - name: filter[usage]
+        in: query
+        description: 'Filter resources by their usage. Defaults to `bookable` for backward compatibility.
+
+          '
+        required: false
+        schema:
+          type: string
+          enum:
+          - bookable
+          - allocatable
+          - all
+          default: bookable
+      - name: filter[spaceIds]
+        in: query
+        description: 'Comma-separated list of space IDs to filter resources by.
+
+          If omitted, returns resources for all spaces in the network.
+
+          '
+        required: false
+        schema:
+          type: string
+          example: space1,space2,space3
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: 'Returns the resources of all spaces in the network (or filtered spaces if specified).
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resources'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+  /networks/{networkId}/resources/available:
+    get:
+      summary: Available resources for network
+      description: 'List the bookable resources that are available to book at a given time across all spaces in a network.
+
+        This means there are fewer existing bookings than the resources'' units.
+
+        For members, the resources'' `booking_times`, cutoff, min/max duration and calendar blockers are also taken into account.
+
+
+        Only resources with `usage: bookable` are returned. Allocatable resources are not included.
+
+
+        **Access**: The current user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-available-network-resources
+      parameters:
+      - name: networkId
+        in: path
+        required: true
+        description: Id of the network.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The start of the timespan to check for availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[to]
+        in: query
+        required: true
+        description: The end of the timespan to check for availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[spaceIds]
+        in: query
+        required: false
+        description: 'Comma-separated list of space IDs to filter resources by.
+
+          If omitted, returns resources for all spaces in the network.
+
+          '
+        schema:
+          type: string
+          example: space1,space2,space3
+      - name: filter[ignoreBookingId]
+        in: query
+        required: false
+        description: Id of a booking to not consider when determining availability. Useful for determining availbility before moving a booking to a different time.
+        schema:
+          type: string
+      - name: filter[ignoreBookingTimes]
+        in: query
+        required: false
+        description: If set to true, returns resources as available even when the requested time is outside of the resource's booking times setting or blocked by calendar blockers. Option available only for admins of a space.
+        schema:
+          type: string
+          enum:
+          - true
+          - false
+      - name: filter[resourceIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Limit returned resources to the given resource ids (comma separated).
+        schema:
+          type: array
+          items:
+            type: string
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: 'The resources of all spaces in the network that are available to book at the given time.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resources'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+  /resources:
+    post:
+      summary: Create resource
+      description: 'Create a new resource in a space.
+
+
+        **Access**: The current user must be an admin of the space
+
+        the resource if created in.
+
+        '
+      operationId: post-resources
+      security:
+      - OAuth2:
+        - write_resources
+      tags:
+      - Resource
+      requestBody:
+        description: Data to create a resource.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-resource'
+            examples:
+              default:
+                value:
+                  data:
+                    type: resources
+                    attributes:
+                      name: Meeting Room
+                      resourceType: room
+                      pricing:
+                        currency: EUR
+                        taxes:
+                        - rate: '20.0'
+                          name: Tax
+                        pricePerHour:
+                          net: '10.0'
+                        discounts:
+                        - minimumDuration:
+                            hours: 2
+                            minutes: 30
+                          pricePerHour:
+                            net: '11.25'
+                        priceCaps:
+                        - maximumDuration:
+                            hours: 4
+                            minutes: 0
+                          price:
+                            net: '30.00'
+                      description: Large room, fits 12.
+                      units: 2
+                      capacity: 12
+                      bookingCutoff: 1
+                      cancellationPeriod: 3
+                      minBookingDuration: 30
+                      maxBookingDuration: 480
+                      color: '#ff0000'
+                      photo:
+                        data: data:image/png;base64,cGhvdG8=
+                      bookingTimesString: mo - tu 15:00 - 16:00
+                      costCenter:
+                        name: Bookings
+                        number: Room 1
+                      revenueAccount:
+                        name: Bookings
+                        number: '4000'
+                    relationships:
+                      space:
+                        data:
+                          type: spaces
+                          id: c4d25d6e-9409-5055-ba83-b75b9c253e75
+      responses:
+        '201':
+          description: Details of the new resource.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+  /resources/{id}:
+    get:
+      summary: Get resource
+      description: 'See details of the resource.
+
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-resource
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the resource.
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: 'List of related resources to include in response.
+
+          `media` are the additional photos of a resource (the primary photo is
+
+          in the `photo` attribute).
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - media
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: Details of the resource.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+    patch:
+      summary: Update resource
+      description: 'Update the details of a resource.
+
+
+        **Access**: The current user must be an admin of the space the resource belongs to.
+
+        '
+      operationId: patch-resource
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the resource.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_resources
+      tags:
+      - Resource
+      requestBody:
+        description: The resource attributes to update.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/update-resource'
+            examples:
+              default:
+                value:
+                  data:
+                    type: resources
+                    id: 2c2a8092-3273-50da-ba45-23badf1cdc5d
+                    attributes:
+                      name: Meeting Room
+                      pricing:
+                        currency: EUR
+                        taxes:
+                        - rate: '20.0'
+                          name: Tax
+                        pricePerHour:
+                          net: '10.0'
+                      description: Large room, fits 12.
+                      units: 2
+                      capacity: 12
+                      bookingCutoff: 1
+                      cancellationPeriod: 3
+                      minBookingDuration: 30
+                      maxBookingDuration: 480
+                      color: '#ff0000'
+                      photo:
+                        data: data:image/png;base64,cGhvdG8=
+                      bookingTimesString: mo - tu 15:00 - 16:00
+                    relationships:
+                      products:
+                        data:
+                        - id: 69efec34ba8df98d29de35cc80d27565
+                          type: products
+      responses:
+        '200':
+          description: Details of the updated resource.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+  /resources/{id}/availability:
+    get:
+      summary: Availability
+      description: 'See the times a resource is still available to book. Considers existing
+
+        bookings, the resource''s booking times, cutoff and calendar blockers.
+
+
+        Only resources with `usage: bookable` are supported. Returns an error for allocatable resources.
+
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-resource-availbility
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the resource.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The time from when on to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[to]
+        in: query
+        required: true
+        description: The time until when to return the availability.
+        schema:
+          type: string
+          format: date-time
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: Available booking times.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource-availability'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: a4a99a71ac8df98d29de357180d273d3
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T10:00:00Z'
+                          to: '2018-01-01T12:00:00Z'
+                        - from: '2018-01-01T14:30:00Z'
+                          to: '2018-01-01T19:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+  /spaces/{spaceId}/resources:
+    get:
+      summary: List for space
+      description: 'List the resources (and their categories) for a space.
+
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-resources
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space to get the resources for.
+        schema:
+          type: string
+      - name: filter[usage]
+        in: query
+        description: 'Filter resources by their usage. Defaults to `bookable` for backward compatibility.
+
+          '
+        required: false
+        schema:
+          type: string
+          enum:
+          - bookable
+          - allocatable
+          - all
+          default: bookable
+      - name: include
+        in: query
+        description: 'List of related resources to include in response.
+
+          Including `categories` requires the `read_resource_categories` scope.
+
+          `media` are the additional photos of a resource (the primary photo is
+
+          in the `photo` attribute).
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - categories
+            - media
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: The resources of a space, including their categories.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resources'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+                    included:
+                    - id: f227aa71ac8df98d29de357180d275a2
+                      type: resourceCategories
+                      attributes:
+                        name: Small Meeting Rooms
+  /spaces/{spaceId}/resources/available:
+    get:
+      summary: Available resources
+      description: 'List the bookable resources that are available to book at a given time.
+
+        This means there are fewer existing bookings than the resources'' units.
+
+        For members, the resources'' `booking_times`, cutoff, min/max duration and calendar blockers are also taken into account.
+
+
+        Only resources with `usage: bookable` are returned. Allocatable resources are not included.
+
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-available-resources
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space to get the resources for.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The start of the timespan to check for availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[to]
+        in: query
+        required: true
+        description: The end of the timespan to check for availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[ignoreBookingId]
+        in: query
+        required: false
+        description: Id of a booking to not consider when determining availability. Useful for determining availbility before moving a booking to a different time.
+        schema:
+          type: string
+      - name: filter[ignoreBookingTimes]
+        in: query
+        required: false
+        description: If set to true, returns resources as available even when the requested time is outside of the resource's booking times setting or blocked by calendar blockers. Option available only for admins of a space.
+        schema:
+          type: string
+          enum:
+          - true
+          - false
+      - name: filter[resourceIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Limit returned resources to the given resource ids (comma separated).
+        schema:
+          type: array
+          items:
+            type: string
+      - name: include
+        in: query
+        description: 'List of related resources to include in response.
+
+          Including `categories` requires the `read_resource_categories` scope.
+
+          `media` are the additional photos of a resource (the primary photo is
+
+          in the `photo` attribute).
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - categories
+            - media
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: 'The resources of a space that are available to book at the given time.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resources'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resources
+                      attributes:
+                        name: Meeting Room
+                        resourceType: room
+                        usage: bookable
+                        pricing:
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                          pricePerHour:
+                            net: '10.0'
+                            gross: '12.0'
+                            currency: EUR
+                            taxes:
+                            - rate: '20.0'
+                              name: Tax
+                          priceCap:
+                            maximumDuration:
+                              hours: 8
+                              minutes: 0
+                          discounts:
+                          - pricePerHour:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            minimumDuration:
+                              hours: 2
+                              minutes: 0
+                          priceCaps:
+                          - price:
+                              net: '10.0'
+                              gross: '12.0'
+                              currency: EUR
+                              taxes:
+                              - rate: '20.0'
+                                name: Tax
+                            maximumDuration:
+                              hours: 8
+                              minutes: 30
+                        accountingCode: ROOM
+                        area:
+                        - unit: sqm
+                          number: 40
+                        - unit: sqft
+                          number: 431
+                        areaPreferredUnit: sqm
+                        costCenter:
+                          name: Room Bookings
+                          number: ROOM3
+                        revenueAccount:
+                          name: Room Bookings
+                          number: '4000'
+                        description: Large room, fits 12.
+                        hidden: false
+                        units: 2
+                        capacity: 12
+                        minBookingDuration: 10
+                        maxBookingDuration: 20
+                        color: '#ff0000'
+                        bookingCutoff: 1
+                        cancellationPeriod: 0
+                        onlyAdminsCanBook: false
+                        canBook: true
+                        photo:
+                          icon:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        bookingTimesString: mo - tu 15:00 - 16:00
+                        bookingTimes:
+                        - from: '15:00'
+                          to: '16:00'
+                          weekdays:
+                          - 1
+                          - 2
+                      relationships:
+                        space:
+                          data:
+                            id: a927aa71ac8df98d29de357180d275a2
+                            type: spaces
+                        resourceAvailability:
+                          links:
+                            related: https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability
+                        categories:
+                          data:
+                          - id: f227aa71ac8df98d29de357180d275a2
+                            type: resourceCategories
+                        media:
+                          data:
+                          - id: b6288a71ac8df98d29de357180d21c99
+                            type: resourcePhotos
+                        products:
+                          data:
+                          - id: 69efec34ba8df98d29de35cc80d27565
+                            type: products
+  /spaces/{spaceId}/resource_availabilities:
+    get:
+      summary: List resource availabilities
+      description: 'List the availability of multiple resources in a space for a given time range. Considers existing bookings, each resource''s booking times, cutoff, and calendar blockers.
+
+
+        **Access**: The current user must be an admin or member of the space. If the space is part of a network, the user must be an admin or member of any space in the network.
+
+        '
+      operationId: get-resource-availabilities
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The time from when on to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[to]
+        in: query
+        required: true
+        description: The time until when to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[resource_ids]
+        in: query
+        required: true
+        style: form
+        explode: false
+        description: Comma-separated list of resource ids to return availabilities for.
+        schema:
+          type: array
+          items:
+            type: string
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Resource
+      responses:
+        '200':
+          description: Availabilities for the requested resources.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource-availabilities'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T10:00:00Z'
+                          to: '2018-01-01T12:00:00Z'
+                        - from: '2018-01-01T14:30:00Z'
+                          to: '2018-01-01T19:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                    - id: b7b99a71ac8df98d29de357180d273d4
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T09:00:00Z'
+                          to: '2018-01-01T11:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: b7b99a71ac8df98d29de357180d273d4
+                            type: resources
+components:
+  schemas:
+    positive-decimal:
+      description: A positive decimal number (>= 0).
+      type: string
+      pattern: ^\d+(\.\d+)?$
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    bookingTimesString:
+      description: When (weekdays, times) the resource can be booked. See the resource form in the admin section for the format.
+      type:
+      - 'null'
+      - string
+    resource-price-cap:
+      type: object
+      required:
+      - price
+      - maximumDuration
+      additionalProperties: false
+      properties:
+        price:
+          $ref: '#/components/schemas/price'
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    onlyAdminsCanBook:
+      description: Resource can be seen by members but not booked.
+      type: boolean
+    capacity:
+      description: How many people can fit inside
+      type:
+      - 'null'
+      - integer
+    data:
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - resourceAvailabilities
+        attributes:
+          type: object
+          required:
+          - availableTimes
+          additionalProperties: false
+          properties:
+            availableTimes:
+              type: array
+              items:
+                type: object
+                required:
+                - from
+                - to
+                additionalProperties: false
+                properties:
+                  from:
+                    type: string
+                    format: date-time
+                  to:
+                    type: string
+                    format: date-time
+        relationships:
+          type: object
+          additionalProperties: false
+          properties:
+            resource:
+              $ref: '#/components/schemas/relationship-linkage'
+    hidden:
+      description: Resource is hidden from members. Only admins can see it.
+      type: boolean
+    resourceType:
+      oneOf:
+      - type: 'null'
+      - type: string
+        enum:
+        - room
+        - desk
+        - other
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    color:
+      description: 'Color hex code, e.g. #FF0000'
+      type: string
+      pattern: ^#[a-fA-F0-9]{6}$
+    priceCaps:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+        - price
+        - maximumDuration
+        properties:
+          price:
+            $ref: '#/components/schemas/positive-money'
+          maximumDuration:
+            $ref: '#/components/schemas/hours-minutes-object'
+    pricing:
+      description: A pricing object, containing all pricing information for a given resource.
+      required:
+      - currency
+      - pricePerHour
+      - discounts
+      - priceCap
+      - priceCaps
+      - taxes
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/resource-discount'
+        priceCaps:
+          type: array
+          items:
+            $ref: '#/components/schemas/resource-price-cap'
+        priceCap:
+          description: Only charges for the booking up to the given duration.
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/resource-paid-time-cap'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+        fixedRates:
+          description: When set, regular price, discounts, price caps etc are ignored.
+          type: array
+          items:
+            $ref: '#/components/schemas/fixed-rate'
+      additionalProperties: false
+    fixedRates:
+      type: array
+      description: When set, regular price, discounts, price caps etc are ignored.
+      items:
+        $ref: '#/components/schemas/fixed-rate'
+    description:
+      type:
+      - string
+      - 'null'
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    photo-2:
+      oneOf:
+      - type: 'null'
+      - $ref: '#/components/schemas/image-upload'
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    resource-availability:
+      id: resource-availability.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - resourceAvailabilities
+            attributes:
+              type: object
+              required:
+              - availableTimes
+              additionalProperties: false
+              properties:
+                availableTimes:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - from
+                    - to
+                    additionalProperties: false
+                    properties:
+                      from:
+                        type: string
+                        format: date-time
+                      to:
+                        type: string
+                        format: date-time
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                resource:
+                  $ref: '#/components/schemas/relationship-linkage'
+    bookingCutoff:
+      description: This limits how many hours in advance of a booking's start time it can be made by members.
+      oneOf:
+      - type: 'null'
+      - type: integer
+        default: 0
+    update-resource:
+      id: update-resource.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - id
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: resources
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/createUpdateAttributes-2'
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                products:
+                  $ref: '#/components/schemas/products-2'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    color-2:
+      oneOf:
+      - type: 'null'
+      - $ref: '#/components/schemas/color'
+    maxBookingDuration:
+      description: in minutes
+      type:
+      - 'null'
+      - integer
+    resource-paid-time-cap:
+      type: object
+      required:
+      - maximumDuration
+      properties:
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+      additionalProperties: false
+    cancellationPeriod:
+      description: This limits how many hours in advance of a booking's start time it can still be edited or canceled by members.
+      oneOf:
+      - type: 'null'
+      - type: integer
+        default: 0
+    name:
+      type: string
+    create-resource:
+      id: create-resource.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: resources
+            attributes:
+              $ref: '#/components/schemas/createUpdateAttributes-2'
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              properties:
+                space:
+                  $ref: '#/components/schemas/relationship-linkage'
+                products:
+                  $ref: '#/components/schemas/products-2'
+    pricing-2:
+      type: object
+      description: A pricing object, containing all pricing information to create/update a resource.
+      additionalProperties: false
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        pricePerHour:
+          oneOf:
+          - $ref: '#/components/schemas/positive-money'
+          - type: 'null'
+        priceCap:
+          $ref: '#/components/schemas/priceCap'
+        discounts:
+          $ref: '#/components/schemas/discounts'
+        priceCaps:
+          $ref: '#/components/schemas/priceCaps'
+        taxes:
+          $ref: '#/components/schemas/taxes'
+        fixedRates:
+          $ref: '#/components/schemas/fixedRates'
+    hours-minutes-object:
+      type: object
+      required:
+      - hours
+      - minutes
+      additionalProperties: false
+      properties:
+        hours:
+          type: integer
+          minimum: 0
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 59
+    resources:
+      id: resources.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-resource-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            type: object
+    resource-discount:
+      type: object
+      required:
+      - pricePerHour
+      - minimumDuration
+      additionalProperties: false
+      properties:
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        minimumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    resource:
+      id: resource.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-resource-data'
+        included:
+          type: array
+          items:
+            type: object
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    hours-minutes:
+      type: string
+      pattern: ^\d{2}:\d{2}$
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    minBookingDuration:
+      description: in minutes
+      oneOf:
+      - type: 'null'
+      - type: integer
+        default: 0
+    fixed-rate:
+      type: object
+      additionalProperties: false
+      required:
+      - price
+      - maximumDuration
+      properties:
+        price:
+          $ref: '#/components/schemas/positive-money'
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    bookingTimes:
+      type: array
+      description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
+      items:
+        oneOf:
+        - type: object
+          additionalProperties: false
+          required:
+          - from
+          - to
+          - weekdays
+          properties:
+            from:
+              $ref: '#/components/schemas/hours-minutes'
+            to:
+              $ref: '#/components/schemas/hours-minutes'
+            weekdays:
+              description: If empty, times are valid on any weekday. 1 = monday, 7 = sunday (see ISO 8601).
+              type: array
+              items:
+                type: number
+                minimum: 1
+                maximum: 7
+        - type: object
+          additionalProperties: false
+          required:
+          - hours
+          - minutes
+          properties:
+            hours:
+              type: integer
+            minutes:
+              type: integer
+    priceCap:
+      description: Only charges for the booking up to the given duration.
+      oneOf:
+      - type: object
+        properties:
+          maximumDuration:
+            $ref: '#/components/schemas/hours-minutes-object'
+        additionalProperties: false
+      - type: 'null'
+    positive-money:
+      type: object
+      required:
+      - net
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/positive-decimal'
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    createUpdateAttributes-2:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/name'
+        resourceType:
+          $ref: '#/components/schemas/resourceType'
+        pricePerHour:
+          $ref: '#/components/schemas/positive-net-amount-with-currency-and-taxes'
+        description:
+          $ref: '#/components/schemas/description'
+        hidden:
+          $ref: '#/components/schemas/hidden'
+        onlyAdminsCanBook:
+          $ref: '#/components/schemas/onlyAdminsCanBook'
+        units:
+          $ref: '#/components/schemas/units'
+        capacity:
+          $ref: '#/components/schemas/capacity'
+        bookingCutoff:
+          $ref: '#/components/schemas/bookingCutoff'
+        cancellationPeriod:
+          $ref: '#/components/schemas/cancellationPeriod'
+        minBookingDuration:
+          $ref: '#/components/schemas/minBookingDuration'
+        maxBookingDuration:
+          $ref: '#/components/schemas/maxBookingDuration'
+        color:
+          $ref: '#/components/schemas/color-2'
+        photo:
+          $ref: '#/components/schemas/photo-2'
+        bookingTimesString:
+          $ref: '#/components/schemas/bookingTimesString'
+        accountingCode:
+          type:
+          - 'null'
+          - string
+        costCenter:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/cost-center'
+        revenueAccount:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/revenue-account'
+        discounts:
+          $ref: '#/components/schemas/discounts'
+        priceCaps:
+          $ref: '#/components/schemas/priceCaps'
+        pricing:
+          $ref: '#/components/schemas/pricing-2'
+    products-2:
+      description: Additional products bookable as booking extras with this resource.
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - type
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+                enum:
+                - products
+              id:
+                description: Id of a product (products endpoint) to add as bookable with this resource.
+                type: string
+    taxes:
+      oneOf:
+      - type: 'null'
+      - type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+          - rate
+          - name
+          properties:
+            rate:
+              $ref: '#/components/schemas/positive-decimal'
+            name:
+              type: string
+    units:
+      description: How many people can book in the same time
+      oneOf:
+      - type: 'null'
+      - type: integer
+        minimum: 1
+        default: 1
+    resource-availabilities:
+      id: resource-availabilities.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            type: object
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    image-upload:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          description: The image as data uri (content type + base64 encoded data)
+          type: string
+          pattern: ^data:image/\w+;base64,\S+$
+    discounts:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+        - pricePerHour
+        - minimumDuration
+        properties:
+          pricePerHour:
+            $ref: '#/components/schemas/positive-money'
+          minimumDuration:
+            $ref: '#/components/schemas/hours-minutes-object'
+    positive-net-amount-with-currency-and-taxes:
+      description: Positive amount with currency and taxes. Not setting any taxes will result in the space's default taxes being used.
+      type: object
+      required:
+      - net
+      - currency
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/positive-decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          $ref: '#/components/schemas/taxes'
+    -resource-data:
+      id: -resource-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        attributes:
+          type: object
+          required:
+          - accountingCode
+          - area
+          - areaPreferredUnit
+          - costCenter
+          - revenueAccount
+          - bookingTimes
+          - bookingTimesString
+          - canBook
+          - bookingCutoff
+          - cancellationPeriod
+          - capacity
+          - color
+          - description
+          - hidden
+          - maxBookingDuration
+          - minBookingDuration
+          - name
+          - onlyAdminsCanBook
+          - photo
+          - pricing
+          - resourceType
+          - units
+          - usage
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+            resourceType:
+              $ref: '#/components/schemas/resourceType'
+            usage:
+              description: Whether the resource is used for bookings or allocations
+              type: string
+              enum:
+              - bookable
+              - allocatable
+            pricing:
+              $ref: '#/components/schemas/pricing'
+            accountingCode:
+              type:
+              - 'null'
+              - string
+            area:
+              description: Floor area in square meters and square feet. Numbers may be null when not set.
+              type: array
+              minItems: 2
+              maxItems: 2
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - unit
+                - number
+                properties:
+                  unit:
+                    type: string
+                    enum:
+                    - sqm
+                    - sqft
+                  number:
+                    oneOf:
+                    - type: integer
+                    - type: 'null'
+            areaPreferredUnit:
+              description: The unit to display for the resource's space based on the space's country.
+              type: string
+              enum:
+              - sqm
+              - sqft
+            costCenter:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/cost-center'
+            revenueAccount:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/revenue-account'
+            description:
+              oneOf:
+              - type: string
+              - type: 'null'
+            hidden:
+              description: Resource is hidden from members. Only admins can see it.
+              type: boolean
+            onlyAdminsCanBook:
+              type: boolean
+            canBook:
+              type: boolean
+            units:
+              description: How many people can book at the same time
+              type: integer
+              minimum: 1
+            capacity:
+              description: How many people can fit inside
+              oneOf:
+              - type: integer
+              - type: 'null'
+            cancellationPeriod:
+              description: This limits how many hours in advance of a booking's start time it can still be edited or canceled by members.
+              type: integer
+            bookingCutoff:
+              description: This limits how many hours in advance of a booking's start time it can be made by members.
+              type: integer
+            minBookingDuration:
+              type: integer
+            maxBookingDuration:
+              oneOf:
+              - type: 'null'
+              - type: integer
+            color:
+              $ref: '#/components/schemas/color'
+            photo:
+              oneOf:
+              - type: 'null'
+              - type: object
+                properties:
+                  icon:
+                    $ref: '#/components/schemas/photo'
+                  default:
+                    $ref: '#/components/schemas/photo'
+                  small:
+                    $ref: '#/components/schemas/photo'
+                  medium:
+                    $ref: '#/components/schemas/photo'
+                  large:
+                    $ref: '#/components/schemas/photo'
+                additionalProperties: false
+            bookingTimes:
+              $ref: '#/components/schemas/bookingTimes'
+            bookingTimesString:
+              oneOf:
+              - type: 'null'
+              - type: string
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - categories
+          - resourceAvailability
+          - space
+          properties:
+            categories:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            externalResource:
+              $ref: '#/components/schemas/relationship-linkage'
+            media:
+              description: Additional photos of the resource. Only included when requested via include=media.
+              $ref: '#/components/schemas/relationship-linkage-array'
+            resourceAvailability:
+              $ref: '#/components/schemas/related-link'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            products:
+              $ref: '#/components/schemas/relationship-linkage-array'
+      definitions:
+        resourceType:
+          oneOf:
+          - type: 'null'
+          - type: string
+            enum:
+            - room
+            - desk
+            - other
+    relationship-linkage-array:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/linkage'
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

@@ -1,0 +1,865 @@
+openapi: 3.2.0
+info:
+  title: Cobot Membership Profile API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Membership Profile
+  description: Social profile for a membership.
+paths:
+  /membership_profiles/{id}:
+    get:
+      summary: Single profile
+      description: 'Get a single membership profile by its id.
+
+
+        **Access**: The current user must be an admin or member of the space the
+
+        membership profile belongs to. If the space is part of a network, the user
+
+        must be an admin or member of any space in the network.
+
+        '
+      operationId: get-membership-profile
+      parameters:
+      - name: id
+        in: path
+        description: Id of the membership profile.
+        required: true
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_membership_profiles
+      tags:
+      - Membership Profile
+      responses:
+        '200':
+          description: Returns the profile data.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/membership-profile'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: a8c12f62ac8df98d29de357180d673e1
+                      type: membershipProfiles
+                      attributes:
+                        name: Co Bot
+                        email: info@cobot.me
+                        phone: 555-123 456
+                        company: Cobot
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                        location: Berlin, Germany
+                        birthday: '2009-11-05'
+                        aboutMe: I am a coworking robot.
+                        website: https://cobot.me
+                        twitter: https://twitter.com/cobot_me
+                        facebook: https://www.facebook.com/cobot.me
+                        linkedin: https://www.linkedin.com/company/cobot
+                        github: https://github.com/cobot
+                        instagram: https://www.instagram.com/cobot_me/
+                      relationships:
+                        membership:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+    patch:
+      summary: Update profile
+      description: 'Lets members update their profile.
+
+
+        **Access**: The current user must be the owner of the membership that
+
+        the profile belongs to.
+
+        '
+      operationId: patch-membership-profile
+      parameters:
+      - name: id
+        in: path
+        description: Id of the membership profile.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The attributes to be updated.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/update-membership-profile'
+            examples:
+              default:
+                value:
+                  data:
+                    id: 84b3d762-ffe2-5bd2-a11a-a66251fc26e4
+                    type: membershipProfiles
+                    attributes:
+                      location: Berlin, Germany
+                      birthday: '2009-11-05'
+                      aboutMe: I am a coworking robot.
+                      website: https://cobot.me
+                      twitter: https://twitter.com/cobot_me
+                      facebook: https://www.facebook.com/cobot.me
+                      linkedin: https://www.linkedin.com/company/cobot
+                      github: https://github.com/cobot
+                      instagram: https://www.instagram.com/cobot_me/
+                      phone: 555-123 456
+                      email: info@cobot.me
+                      company: Cobot
+                      published: true
+      security:
+      - OAuth2:
+        - write_membership_profiles
+      tags:
+      - Membership Profile
+      responses:
+        '200':
+          description: Returns the profile data.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/membership-profile'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: a8c12f62ac8df98d29de357180d673e1
+                      type: membershipProfiles
+                      attributes:
+                        name: Co Bot
+                        email: info@cobot.me
+                        phone: 555-123 456
+                        company: Cobot
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                        location: Berlin, Germany
+                        birthday: '2009-11-05'
+                        aboutMe: I am a coworking robot.
+                        website: https://cobot.me
+                        twitter: https://twitter.com/cobot_me
+                        facebook: https://www.facebook.com/cobot.me
+                        linkedin: https://www.linkedin.com/company/cobot
+                        github: https://github.com/cobot
+                        instagram: https://www.instagram.com/cobot_me/
+                        published: true
+                      relationships:
+                        membership:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+  /networks/{networkId}/membership_profiles:
+    get:
+      summary: For network
+      description: 'Get a list of membership profiles for a network.
+
+
+        **Access**: The current user must be an admin of the space or any
+
+        space in the network.
+
+        '
+      operationId: get-network-membership-profiles
+      parameters:
+      - name: networkId
+        in: path
+        description: Id of the network.
+        required: true
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_membership_profiles
+      tags:
+      - Membership Profile
+      responses:
+        '200':
+          description: 'Returns the membership profiles of all memberships in all spaces of the network.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/membership-profiles'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: membershipProfiles
+                      attributes:
+                        name: Co Bot
+                        email: info@cobot.me
+                        phone: 555-123 456
+                        company: Cobot
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                        location: Berlin, Germany
+                        birthday: '2009-11-05'
+                        aboutMe: I am a coworking robot.
+                        website: https://cobot.me
+                        twitter: https://twitter.com/cobot_me
+                        facebook: https://www.facebook.com/cobot.me
+                        linkedin: https://www.linkedin.com/company/cobot
+                        github: https://github.com/cobot
+                        instagram: https://www.instagram.com/cobot_me/
+                      relationships:
+                        membership:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+  /networks/{networkId}/membership_profiles/search:
+    get:
+      summary: Search network
+      description: 'Search the list of membership profiles for a network.
+
+
+        **Access**: The current user must be an admin of the space or any
+
+        space in the network.
+
+        '
+      operationId: search-network-membership-profiles
+      parameters:
+      - name: networkId
+        in: path
+        description: Id of the network.
+        required: true
+        schema:
+          type: string
+      - name: filter[query]
+        in: query
+        description: The search query. All profile fields are searched.
+        required: true
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_membership_profiles
+      tags:
+      - Membership Profile
+      responses:
+        '200':
+          description: 'Returns the membership profiles of all memberships in all
+
+            spaces of the network matching the query.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/membership-profiles'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: membershipProfiles
+                      attributes:
+                        name: Co Bot
+                        email: info@cobot.me
+                        phone: 555-123 456
+                        company: Cobot
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                        location: Berlin, Germany
+                        birthday: '2009-11-05'
+                        aboutMe: I am a coworking robot.
+                        website: https://cobot.me
+                        twitter: https://twitter.com/cobot_me
+                        facebook: https://www.facebook.com/cobot.me
+                        linkedin: https://www.linkedin.com/company/cobot
+                        github: https://github.com/cobot
+                        instagram: https://www.instagram.com/cobot_me/
+                      relationships:
+                        membership:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+  /spaces/{spaceId}/membership_profiles:
+    get:
+      summary: For space
+      description: 'Get a list of membership profiles for a space.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: get-space-membership-profiles
+      parameters:
+      - name: spaceId
+        in: path
+        description: Id of the space.
+        required: true
+        schema:
+          type: string
+      - name: filter[membershipIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Only return profiles for the given memberships ids.
+        schema:
+          type: array
+          items:
+            type: string
+        example: c2a99a71ac8df98d29de357180d273d2,9a673f71ac8df98129de357180d219a8
+      security:
+      - OAuth2:
+        - read_membership_profiles
+      tags:
+      - Membership Profile
+      responses:
+        '200':
+          description: 'Returns the membership profiles of all memberships in the space.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/membership-profiles'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: membershipProfiles
+                      attributes:
+                        name: Co Bot
+                        email: info@cobot.me
+                        phone: 555-123 456
+                        company: Cobot
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                        location: Berlin, Germany
+                        birthday: '2009-11-05'
+                        aboutMe: I am a coworking robot.
+                        website: https://cobot.me
+                        twitter: https://twitter.com/cobot_me
+                        facebook: https://www.facebook.com/cobot.me
+                        linkedin: https://www.linkedin.com/company/cobot
+                        github: https://github.com/cobot
+                        instagram: https://www.instagram.com/cobot_me/
+                        published: true
+                      relationships:
+                        membership:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+  /spaces/{spaceId}/membership_profiles/published:
+    get:
+      summary: Published for space
+      description: 'Get a list of published membership profiles for a space.
+
+
+        **Access**: The current user must be an admin or member of the space.
+
+        '
+      operationId: get-space-published-membership-profiles
+      parameters:
+      - name: spaceId
+        in: path
+        description: Id of the space.
+        required: true
+        schema:
+          type: string
+      - name: filter[membershipIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Only return profiles for the given memberships ids.
+        schema:
+          type: array
+          items:
+            type: string
+        example: c2a99a71ac8df98d29de357180d273d2,9a673f71ac8df98129de357180d219a8
+      security:
+      - OAuth2:
+        - read_published_membership_profiles
+      tags:
+      - Membership Profile
+      responses:
+        '200':
+          description: 'Returns the published membership profiles of all memberships in the space.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/membership-profiles'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: membershipProfiles
+                      attributes:
+                        name: Co Bot
+                        email: info@cobot.me
+                        phone: 555-123 456
+                        company: Cobot
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                        location: Berlin, Germany
+                        birthday: '2009-11-05'
+                        aboutMe: I am a coworking robot.
+                        website: https://cobot.me
+                        twitter: https://twitter.com/cobot_me
+                        facebook: https://www.facebook.com/cobot.me
+                        linkedin: https://www.linkedin.com/company/cobot
+                        github: https://github.com/cobot
+                        instagram: https://www.instagram.com/cobot_me/
+                        published: true
+                      relationships:
+                        membership:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+components:
+  schemas:
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+    update-membership-profile:
+      id: update-membership-profile.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              pattern: membershipProfiles
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                location:
+                  type: string
+                birthday:
+                  oneOf:
+                  - $ref: '#/components/schemas/date'
+                  - $ref: '#/components/schemas/blank'
+                aboutMe:
+                  type: string
+                twitter:
+                  type: string
+                instagram:
+                  type: string
+                facebook:
+                  type: string
+                linkedin:
+                  type: string
+                github:
+                  type: string
+                website:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  oneOf:
+                  - $ref: '#/components/schemas/email'
+                  - $ref: '#/components/schemas/blank'
+                company:
+                  type: string
+                pronouns:
+                  type: string
+                published:
+                  type: boolean
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    membership-profile:
+      id: membership-profile.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-membership-profile-data'
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    -membership-profile-data:
+      id: -membership-profile-data.json#
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - membershipProfiles
+        attributes:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              oneOf:
+              - type: string
+              - type: 'null'
+            email:
+              oneOf:
+              - $ref: '#/components/schemas/email'
+              - type: 'null'
+            phone:
+              oneOf:
+              - type: string
+              - type: 'null'
+            pronouns:
+              oneOf:
+              - type: string
+              - type: 'null'
+            company:
+              oneOf:
+              - type: string
+              - type: 'null'
+            photo:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/avatar-photo'
+            published:
+              type: boolean
+            location:
+              oneOf:
+              - type: string
+              - type: 'null'
+            birthday:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            aboutMe:
+              oneOf:
+              - type: string
+              - type: 'null'
+            website:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+            twitter:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+            facebook:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+            linkedin:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+            github:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+            instagram:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          properties:
+            membership:
+              type: object
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    blank:
+      oneOf:
+      - type: 'null'
+      - type: string
+        pattern: ^\s*$
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    membership-profiles:
+      id: membership-profiles.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-membership-profile-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

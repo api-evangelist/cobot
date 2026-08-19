@@ -1,0 +1,319 @@
+{
+  "item": [
+    {
+      "id": "36616fc9-1788-4e1a-8373-c342bd7e0ec0",
+      "name": "Product",
+      "description": {
+        "content": "Products can be set up by a space and then used as booking extras or to create charges from.\nExamples are coffee, projectors, additional cleaning services etc.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2977fe5e-6f5e-483f-8705-2ed09899deb6",
+          "name": "Single product",
+          "request": {
+            "name": "Single product",
+            "description": {
+              "content": "A single product.\n\n**Access**: Any user can view products.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the product."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "eae79e7e-f3db-49a8-8478-03d992408c64",
+              "name": "The product.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"55c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"products\",\n    \"attributes\": {\n      \"name\": \"Cup of coffee\",\n      \"description\": \"Hot\",\n      \"accountingCode\": \"COFF\",\n      \"costCenter\": {\n        \"name\": \"Food\",\n        \"number\": \"100\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Revenue Food\",\n        \"number\": \"4000\"\n      },\n      \"enabledForScopes\": [\n        \"bookings\",\n        \"externalBookings\"\n      ],\n      \"pricing\": {\n        \"unit\": \"person\",\n        \"quantity\": \"1.0\",\n        \"price\": {\n          \"net\": \"5.0\",\n          \"gross\": \"6.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"Tax\",\n              \"rate\": \"20.0\",\n              \"amount\": \"1.0\"\n            }\n          ]\n        }\n      }\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"6f43c08b-4392-59d2-b6b5-03c4777f67b5\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32571a8a-66dc-4909-a4c7-460b6adf79a2",
+          "name": "List for space",
+          "request": {
+            "name": "List for space",
+            "description": {
+              "content": "List the products for a space. The products are returned in the order set up \nby admins, so should not be sorted again by the client.\n\n**Access**: Any user can view products.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "products"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[scope]",
+                  "value": "<string>",
+                  "description": "Only return products enabled for the given scopes.\nReturns products matching any of the provided scopes.\nReturns all products if no scope is provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[scope]",
+                  "value": "<string>",
+                  "description": "Only return products enabled for the given scopes.\nReturns products matching any of the provided scopes.\nReturns all products if no scope is provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "Include product categories. The categories are returned in the order set up \nby admins, so should not be sorted again by the client.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space to get the products for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c0f52535-df1d-4055-b26a-bc7ce7de4970",
+              "name": "The products of a space.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[scope]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[scope]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space to get the products for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"55c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"products\",\n      \"attributes\": {\n        \"name\": \"Cup of coffee\",\n        \"description\": \"Hot\",\n        \"accountingCode\": \"COFF\",\n        \"costCenter\": {\n          \"name\": \"Food\",\n          \"number\": \"100\"\n        },\n        \"revenueAccount\": {\n          \"name\": \"Revenue Food\",\n          \"number\": \"4000\"\n        },\n        \"enabledForScopes\": [\n          \"bookings\",\n          \"externalBookings\"\n        ],\n        \"pricing\": {\n          \"unit\": \"person\",\n          \"quantity\": \"1.0\",\n          \"price\": {\n            \"net\": \"5.0\",\n            \"gross\": \"6.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"Tax\",\n                \"rate\": \"20.0\",\n                \"amount\": \"1.0\"\n              }\n            ]\n          }\n        }\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"6f43c08b-4392-59d2-b6b5-03c4777f67b5\",\n            \"type\": \"spaces\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "91db772a-e145-4248-861e-7f6458a517a7",
+    "name": "Cobot Product API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

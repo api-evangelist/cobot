@@ -1,0 +1,409 @@
+openapi: 3.2.0
+info:
+  title: Cobot Network API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Network
+  description: Multiple spaces can form a network. This allows their members to access multiple spaces, for example to book resources.
+paths:
+  /networks/{id}:
+    get:
+      summary: Get single network
+      description: 'Get a network by its id. Spaces that are in a network expose a link to it.
+
+        **Access**: The current user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-network
+      parameters:
+      - name: include
+        in: query
+        style: form
+        explode: false
+        description: 'List of related resources to include in response.
+
+          Provide a comma separated list of relationship names.
+
+          Including `memberSpaces` requires the `read_spaces` scope.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - memberSpaces
+      - name: id
+        in: path
+        required: true
+        description: The id of the network.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_networks
+      tags:
+      - Network
+      responses:
+        '200':
+          description: The network and member spaces.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/network'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: d9a99a71ac8df98d29de357180d273d3
+                      type: networks
+                      relationships:
+                        memberSpaces:
+                          data:
+                          - id: 99da6cb66b5e6b39007690854fd66df9
+                            type: spaces
+                        memberships:
+                          links:
+                            related: https://api.cobot.me/networks/d9a99a71ac8df98d29de357180d273d3/memberships
+                        membershipProfiles:
+                          links:
+                            related: https://api.cobot.me/networks/d9a99a71ac8df98d29de357180d273d3/membership_profiles
+                with_include_spaces:
+                  value:
+                    data:
+                      id: d9a99a71ac8df98d29de357180d273d3
+                      type: networks
+                      relationships:
+                        memberSpaces:
+                          data:
+                          - id: 99da6cb66b5e6b39007690854fd66df9
+                            type: spaces
+                        memberships:
+                          links:
+                            related: https://api.cobot.me/networks/d9a99a71ac8df98d29de357180d273d3/memberships
+                        membershipProfiles:
+                          links:
+                            related: https://api.cobot.me/networks/d9a99a71ac8df98d29de357180d273d3/membership_profiles
+                    included:
+                    - type: spaces
+                      id: 99da6cb66b5e6b39007690854fd66df9
+                      attributes:
+                        subdomain: co-up
+  /networks/{networkId}/resource_availabilities:
+    get:
+      summary: List network resource availabilities
+      description: 'List the availability of multiple resources across all spaces in a network for a given time range. Considers existing bookings, each resource''s booking times, cutoff, and calendar blockers.
+
+
+        Only resources that belong to spaces within the specified network will be included in the results. Resource IDs from outside the network will be filtered out.
+
+
+        **Access**: The current user must be an admin or member of any space in the network.
+
+        '
+      operationId: get-network-resource-availabilities
+      parameters:
+      - name: networkId
+        in: path
+        required: true
+        description: The id of the network.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The time from when on to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[to]
+        in: query
+        required: true
+        description: The time until when to return the availability.
+        schema:
+          type: string
+          format: date-time
+      - name: filter[resourceIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Comma-separated list of resource ids to return availabilities for. Only resources belonging to spaces in this network will be included.
+        schema:
+          type: array
+          items:
+            type: string
+      security:
+      - OAuth2:
+        - read_resources
+      tags:
+      - Network
+      responses:
+        '200':
+          description: Availabilities for the requested resources within the network.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/resource-availabilities'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: a4a99a71ac8df98d29de357180d273d3
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T10:00:00Z'
+                          to: '2018-01-01T12:00:00Z'
+                        - from: '2018-01-01T14:30:00Z'
+                          to: '2018-01-01T19:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                    - id: b7b99a71ac8df98d29de357180d273d4
+                      type: resourceAvailabilities
+                      attributes:
+                        availableTimes:
+                        - from: '2018-01-01T09:00:00Z'
+                          to: '2018-01-01T11:00:00Z'
+                      relationships:
+                        resource:
+                          data:
+                            id: b7b99a71ac8df98d29de357180d273d4
+                            type: resources
+components:
+  schemas:
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    resource-availabilities:
+      id: resource-availabilities.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            type: object
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    data:
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - resourceAvailabilities
+        attributes:
+          type: object
+          required:
+          - availableTimes
+          additionalProperties: false
+          properties:
+            availableTimes:
+              type: array
+              items:
+                type: object
+                required:
+                - from
+                - to
+                additionalProperties: false
+                properties:
+                  from:
+                    type: string
+                    format: date-time
+                  to:
+                    type: string
+                    format: date-time
+        relationships:
+          type: object
+          additionalProperties: false
+          properties:
+            resource:
+              $ref: '#/components/schemas/relationship-linkage'
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    network:
+      id: network.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                memberSpaces:
+                  type: object
+                memberships:
+                  type: object
+                membershipProfiles:
+                  type: object
+        included:
+          type: array
+          items:
+            type: object
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

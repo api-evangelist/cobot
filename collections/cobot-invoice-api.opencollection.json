@@ -1,0 +1,474 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Invoice API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoice",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Charge invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/invoice_charges",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Bulk-charge invoices. The invoices will be charged in the background.\n\n**Access**: The current user must be an admin of the space of each invoice.\n"
+        },
+        {
+          "info": {
+            "name": "Create custom",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/invoices",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a custom invoice in a space.\n\nPass a *membership* relationship to assign the invoice to a membership.\nPass a *correctedInvoice* relationship and optional *writeOffCorrectedInvoice* flag to create a correction invoice.\n\n**Access**: The current user must be an admin of the space where the invoice is created.\n"
+        },
+        {
+          "info": {
+            "name": "Single invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/invoices/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show a single invoice.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created, and admin of any space in the network,\nor the user of the membership the invoice belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Single invoice PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/invoices/:id.pdf",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "Optional token to access the PDF without API authentication."
+              },
+              {
+                "name": "e_invoice",
+                "value": "",
+                "type": "query",
+                "description": "If set to true, returns the PDF without any payment related information."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show a single invoice PDF.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created, and admin of any space in the network,\nor the user of the membership the invoice belongs to.\n\nAlternatively, a token parameter can be provided to acces the PDF.\n"
+        },
+        {
+          "info": {
+            "name": "Lock invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/invoices/:id/lock",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Locks an invoice so it can not be edited anymore.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n"
+        },
+        {
+          "info": {
+            "name": "Remove invoice lock",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/invoices/:id/lock",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Removes the invoice lock so the invoice can be edited again (for example after external\ne-invoice generation failed). This is not allowed if the invoice already has a final PDF\nor e-invoicing data attached; in that case the request fails with\nHTTP 409.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n"
+        },
+        {
+          "info": {
+            "name": "Create an e-invoice for invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/invoices/:id/e_invoice",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create an e-invoice for the passed invoice and attach it to the PDF.\nThis will lock the invoice, preventing it from being changed manually afterwards.\nIf generation fails before a PDF is attached, call `DELETE /invoices/{id}/lock` so the invoice can be edited again.\nAfter an e-invoice or final PDF is attached, `DELETE /invoices/{id}/lock` returns HTTP 409 and does not unlock.\n\nSupports e-invoicing in Germany (ZUGFeRD) and Poland (KSeF).\n\nFor Polish KSeF e-invoices, pass `e_invoice_standard: \"KSe"
+        },
+        {
+          "info": {
+            "name": "Attach PDF to invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/invoices/:id/pdf",
+            "params": [
+              {
+                "name": "invoice_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Attaches a PDF to an invoice.\nThis can be used to create an e-invoice externally to replace the regular invoice pdf.\n\nThe invoice has to be locked.\nAn invoice that has been requested to be sent will be sent after the PDF is attached.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n"
+        },
+        {
+          "info": {
+            "name": "Payment methods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/invoices/:id/payment_methods",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the invoice."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Lists the payment methods used to pay an invoice.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n"
+        },
+        {
+          "info": {
+            "name": "Previews",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/invoice_previews",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the invoices belong to."
+              },
+              {
+                "name": "filter[from]",
+                "value": "",
+                "type": "query",
+                "description": "The start of the timespan to list previews for. Must be today or in the future."
+              },
+              {
+                "name": "filter[to]",
+                "value": "",
+                "type": "query",
+                "description": "The end of the timespan to list previews for."
+              },
+              {
+                "name": "filter[dateFilterField]",
+                "value": "",
+                "type": "query",
+                "description": "What field to use for filtering the invoice previews by date.\n* When using `invoiceDate` (default), previews are filtered based on the date the\ninvoice would be generated (this respects when invoices are generated before their due date).\n* When using `dueDate`, previews are filtered based on the due date of the future invoice\n  (disregarding that invoices might be generated before their due date).\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the previews of the invoices that will be generated in a space\nfor a timespan.\n\n**Access**: The current user must be an admin of the space where\nthe invoice is created.\n"
+        },
+        {
+          "info": {
+            "name": "List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/invoices",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the invoices belong to."
+              },
+              {
+                "name": "filter[debitorId]",
+                "value": "",
+                "type": "query",
+                "description": "To list invoices that belong to a single debitor (membership or team), pass the id of that membership or team."
+              },
+              {
+                "name": "filter[membershipId]",
+                "value": "",
+                "type": "query",
+                "description": "Same as `filter[debitorId]`, left for backward compatibility. Will be deprecated."
+              },
+              {
+                "name": "filter[from]",
+                "value": "",
+                "type": "query",
+                "description": "List invoices for all debitors whose invoice date is within the given timespan."
+              },
+              {
+                "name": "filter[to]",
+                "value": "",
+                "type": "query",
+                "description": "List invoices for all debitors whose invoice date is within the given timespan."
+              },
+              {
+                "name": "filter[dateFilterField]",
+                "value": "",
+                "type": "query",
+                "description": "What field to use for filtering the invoices by date.\n* When using `invoiceDate` (default), invoices are filtered based on the date the\n  invoice was generated (this respects when invoices are generated before their due date).\n* When using `dueDate`, invoices are filtered based on their due date\n  (disregarding that invoices might be generated before their due date).\n* When using `remindAt`, invoices are filtered based on the date the invoice's reminder is due. Only unpaid invoices are included.\n"
+              },
+              {
+                "name": "filter[paidStatus]",
+                "value": "",
+                "type": "query",
+                "description": "Filter the invoices by their paid status. Can not be combined with any of the other filters.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the invoices issued by a space:\n\n* all invoices in a given time (pass `filter[to/from]`)\n* for a single membership or team (pass `filter[debitorId]`)\n* all invoices with a specific paid status (pass `filter[paidStatus]`)\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created. If the space is part of a network,\nthe user must be an admin of any space in the network.\n"
+        },
+        {
+          "info": {
+            "name": "Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/invoices/search",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the invoices belong to."
+              },
+              {
+                "name": "filter[query]",
+                "value": "",
+                "type": "query",
+                "description": "The text query to search for."
+              },
+              {
+                "name": "filter[paidStatus]",
+                "value": "",
+                "type": "query",
+                "description": "Provide a comma separated list. Default: all.\npaidStatus=late returns unpaid invoices with remind_at date in the past.\n"
+              },
+              {
+                "name": "filter[sentStatus]",
+                "value": "",
+                "type": "query",
+                "description": "Provide a comma separated list. Default: all.\n"
+              },
+              {
+                "name": "filter[sortBy]",
+                "value": "",
+                "type": "query",
+                "description": "One from the list, default: invoiceDate.\n"
+              },
+              {
+                "name": "filter[sortOrder]",
+                "value": "",
+                "type": "query",
+                "description": "Default: desc.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Text query searches through invoice number, invoice items and recipient name or company.\nReturns paginated list of invoices and number of pages in total.\n\n**Access**: The current user must be an admin of the space.\nIf the space is part of a network, the user must be an admin of any space in the network.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

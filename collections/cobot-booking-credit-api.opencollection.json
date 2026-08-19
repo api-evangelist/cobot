@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Booking Credit API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Booking Credit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "For membership",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/memberships/:membershipId/booking_credits",
+            "params": [
+              {
+                "name": "membershipId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the membership the booking credits belong to."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the total and remaing booking credits for a membership and each resource.\n\n**Access**: The current user must be the owner of the membership or an admin\nin the space the membership belongs to.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

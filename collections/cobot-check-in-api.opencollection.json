@@ -1,0 +1,160 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Check In API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Check-in",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check membership in",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/check_ins",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Checks a membership in at a space, after validating that checking in is\npossible (enough time passes, time restrictions). Potentially uses a time pass.\n\nIf the space is part of a network, the membership can be checked in to any space\nof the network.\n\n**Access**: The current user must be an admin of the space the membership belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Check membership out",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cobot.me/check_ins/:id/check_out",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the check-in to update."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Checks a membership (that is currently checked in at a space) out.\n\nIf the space is part of a network, the membership can be checked out of any space\nof the network.\n\n**Access**: The current user must be an admin of the space the membership belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "For membership/time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/memberships/:membershipId/check_ins",
+            "params": [
+              {
+                "name": "membershipId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the membership the bookings belong to."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-04-12T10:00:00Z",
+                "type": "query",
+                "description": "Start of the time range."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-04-12T18:00:00Z",
+                "type": "query",
+                "description": "End of the time range."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all check-ins of the membership starting in the given time range.\nIf the membership's space belongs to a network, this\nincludes check-ins from all spaces in the network.\n\n**Access**: The current user must be the owner of the membership or an admin\nin the space the membership belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Current by token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/check_ins/current",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the check-ins belong to."
+              },
+              {
+                "name": "filter[checkInToken]",
+                "value": "",
+                "type": "query",
+                "description": "A check-in token of the membership the check-ins belong to. Check-in tokens\nare created via the check-in token API and are typically MAC addresses\nor RFID tokens.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List check-ins for a membership in a space that are still current, i.e.\ntheir `validUntil` attribute is in the future.\n\nThe membership is determined by passing a `checkInToken`.\nIf the space is part of a network, check-ins can be fetched for any space\nof the network.\n\n**Access**: The current user must be an admin of the space the membership belongs to.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

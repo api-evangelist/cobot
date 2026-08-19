@@ -1,0 +1,1551 @@
+{
+  "item": [
+    {
+      "id": "830b81db-6716-436a-aff1-aad4a7fb486f",
+      "name": "Resource",
+      "description": {
+        "content": "A resource can be booked on an hourly basis using the booking calendar. Examples are conference rooms, presentation equipment, bikes etc.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9476617f-10b0-4e89-b170-f142e1a8b45a",
+          "name": "List network resource availabilities",
+          "request": {
+            "name": "List network resource availabilities",
+            "description": {
+              "content": "List the availability of multiple resources across all spaces in a network for a given time range. Considers existing bookings, each resource's booking times, cutoff, and calendar blockers.\n\nOnly resources that belong to spaces within the specified network will be included in the results. Resource IDs from outside the network will be filtered out.\n\n**Access**: The current user must be an admin or member of any space in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "networks",
+                ":networkId",
+                "resource_availabilities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The time from when on to return the availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The time until when to return the availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[resourceIds]",
+                  "value": "<string>,<string>",
+                  "description": "Comma-separated list of resource ids to return availabilities for. Only resources belonging to spaces in this network will be included."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "networkId",
+                  "description": "(Required) The id of the network."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "992f061e-4f62-4fa0-90cf-239d6ae77267",
+              "name": "Availabilities for the requested resources within the network.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "networks",
+                    ":networkId",
+                    "resource_availabilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[resourceIds]",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "networkId",
+                      "description": "(Required) The id of the network."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n      \"type\": \"resourceAvailabilities\",\n      \"attributes\": {\n        \"availableTimes\": [\n          {\n            \"from\": \"2018-01-01T10:00:00Z\",\n            \"to\": \"2018-01-01T12:00:00Z\"\n          },\n          {\n            \"from\": \"2018-01-01T14:30:00Z\",\n            \"to\": \"2018-01-01T19:00:00Z\"\n          }\n        ]\n      },\n      \"relationships\": {\n        \"resource\": {\n          \"data\": {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"b7b99a71ac8df98d29de357180d273d4\",\n      \"type\": \"resourceAvailabilities\",\n      \"attributes\": {\n        \"availableTimes\": [\n          {\n            \"from\": \"2018-01-01T09:00:00Z\",\n            \"to\": \"2018-01-01T11:00:00Z\"\n          }\n        ]\n      },\n      \"relationships\": {\n        \"resource\": {\n          \"data\": {\n            \"id\": \"b7b99a71ac8df98d29de357180d273d4\",\n            \"type\": \"resources\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "71e55749-e189-4e7c-a0ae-20e512419b89",
+          "name": "List for network",
+          "request": {
+            "name": "List for network",
+            "description": {
+              "content": "Get a list of resources for all spaces in a network.\n\n**Access**: The current user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "networks",
+                ":networkId",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[usage]",
+                  "value": "bookable",
+                  "description": "Filter resources by their usage. Defaults to `bookable` for backward compatibility.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[spaceIds]",
+                  "value": "<string>",
+                  "description": "Comma-separated list of space IDs to filter resources by.\nIf omitted, returns resources for all spaces in the network.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "networkId",
+                  "description": "(Required) Id of the network."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a7a3e880-5c1a-4374-910d-86fb9af5c4b6",
+              "name": "Returns the resources of all spaces in the network (or filtered spaces if specified).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "networks",
+                    ":networkId",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[usage]",
+                      "value": "bookable"
+                    },
+                    {
+                      "key": "filter[spaceIds]",
+                      "value": "space1,space2,space3"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "networkId",
+                      "description": "(Required) Id of the network."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n      \"type\": \"resources\",\n      \"attributes\": {\n        \"name\": \"Meeting Room\",\n        \"resourceType\": \"room\",\n        \"usage\": \"bookable\",\n        \"pricing\": {\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ],\n          \"pricePerHour\": {\n            \"net\": \"10.0\",\n            \"gross\": \"12.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"20.0\",\n                \"name\": \"Tax\"\n              }\n            ]\n          },\n          \"priceCap\": {\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 0\n            }\n          },\n          \"discounts\": [\n            {\n              \"pricePerHour\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"minimumDuration\": {\n                \"hours\": 2,\n                \"minutes\": 0\n              }\n            }\n          ],\n          \"priceCaps\": [\n            {\n              \"price\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"maximumDuration\": {\n                \"hours\": 8,\n                \"minutes\": 30\n              }\n            }\n          ]\n        },\n        \"accountingCode\": \"ROOM\",\n        \"area\": [\n          {\n            \"unit\": \"sqm\",\n            \"number\": 40\n          },\n          {\n            \"unit\": \"sqft\",\n            \"number\": 431\n          }\n        ],\n        \"areaPreferredUnit\": \"sqm\",\n        \"costCenter\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"ROOM3\"\n        },\n        \"revenueAccount\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"4000\"\n        },\n        \"description\": \"Large room, fits 12.\",\n        \"hidden\": false,\n        \"units\": 2,\n        \"capacity\": 12,\n        \"minBookingDuration\": 10,\n        \"maxBookingDuration\": 20,\n        \"color\": \"#ff0000\",\n        \"bookingCutoff\": 1,\n        \"cancellationPeriod\": 0,\n        \"onlyAdminsCanBook\": false,\n        \"canBook\": true,\n        \"photo\": {\n          \"icon\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"default\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n            \"width\": 800,\n            \"height\": 600\n          }\n        },\n        \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n        \"bookingTimes\": [\n          {\n            \"from\": \"15:00\",\n            \"to\": \"16:00\",\n            \"weekdays\": [\n              1,\n              2\n            ]\n          }\n        ]\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resourceAvailability\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n          }\n        },\n        \"categories\": {\n          \"data\": [\n            {\n              \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n              \"type\": \"resourceCategories\"\n            }\n          ]\n        },\n        \"media\": {\n          \"data\": [\n            {\n              \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n              \"type\": \"resourcePhotos\"\n            }\n          ]\n        },\n        \"products\": {\n          \"data\": [\n            {\n              \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n              \"type\": \"products\"\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "48306424-fa88-451a-9c2c-59c05b79c630",
+          "name": "Available resources for network",
+          "request": {
+            "name": "Available resources for network",
+            "description": {
+              "content": "List the bookable resources that are available to book at a given time across all spaces in a network.\nThis means there are fewer existing bookings than the resources' units.\nFor members, the resources' `booking_times`, cutoff, min/max duration and calendar blockers are also taken into account.\n\nOnly resources with `usage: bookable` are returned. Allocatable resources are not included.\n\n**Access**: The current user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "networks",
+                ":networkId",
+                "resources",
+                "available"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The start of the timespan to check for availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The end of the timespan to check for availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[spaceIds]",
+                  "value": "<string>",
+                  "description": "Comma-separated list of space IDs to filter resources by.\nIf omitted, returns resources for all spaces in the network.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[ignoreBookingId]",
+                  "value": "<string>",
+                  "description": "Id of a booking to not consider when determining availability. Useful for determining availbility before moving a booking to a different time."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[ignoreBookingTimes]",
+                  "value": "<string>",
+                  "description": "If set to true, returns resources as available even when the requested time is outside of the resource's booking times setting or blocked by calendar blockers. Option available only for admins of a space."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[resourceIds]",
+                  "value": "<string>,<string>",
+                  "description": "Limit returned resources to the given resource ids (comma separated)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "networkId",
+                  "description": "(Required) Id of the network."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dace7562-8a95-441e-bb63-04f84f4f6dac",
+              "name": "The resources of all spaces in the network that are available to book at the given time.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "networks",
+                    ":networkId",
+                    "resources",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[spaceIds]",
+                      "value": "space1,space2,space3"
+                    },
+                    {
+                      "key": "filter[ignoreBookingId]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[ignoreBookingTimes]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[resourceIds]",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "networkId",
+                      "description": "(Required) Id of the network."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n      \"type\": \"resources\",\n      \"attributes\": {\n        \"name\": \"Meeting Room\",\n        \"resourceType\": \"room\",\n        \"usage\": \"bookable\",\n        \"pricing\": {\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ],\n          \"pricePerHour\": {\n            \"net\": \"10.0\",\n            \"gross\": \"12.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"20.0\",\n                \"name\": \"Tax\"\n              }\n            ]\n          },\n          \"priceCap\": {\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 0\n            }\n          },\n          \"discounts\": [\n            {\n              \"pricePerHour\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"minimumDuration\": {\n                \"hours\": 2,\n                \"minutes\": 0\n              }\n            }\n          ],\n          \"priceCaps\": [\n            {\n              \"price\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"maximumDuration\": {\n                \"hours\": 8,\n                \"minutes\": 30\n              }\n            }\n          ]\n        },\n        \"accountingCode\": \"ROOM\",\n        \"area\": [\n          {\n            \"unit\": \"sqm\",\n            \"number\": 40\n          },\n          {\n            \"unit\": \"sqft\",\n            \"number\": 431\n          }\n        ],\n        \"areaPreferredUnit\": \"sqm\",\n        \"costCenter\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"ROOM3\"\n        },\n        \"revenueAccount\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"4000\"\n        },\n        \"description\": \"Large room, fits 12.\",\n        \"hidden\": false,\n        \"units\": 2,\n        \"capacity\": 12,\n        \"minBookingDuration\": 10,\n        \"maxBookingDuration\": 20,\n        \"color\": \"#ff0000\",\n        \"bookingCutoff\": 1,\n        \"cancellationPeriod\": 0,\n        \"onlyAdminsCanBook\": false,\n        \"canBook\": true,\n        \"photo\": {\n          \"icon\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"default\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n            \"width\": 800,\n            \"height\": 600\n          }\n        },\n        \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n        \"bookingTimes\": [\n          {\n            \"from\": \"15:00\",\n            \"to\": \"16:00\",\n            \"weekdays\": [\n              1,\n              2\n            ]\n          }\n        ]\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resourceAvailability\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n          }\n        },\n        \"categories\": {\n          \"data\": [\n            {\n              \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n              \"type\": \"resourceCategories\"\n            }\n          ]\n        },\n        \"media\": {\n          \"data\": [\n            {\n              \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n              \"type\": \"resourcePhotos\"\n            }\n          ]\n        },\n        \"products\": {\n          \"data\": [\n            {\n              \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n              \"type\": \"products\"\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85c91a2c-ff11-4e3b-8824-62e797466493",
+          "name": "Create resource",
+          "request": {
+            "name": "Create resource",
+            "description": {
+              "content": "Create a new resource in a space.\n\n**Access**: The current user must be an admin of the space\nthe resource if created in.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"resourceType\": \"<null>\",\n      \"pricePerHour\": {\n        \"net\": \"<string>\",\n        \"currency\": \"<string>\",\n        \"taxes\": \"<null>\"\n      },\n      \"description\": \"<string,null>\",\n      \"hidden\": \"<boolean>\",\n      \"onlyAdminsCanBook\": \"<boolean>\",\n      \"units\": \"<null>\",\n      \"capacity\": \"<null,integer>\",\n      \"bookingCutoff\": \"<null>\",\n      \"cancellationPeriod\": \"<null>\",\n      \"minBookingDuration\": \"<null>\",\n      \"maxBookingDuration\": \"<null,integer>\",\n      \"color\": \"<null>\",\n      \"photo\": \"<null>\",\n      \"bookingTimesString\": \"<null,string>\",\n      \"accountingCode\": \"<null,string>\",\n      \"costCenter\": \"<null>\",\n      \"revenueAccount\": \"<null>\",\n      \"discounts\": [\n        {\n          \"pricePerHour\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"minimumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        },\n        {\n          \"pricePerHour\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"minimumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        }\n      ],\n      \"priceCaps\": [\n        {\n          \"price\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"maximumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        },\n        {\n          \"price\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"maximumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        }\n      ],\n      \"pricing\": {\n        \"currency\": \"<string>\",\n        \"pricePerHour\": {\n          \"net\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"priceCap\": {\n          \"maximumDuration\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"discounts\": [\n          {\n            \"pricePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minimumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"pricePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minimumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"priceCaps\": [\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"taxes\": \"<null>\",\n        \"fixedRates\": [\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"products\": {\n        \"data\": [\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a41f7614-7697-4f99-b0b1-652501228141",
+              "name": "Details of the new resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"resources\",\n    \"attributes\": {\n      \"name\": \"Meeting Room\",\n      \"resourceType\": \"room\",\n      \"pricing\": {\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ],\n        \"pricePerHour\": {\n          \"net\": \"10.0\"\n        },\n        \"discounts\": [\n          {\n            \"minimumDuration\": {\n              \"hours\": 2,\n              \"minutes\": 30\n            },\n            \"pricePerHour\": {\n              \"net\": \"11.25\"\n            }\n          }\n        ],\n        \"priceCaps\": [\n          {\n            \"maximumDuration\": {\n              \"hours\": 4,\n              \"minutes\": 0\n            },\n            \"price\": {\n              \"net\": \"30.00\"\n            }\n          }\n        ]\n      },\n      \"description\": \"Large room, fits 12.\",\n      \"units\": 2,\n      \"capacity\": 12,\n      \"bookingCutoff\": 1,\n      \"cancellationPeriod\": 3,\n      \"minBookingDuration\": 30,\n      \"maxBookingDuration\": 480,\n      \"color\": \"#ff0000\",\n      \"photo\": {\n        \"data\": \"data:image/png;base64,cGhvdG8=\"\n      },\n      \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n      \"costCenter\": {\n        \"name\": \"Bookings\",\n        \"number\": \"Room 1\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Bookings\",\n        \"number\": \"4000\"\n      }\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"type\": \"spaces\",\n          \"id\": \"c4d25d6e-9409-5055-ba83-b75b9c253e75\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n    \"type\": \"resources\",\n    \"attributes\": {\n      \"name\": \"Meeting Room\",\n      \"resourceType\": \"room\",\n      \"usage\": \"bookable\",\n      \"pricing\": {\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ],\n        \"pricePerHour\": {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        },\n        \"priceCap\": {\n          \"maximumDuration\": {\n            \"hours\": 8,\n            \"minutes\": 0\n          }\n        },\n        \"discounts\": [\n          {\n            \"pricePerHour\": {\n              \"net\": \"10.0\",\n              \"gross\": \"12.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"20.0\",\n                  \"name\": \"Tax\"\n                }\n              ]\n            },\n            \"minimumDuration\": {\n              \"hours\": 2,\n              \"minutes\": 0\n            }\n          }\n        ],\n        \"priceCaps\": [\n          {\n            \"price\": {\n              \"net\": \"10.0\",\n              \"gross\": \"12.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"20.0\",\n                  \"name\": \"Tax\"\n                }\n              ]\n            },\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 30\n            }\n          }\n        ]\n      },\n      \"accountingCode\": \"ROOM\",\n      \"area\": [\n        {\n          \"unit\": \"sqm\",\n          \"number\": 40\n        },\n        {\n          \"unit\": \"sqft\",\n          \"number\": 431\n        }\n      ],\n      \"areaPreferredUnit\": \"sqm\",\n      \"costCenter\": {\n        \"name\": \"Room Bookings\",\n        \"number\": \"ROOM3\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Room Bookings\",\n        \"number\": \"4000\"\n      },\n      \"description\": \"Large room, fits 12.\",\n      \"hidden\": false,\n      \"units\": 2,\n      \"capacity\": 12,\n      \"minBookingDuration\": 10,\n      \"maxBookingDuration\": 20,\n      \"color\": \"#ff0000\",\n      \"bookingCutoff\": 1,\n      \"cancellationPeriod\": 0,\n      \"onlyAdminsCanBook\": false,\n      \"canBook\": true,\n      \"photo\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n      \"bookingTimes\": [\n        {\n          \"from\": \"15:00\",\n          \"to\": \"16:00\",\n          \"weekdays\": [\n            1,\n            2\n          ]\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resourceAvailability\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n        }\n      },\n      \"categories\": {\n        \"data\": [\n          {\n            \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n            \"type\": \"resourceCategories\"\n          }\n        ]\n      },\n      \"media\": {\n        \"data\": [\n          {\n            \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n            \"type\": \"resourcePhotos\"\n          }\n        ]\n      },\n      \"products\": {\n        \"data\": [\n          {\n            \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n            \"type\": \"products\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9705176-0bfb-4195-aceb-36ef126b0076",
+          "name": "Get resource",
+          "request": {
+            "name": "Get resource",
+            "description": {
+              "content": "See details of the resource.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "resources",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9ed18367-f69c-4514-870e-ceefda335fbc",
+              "name": "Details of the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n    \"type\": \"resources\",\n    \"attributes\": {\n      \"name\": \"Meeting Room\",\n      \"resourceType\": \"room\",\n      \"usage\": \"bookable\",\n      \"pricing\": {\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ],\n        \"pricePerHour\": {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        },\n        \"priceCap\": {\n          \"maximumDuration\": {\n            \"hours\": 8,\n            \"minutes\": 0\n          }\n        },\n        \"discounts\": [\n          {\n            \"pricePerHour\": {\n              \"net\": \"10.0\",\n              \"gross\": \"12.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"20.0\",\n                  \"name\": \"Tax\"\n                }\n              ]\n            },\n            \"minimumDuration\": {\n              \"hours\": 2,\n              \"minutes\": 0\n            }\n          }\n        ],\n        \"priceCaps\": [\n          {\n            \"price\": {\n              \"net\": \"10.0\",\n              \"gross\": \"12.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"20.0\",\n                  \"name\": \"Tax\"\n                }\n              ]\n            },\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 30\n            }\n          }\n        ]\n      },\n      \"accountingCode\": \"ROOM\",\n      \"area\": [\n        {\n          \"unit\": \"sqm\",\n          \"number\": 40\n        },\n        {\n          \"unit\": \"sqft\",\n          \"number\": 431\n        }\n      ],\n      \"areaPreferredUnit\": \"sqm\",\n      \"costCenter\": {\n        \"name\": \"Room Bookings\",\n        \"number\": \"ROOM3\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Room Bookings\",\n        \"number\": \"4000\"\n      },\n      \"description\": \"Large room, fits 12.\",\n      \"hidden\": false,\n      \"units\": 2,\n      \"capacity\": 12,\n      \"minBookingDuration\": 10,\n      \"maxBookingDuration\": 20,\n      \"color\": \"#ff0000\",\n      \"bookingCutoff\": 1,\n      \"cancellationPeriod\": 0,\n      \"onlyAdminsCanBook\": false,\n      \"canBook\": true,\n      \"photo\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n      \"bookingTimes\": [\n        {\n          \"from\": \"15:00\",\n          \"to\": \"16:00\",\n          \"weekdays\": [\n            1,\n            2\n          ]\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resourceAvailability\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n        }\n      },\n      \"categories\": {\n        \"data\": [\n          {\n            \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n            \"type\": \"resourceCategories\"\n          }\n        ]\n      },\n      \"media\": {\n        \"data\": [\n          {\n            \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n            \"type\": \"resourcePhotos\"\n          }\n        ]\n      },\n      \"products\": {\n        \"data\": [\n          {\n            \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n            \"type\": \"products\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7c21261d-4c73-48e4-a9cb-8c9372e6399b",
+          "name": "Update resource",
+          "request": {
+            "name": "Update resource",
+            "description": {
+              "content": "Update the details of a resource.\n\n**Access**: The current user must be an admin of the space the resource belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "resources",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"resourceType\": \"<null>\",\n      \"pricePerHour\": {\n        \"net\": \"<string>\",\n        \"currency\": \"<string>\",\n        \"taxes\": \"<null>\"\n      },\n      \"description\": \"<string,null>\",\n      \"hidden\": \"<boolean>\",\n      \"onlyAdminsCanBook\": \"<boolean>\",\n      \"units\": \"<null>\",\n      \"capacity\": \"<null,integer>\",\n      \"bookingCutoff\": \"<null>\",\n      \"cancellationPeriod\": \"<null>\",\n      \"minBookingDuration\": \"<null>\",\n      \"maxBookingDuration\": \"<null,integer>\",\n      \"color\": \"<null>\",\n      \"photo\": \"<null>\",\n      \"bookingTimesString\": \"<null,string>\",\n      \"accountingCode\": \"<null,string>\",\n      \"costCenter\": \"<null>\",\n      \"revenueAccount\": \"<null>\",\n      \"discounts\": [\n        {\n          \"pricePerHour\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"minimumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        },\n        {\n          \"pricePerHour\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"minimumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        }\n      ],\n      \"priceCaps\": [\n        {\n          \"price\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"maximumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        },\n        {\n          \"price\": {\n            \"net\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"maximumDuration\": {\n            \"hours\": \"<integer>\",\n            \"minutes\": \"<integer>\"\n          }\n        }\n      ],\n      \"pricing\": {\n        \"currency\": \"<string>\",\n        \"pricePerHour\": {\n          \"net\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"priceCap\": {\n          \"maximumDuration\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"discounts\": [\n          {\n            \"pricePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minimumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"pricePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minimumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"priceCaps\": [\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"taxes\": \"<null>\",\n        \"fixedRates\": [\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"price\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maximumDuration\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"products\": {\n        \"data\": [\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "73d68c2e-2f66-4fc4-9fda-49bf8a2ed28d",
+              "name": "Details of the updated resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"resources\",\n    \"id\": \"2c2a8092-3273-50da-ba45-23badf1cdc5d\",\n    \"attributes\": {\n      \"name\": \"Meeting Room\",\n      \"pricing\": {\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ],\n        \"pricePerHour\": {\n          \"net\": \"10.0\"\n        }\n      },\n      \"description\": \"Large room, fits 12.\",\n      \"units\": 2,\n      \"capacity\": 12,\n      \"bookingCutoff\": 1,\n      \"cancellationPeriod\": 3,\n      \"minBookingDuration\": 30,\n      \"maxBookingDuration\": 480,\n      \"color\": \"#ff0000\",\n      \"photo\": {\n        \"data\": \"data:image/png;base64,cGhvdG8=\"\n      },\n      \"bookingTimesString\": \"mo - tu 15:00 - 16:00\"\n    },\n    \"relationships\": {\n      \"products\": {\n        \"data\": [\n          {\n            \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n            \"type\": \"products\"\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n    \"type\": \"resources\",\n    \"attributes\": {\n      \"name\": \"Meeting Room\",\n      \"resourceType\": \"room\",\n      \"usage\": \"bookable\",\n      \"pricing\": {\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ],\n        \"pricePerHour\": {\n          \"net\": \"10.0\",\n          \"gross\": \"12.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ]\n        },\n        \"priceCap\": {\n          \"maximumDuration\": {\n            \"hours\": 8,\n            \"minutes\": 0\n          }\n        },\n        \"discounts\": [\n          {\n            \"pricePerHour\": {\n              \"net\": \"10.0\",\n              \"gross\": \"12.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"20.0\",\n                  \"name\": \"Tax\"\n                }\n              ]\n            },\n            \"minimumDuration\": {\n              \"hours\": 2,\n              \"minutes\": 0\n            }\n          }\n        ],\n        \"priceCaps\": [\n          {\n            \"price\": {\n              \"net\": \"10.0\",\n              \"gross\": \"12.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"20.0\",\n                  \"name\": \"Tax\"\n                }\n              ]\n            },\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 30\n            }\n          }\n        ]\n      },\n      \"accountingCode\": \"ROOM\",\n      \"area\": [\n        {\n          \"unit\": \"sqm\",\n          \"number\": 40\n        },\n        {\n          \"unit\": \"sqft\",\n          \"number\": 431\n        }\n      ],\n      \"areaPreferredUnit\": \"sqm\",\n      \"costCenter\": {\n        \"name\": \"Room Bookings\",\n        \"number\": \"ROOM3\"\n      },\n      \"revenueAccount\": {\n        \"name\": \"Room Bookings\",\n        \"number\": \"4000\"\n      },\n      \"description\": \"Large room, fits 12.\",\n      \"hidden\": false,\n      \"units\": 2,\n      \"capacity\": 12,\n      \"minBookingDuration\": 10,\n      \"maxBookingDuration\": 20,\n      \"color\": \"#ff0000\",\n      \"bookingCutoff\": 1,\n      \"cancellationPeriod\": 0,\n      \"onlyAdminsCanBook\": false,\n      \"canBook\": true,\n      \"photo\": {\n        \"icon\": {\n          \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n          \"width\": 120,\n          \"height\": 120\n        },\n        \"default\": {\n          \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n          \"width\": 800,\n          \"height\": 600\n        }\n      },\n      \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n      \"bookingTimes\": [\n        {\n          \"from\": \"15:00\",\n          \"to\": \"16:00\",\n          \"weekdays\": [\n            1,\n            2\n          ]\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resourceAvailability\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n        }\n      },\n      \"categories\": {\n        \"data\": [\n          {\n            \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n            \"type\": \"resourceCategories\"\n          }\n        ]\n      },\n      \"media\": {\n        \"data\": [\n          {\n            \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n            \"type\": \"resourcePhotos\"\n          }\n        ]\n      },\n      \"products\": {\n        \"data\": [\n          {\n            \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n            \"type\": \"products\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3be07a20-59b7-4a1e-afda-fe5e390a0510",
+          "name": "Availability",
+          "request": {
+            "name": "Availability",
+            "description": {
+              "content": "See the times a resource is still available to book. Considers existing\nbookings, the resource's booking times, cutoff and calendar blockers.\n\nOnly resources with `usage: bookable` are supported. Returns an error for allocatable resources.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "resources",
+                ":id",
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The time from when on to return the availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The time until when to return the availability."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "227a6b5e-110b-4ddb-a6f8-d9a9596aa3b6",
+              "name": "Available booking times.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resources",
+                    ":id",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n    \"type\": \"resourceAvailabilities\",\n    \"attributes\": {\n      \"availableTimes\": [\n        {\n          \"from\": \"2018-01-01T10:00:00Z\",\n          \"to\": \"2018-01-01T12:00:00Z\"\n        },\n        {\n          \"from\": \"2018-01-01T14:30:00Z\",\n          \"to\": \"2018-01-01T19:00:00Z\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d125e06a-6b48-4ffa-9892-11141f80bb7f",
+          "name": "List for space",
+          "request": {
+            "name": "List for space",
+            "description": {
+              "content": "List the resources (and their categories) for a space.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[usage]",
+                  "value": "bookable",
+                  "description": "Filter resources by their usage. Defaults to `bookable` for backward compatibility.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response.\nIncluding `categories` requires the `read_resource_categories` scope.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response.\nIncluding `categories` requires the `read_resource_categories` scope.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space to get the resources for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "12e74905-2135-40eb-82b9-91f39bafd0b6",
+              "name": "The resources of a space, including their categories.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[usage]",
+                      "value": "bookable"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space to get the resources for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n      \"type\": \"resources\",\n      \"attributes\": {\n        \"name\": \"Meeting Room\",\n        \"resourceType\": \"room\",\n        \"usage\": \"bookable\",\n        \"pricing\": {\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ],\n          \"pricePerHour\": {\n            \"net\": \"10.0\",\n            \"gross\": \"12.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"20.0\",\n                \"name\": \"Tax\"\n              }\n            ]\n          },\n          \"priceCap\": {\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 0\n            }\n          },\n          \"discounts\": [\n            {\n              \"pricePerHour\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"minimumDuration\": {\n                \"hours\": 2,\n                \"minutes\": 0\n              }\n            }\n          ],\n          \"priceCaps\": [\n            {\n              \"price\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"maximumDuration\": {\n                \"hours\": 8,\n                \"minutes\": 30\n              }\n            }\n          ]\n        },\n        \"accountingCode\": \"ROOM\",\n        \"area\": [\n          {\n            \"unit\": \"sqm\",\n            \"number\": 40\n          },\n          {\n            \"unit\": \"sqft\",\n            \"number\": 431\n          }\n        ],\n        \"areaPreferredUnit\": \"sqm\",\n        \"costCenter\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"ROOM3\"\n        },\n        \"revenueAccount\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"4000\"\n        },\n        \"description\": \"Large room, fits 12.\",\n        \"hidden\": false,\n        \"units\": 2,\n        \"capacity\": 12,\n        \"minBookingDuration\": 10,\n        \"maxBookingDuration\": 20,\n        \"color\": \"#ff0000\",\n        \"bookingCutoff\": 1,\n        \"cancellationPeriod\": 0,\n        \"onlyAdminsCanBook\": false,\n        \"canBook\": true,\n        \"photo\": {\n          \"icon\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"default\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n            \"width\": 800,\n            \"height\": 600\n          }\n        },\n        \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n        \"bookingTimes\": [\n          {\n            \"from\": \"15:00\",\n            \"to\": \"16:00\",\n            \"weekdays\": [\n              1,\n              2\n            ]\n          }\n        ]\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resourceAvailability\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n          }\n        },\n        \"categories\": {\n          \"data\": [\n            {\n              \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n              \"type\": \"resourceCategories\"\n            }\n          ]\n        },\n        \"media\": {\n          \"data\": [\n            {\n              \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n              \"type\": \"resourcePhotos\"\n            }\n          ]\n        },\n        \"products\": {\n          \"data\": [\n            {\n              \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n              \"type\": \"products\"\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"included\": [\n    {\n      \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n      \"type\": \"resourceCategories\",\n      \"attributes\": {\n        \"name\": \"Small Meeting Rooms\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d02560fb-025b-4d68-a42d-6b76a9ca21af",
+          "name": "Available resources",
+          "request": {
+            "name": "Available resources",
+            "description": {
+              "content": "List the bookable resources that are available to book at a given time.\nThis means there are fewer existing bookings than the resources' units.\nFor members, the resources' `booking_times`, cutoff, min/max duration and calendar blockers are also taken into account.\n\nOnly resources with `usage: bookable` are returned. Allocatable resources are not included.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "resources",
+                "available"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The start of the timespan to check for availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The end of the timespan to check for availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[ignoreBookingId]",
+                  "value": "<string>",
+                  "description": "Id of a booking to not consider when determining availability. Useful for determining availbility before moving a booking to a different time."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[ignoreBookingTimes]",
+                  "value": "<string>",
+                  "description": "If set to true, returns resources as available even when the requested time is outside of the resource's booking times setting or blocked by calendar blockers. Option available only for admins of a space."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[resourceIds]",
+                  "value": "<string>,<string>",
+                  "description": "Limit returned resources to the given resource ids (comma separated)."
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response.\nIncluding `categories` requires the `read_resource_categories` scope.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response.\nIncluding `categories` requires the `read_resource_categories` scope.\n`media` are the additional photos of a resource (the primary photo is\nin the `photo` attribute).\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space to get the resources for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e321d72f-7a71-451a-ba81-b3133ede9ed8",
+              "name": "The resources of a space that are available to book at the given time.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "resources",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[ignoreBookingId]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[ignoreBookingTimes]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[resourceIds]",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space to get the resources for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n      \"type\": \"resources\",\n      \"attributes\": {\n        \"name\": \"Meeting Room\",\n        \"resourceType\": \"room\",\n        \"usage\": \"bookable\",\n        \"pricing\": {\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"20.0\",\n              \"name\": \"Tax\"\n            }\n          ],\n          \"pricePerHour\": {\n            \"net\": \"10.0\",\n            \"gross\": \"12.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"20.0\",\n                \"name\": \"Tax\"\n              }\n            ]\n          },\n          \"priceCap\": {\n            \"maximumDuration\": {\n              \"hours\": 8,\n              \"minutes\": 0\n            }\n          },\n          \"discounts\": [\n            {\n              \"pricePerHour\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"minimumDuration\": {\n                \"hours\": 2,\n                \"minutes\": 0\n              }\n            }\n          ],\n          \"priceCaps\": [\n            {\n              \"price\": {\n                \"net\": \"10.0\",\n                \"gross\": \"12.0\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"20.0\",\n                    \"name\": \"Tax\"\n                  }\n                ]\n              },\n              \"maximumDuration\": {\n                \"hours\": 8,\n                \"minutes\": 30\n              }\n            }\n          ]\n        },\n        \"accountingCode\": \"ROOM\",\n        \"area\": [\n          {\n            \"unit\": \"sqm\",\n            \"number\": 40\n          },\n          {\n            \"unit\": \"sqft\",\n            \"number\": 431\n          }\n        ],\n        \"areaPreferredUnit\": \"sqm\",\n        \"costCenter\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"ROOM3\"\n        },\n        \"revenueAccount\": {\n          \"name\": \"Room Bookings\",\n          \"number\": \"4000\"\n        },\n        \"description\": \"Large room, fits 12.\",\n        \"hidden\": false,\n        \"units\": 2,\n        \"capacity\": 12,\n        \"minBookingDuration\": 10,\n        \"maxBookingDuration\": 20,\n        \"color\": \"#ff0000\",\n        \"bookingCutoff\": 1,\n        \"cancellationPeriod\": 0,\n        \"onlyAdminsCanBook\": false,\n        \"canBook\": true,\n        \"photo\": {\n          \"icon\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/icon_photo.png\",\n            \"width\": 120,\n            \"height\": 120\n          },\n          \"default\": {\n            \"url\": \"https://cdn.com/resource/photo/a4a99a71ac8df98d29de357180d273d3/default_photo.png\",\n            \"width\": 800,\n            \"height\": 600\n          }\n        },\n        \"bookingTimesString\": \"mo - tu 15:00 - 16:00\",\n        \"bookingTimes\": [\n          {\n            \"from\": \"15:00\",\n            \"to\": \"16:00\",\n            \"weekdays\": [\n              1,\n              2\n            ]\n          }\n        ]\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"a927aa71ac8df98d29de357180d275a2\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resourceAvailability\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/resources/a4a99a71ac8df98d29de357180d273d3/availability\"\n          }\n        },\n        \"categories\": {\n          \"data\": [\n            {\n              \"id\": \"f227aa71ac8df98d29de357180d275a2\",\n              \"type\": \"resourceCategories\"\n            }\n          ]\n        },\n        \"media\": {\n          \"data\": [\n            {\n              \"id\": \"b6288a71ac8df98d29de357180d21c99\",\n              \"type\": \"resourcePhotos\"\n            }\n          ]\n        },\n        \"products\": {\n          \"data\": [\n            {\n              \"id\": \"69efec34ba8df98d29de35cc80d27565\",\n              \"type\": \"products\"\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23a3316b-f525-409e-9701-494c2b33a2b7",
+          "name": "List resource availabilities",
+          "request": {
+            "name": "List resource availabilities",
+            "description": {
+              "content": "List the availability of multiple resources in a space for a given time range. Considers existing bookings, each resource's booking times, cutoff, and calendar blockers.\n\n**Access**: The current user must be an admin or member of the space. If the space is part of a network, the user must be an admin or member of any space in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "resource_availabilities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The time from when on to return the availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The time until when to return the availability."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[resource_ids]",
+                  "value": "<string>,<string>",
+                  "description": "(Required) Comma-separated list of resource ids to return availabilities for."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0a572057-457a-497d-9408-b85f4e55c757",
+              "name": "Availabilities for the requested resources.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "resource_availabilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "filter[resource_ids]",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n      \"type\": \"resourceAvailabilities\",\n      \"attributes\": {\n        \"availableTimes\": [\n          {\n            \"from\": \"2018-01-01T10:00:00Z\",\n            \"to\": \"2018-01-01T12:00:00Z\"\n          },\n          {\n            \"from\": \"2018-01-01T14:30:00Z\",\n            \"to\": \"2018-01-01T19:00:00Z\"\n          }\n        ]\n      },\n      \"relationships\": {\n        \"resource\": {\n          \"data\": {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"b7b99a71ac8df98d29de357180d273d4\",\n      \"type\": \"resourceAvailabilities\",\n      \"attributes\": {\n        \"availableTimes\": [\n          {\n            \"from\": \"2018-01-01T09:00:00Z\",\n            \"to\": \"2018-01-01T11:00:00Z\"\n          }\n        ]\n      },\n      \"relationships\": {\n        \"resource\": {\n          \"data\": {\n            \"id\": \"b7b99a71ac8df98d29de357180d273d4\",\n            \"type\": \"resources\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e7315f40-ebd2-411a-9a7f-dfce3329f70e",
+    "name": "Cobot Resource API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

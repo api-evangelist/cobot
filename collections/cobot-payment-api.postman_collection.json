@@ -1,0 +1,223 @@
+{
+  "item": [
+    {
+      "id": "dbc2af6f-3371-4c40-be49-006a2f88416c",
+      "name": "Payment",
+      "description": {
+        "content": "*The payment API is in development. Endpoints may be missing or not working yet.*\n\nPayments allow any user (i.e. non-members) to pay for items on Cobot via the payment\nmethods a space has set up.\nFor now this only covers external bookings, but more could be added in the future.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b72b5dd-0d73-4b8d-bf07-8cafe23afdba",
+          "name": "Initiate payment",
+          "request": {
+            "name": "Initiate payment",
+            "description": {
+              "content": "Initiates a new payment for a purchase, but does not complete it.\nSupported purchases are:\n\n* external bookings - initiate a payment for an external booking (needs to happen before making the booking)\n  * discount codes can be applied only to external bookings for now\n* drop-in passes - initiate a payment for a drop-in pass (needs to happen before buying the pass)\n* event attendances - initiate a payment for an event attendance (needs to happen before before creating the event attendance)\n\nAfter creating a payment, payment details such as credit card numbers need to\nbe added via the user's browser. This can happen via JavaScript calls or a\nbrowser redirect.\n\nSupported payment providers:\n\n### Stripe\n\nStripe uses payment intents and [Stripe.js](https://stripe.com/docs/js) to process payments.\nCalling this endpoint will\nreturn a _payment intent client secret_ which you need in order to collect payment data\nand complete the payment in the browser.\nSee https://stripe.com/docs/payments/accept-a-payment?ui=elements.\n\n### PayPal\n\nCalling this endpoint will return an _orderId_ which you need in order to collect payment data\nand complete the payment in the browser.\n\nNote: currently in development, created orders can be paid but are not yet linked, automatically.\n\n**Access**: Any user can initiate payments.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"payable\": {\n        \"type\": \"<string>\",\n        \"attributes\": {\n          \"from\": \"<dateTime>\",\n          \"to\": \"<dateTime>\",\n          \"bookingExtras\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"quantity\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"quantity\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"relationships\": {\n          \"externalResource\": {\n            \"id\": \"<string>\"\n          },\n          \"discount\": {\n            \"data\": {\n              \"type\": \"<string>\",\n              \"id\": \"<string>\"\n            }\n          }\n        }\n      }\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"paymentMethod\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e514aa20-b390-4a89-8eab-969805272d80",
+              "name": "Returns information needed to complete the payment via an external payment provider.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"payments\",\n    \"attributes\": {\n      \"payable\": {\n        \"type\": \"externalBookings\",\n        \"attributes\": {\n          \"from\": \"2021-11-28T12:00:00Z\",\n          \"to\": \"2021-11-28T14:30:00Z\",\n          \"bookingExtras\": [\n            {\n              \"productId\": \"17456ef0aac79b82742d76f2ed7ce582\",\n              \"quantity\": \"1.0\"\n            }\n          ]\n        },\n        \"relationships\": {\n          \"externalResource\": {\n            \"id\": \"8056fb60-f239-5330-af26-7365d55c032c\"\n          },\n          \"discount\": {\n            \"data\": {\n              \"id\": \"8056fb60-f239-5330-af26-7365d55c032c\",\n              \"type\": \"discountCodes\"\n            }\n          }\n        }\n      }\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": {\n          \"id\": \"0eead1dc-f1cb-51ae-92a6-7031299f2cec\",\n          \"type\": \"paymentMethods\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"620b9c47-8413-519b-8979-8cc08958c298\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"payments\",\n    \"attributes\": {\n      \"amount\": {\n        \"value\": \"100.0\",\n        \"currency\": \"EUR\"\n      },\n      \"paymentProvider\": \"stripe\",\n      \"providerAttributes\": {\n        \"paymentIntentClientSecret\": \"a1d952f1ac8cf98d29de357180d27734\",\n        \"paymentIntentId\": \"pi_ANipwO3zNfjeWODtRPIg\"\n      }\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": {\n          \"id\": \"0eead1dc-f1cb-51ae-92a6-7031299f2cec\",\n          \"type\": \"paymentMethods\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5dbd8721-761c-4b08-a877-db1f114bd622",
+              "name": "Creating a payment failed because a condition was not met or the space's Stripe setup is incorrect.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"payments\",\n    \"attributes\": {\n      \"payable\": {\n        \"type\": \"externalBookings\",\n        \"attributes\": {\n          \"from\": \"2021-11-28T12:00:00Z\",\n          \"to\": \"2021-11-28T14:30:00Z\",\n          \"bookingExtras\": [\n            {\n              \"productId\": \"17456ef0aac79b82742d76f2ed7ce582\",\n              \"quantity\": \"1.0\"\n            }\n          ]\n        },\n        \"relationships\": {\n          \"externalResource\": {\n            \"id\": \"8056fb60-f239-5330-af26-7365d55c032c\"\n          },\n          \"discount\": {\n            \"data\": {\n              \"id\": \"8056fb60-f239-5330-af26-7365d55c032c\",\n              \"type\": \"discountCodes\"\n            }\n          }\n        }\n      }\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": {\n          \"id\": \"0eead1dc-f1cb-51ae-92a6-7031299f2cec\",\n          \"type\": \"paymentMethods\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"620b9c47-8413-519b-8979-8cc08958c298\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Payment could not be created.\",\n      \"source\": {\n        \"pointer\": \"/data/relationships/paymentMethod\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ad5bb807-d10c-4079-8810-47cd1d9f7e57",
+    "name": "Cobot Payment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

@@ -3,13 +3,12 @@ method: probed
 source: https://api.cobot.me/mcp
 status: live
 gated: true
-summary: >-
-  Cobot operates a hosted, remote MCP server at https://api.cobot.me/mcp. It is UNDOCUMENTED —
-  it appears in no Cobot docs page, no blog post, no llms.txt and no search result — and was
-  found by probing the API host: GET returns 405 (not 404), and an anonymous JSON-RPC POST
-  returns 401 with an RFC 9728 WWW-Authenticate challenge naming its own protected-resource
-  metadata document. The tool list therefore cannot be enumerated anonymously, but the server's
-  real capability surface IS published, as the 14 OAuth scopes in that metadata.
+summary: 'Cobot operates a hosted, remote MCP server at https://api.cobot.me/mcp. It is UNDOCUMENTED —
+  it appears in no Cobot docs page, no blog post, no llms.txt and no search result — and was found by
+  probing the API host: GET returns 405 (not 404), and an anonymous JSON-RPC POST returns 401 with an
+  RFC 9728 WWW-Authenticate challenge naming its own protected-resource metadata document. The tool list
+  therefore cannot be enumerated anonymously, but the server''s real capability surface IS published,
+  as the 14 OAuth scopes in that metadata.'
 server:
   name: Cobot MCP
   url: https://api.cobot.me/mcp
@@ -43,22 +42,19 @@ scopes_supported:
 - read_user
 - write_bookings
 - write_check_ins
-scope_analysis: >-
-  The MCP server exposes 14 of the 58 scopes the REST API supports — a deliberately narrowed
-  agent surface. Reads cover the operational core (spaces, memberships, teams, bookings,
-  resources, allocations, check-ins, contacts, invoices, products, user). Writes are limited to
-  bookings and check-ins: an agent can book a room and check a member in, but cannot issue an
-  invoice, take a payment, refund, change a subscription, publish an event, or touch billing
-  details. That is a meaningfully conservative choice and is recorded here as observed fact.
+scope_analysis: 'The MCP server exposes 14 of the 58 scopes the REST API supports — a deliberately narrowed
+  agent surface. Reads cover the operational core (spaces, memberships, teams, bookings, resources, allocations,
+  check-ins, contacts, invoices, products, user). Writes are limited to bookings and check-ins: an agent
+  can book a room and check a member in, but cannot issue an invoice, take a payment, refund, change a
+  subscription, publish an event, or touch billing details. That is a meaningfully conservative choice
+  and is recorded here as observed fact.'
 tools:
   enumerated: false
-  reason: >-
-    tools/list requires a bearer token. Anonymous POST {"jsonrpc":"2.0","id":1,"method":"tools/list"}
-    returns 401 {"error":"A valid access token must be passed using the 'Authorization: Bearer
-    token' header."}. No tool names are recorded here because none are published — deriving them
-    would be fabrication. Authenticated introspection is required to capture the real
-    inputSchemas; see mcp/cobot-tool-crosswalk.yml for the scope-level binding that CAN be
-    evidenced.
+  reason: 'tools/list requires a bearer token. Anonymous POST {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+    returns 401 {"error":"A valid access token must be passed using the ''Authorization: Bearer token''
+    header."}. No tool names are recorded here because none are published — deriving them would be fabrication.
+    Authenticated introspection is required to capture the real inputSchemas; see mcp/cobot-tool-crosswalk.yml
+    for the scope-level binding that CAN be evidenced.'
 x-evidence:
   fetched: '2026-08-09'
   probes:
@@ -85,3 +81,10 @@ x-evidence:
     url: https://mcp.cobot.me/
     http_status: 404
     note: No dedicated MCP subdomain.
+deployment:
+  mode: remote
+  endpoint: https://api.cobot.me/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

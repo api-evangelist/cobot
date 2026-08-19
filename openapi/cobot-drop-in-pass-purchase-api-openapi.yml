@@ -1,0 +1,727 @@
+openapi: 3.2.0
+info:
+  title: Cobot Drop-In Pass Purchase API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Drop-In Pass Purchase
+  description: A purchase of drop-in-passes, currently only supports buying one pass at a time.
+paths:
+  /drop_in_pass_purchases:
+    post:
+      summary: Create
+      description: 'Create a drop-in pass purchase.
+
+
+        **Access**: Any user can create a drop-in pass purchase.
+
+        '
+      operationId: create-drop-in-pass-purchase
+      security:
+      - OAuth2:
+        - write_drop_in_pass_purchases
+      tags:
+      - Drop-In Pass Purchase
+      responses:
+        '201':
+          description: The created drop-in pass purchase.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/drop-in-pass-purchase'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: dropInPassPurchases
+                      attributes:
+                        acceptedTerms: true
+                        comments: Looking forward to seeing your space!
+                        name: Earl McBride
+                        company: ACME Inc.
+                        email: hello@example.com
+                        phone: (959) 645-9532
+                        taxId: 12345678A
+                        billingAddress: 1422 Nuede Extension
+                        structuredBillingAddress:
+                          name: Earl McBride
+                          company: ACME Inc.
+                          fullAddress: 1422 Nuede Extension
+                          street: null
+                          postCode: null
+                          city: null
+                          state: null
+                          countryCode: null
+                        price:
+                          net: '986.0'
+                          gross: '1089.53'
+                          currency: EUR
+                          taxes:
+                          - name: Main Tax
+                            rate: '10.5'
+                            amount: '103.53'
+                      relationships:
+                        dropInPasses:
+                          data:
+                          - id: b8f21a71ac8df98d29de357180d27358
+                            type: dropInPasses
+                        paymentMethod:
+                          data:
+                            id: 25fc37c06c4a183ea17ada5306725705
+                            type: paymentMethods
+                        invoices:
+                          data:
+                          - id: a07fed27-b35b-5c67-8367-3e52c397c528
+                            type: invoices
+                        space:
+                          data:
+                            id: 99a12ca68b5e6bc9007890854kd368f2
+                            type: spaces
+        '422':
+          description: 'When sending a payment and capturing the payment fails, an error is returned.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Payment could not be captured.
+      requestBody:
+        description: Data needed to create a drop-in pass purchase.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-drop-in-pass-purchase'
+            examples:
+              default:
+                value:
+                  data:
+                    type: dropInPassPurchases
+                    attributes:
+                      dropInPasses:
+                      - type: dropInPasses
+                        attributes:
+                          validOn: '2018-01-01'
+                          numberOfPasses: 1
+                        relationships:
+                          dropInPassTemplate:
+                            data:
+                              id: aeb19e5a78cc64be5056f6ef9a44f7d5
+                              type: dropInPassTemplates
+                      acceptedTerms: true
+                      name: Earl McBride
+                      company: ACME Inc
+                      billingAddress: 1422 Nuede Extension
+                      phone: (959) 645-9532
+                      taxId: 123456789A
+                      email: fe@haos.eg
+                      comments: we need catering
+                    relationships:
+                      payment:
+                        data:
+                          id: jd73gf5a78cc64be5056f6ef9a44fuzt
+                          type: payments
+components:
+  schemas:
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    -drop-in-pass-purchase-data:
+      id: -drop-in-pass-purchase-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - dropInPassPurchases
+        attributes:
+          type: object
+          required:
+          - acceptedTerms
+          - name
+          - billingAddress
+          - price
+          - company
+          - email
+          - comments
+          - phone
+          - taxId
+          additionalProperties: false
+          properties:
+            price:
+              $ref: '#/components/schemas/price'
+            acceptedTerms:
+              type: boolean
+              enum:
+              - true
+            name:
+              type: string
+            company:
+              type:
+              - string
+              - 'null'
+            billingAddress:
+              type: string
+            structuredBillingAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            email:
+              $ref: '#/components/schemas/email'
+            comments:
+              type:
+              - string
+              - 'null'
+            phone:
+              type:
+              - string
+              - 'null'
+            taxId:
+              type:
+              - string
+              - 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - dropInPasses
+          - space
+          - invoices
+          - paymentMethod
+          properties:
+            dropInPasses:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            invoices:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            paymentMethod:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    drop-in-pass-purchase:
+      id: drop-in-pass-purchase.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-drop-in-pass-purchase-data'
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    create-drop-in-pass-purchase:
+      id: create-drop-in-pass-purchase.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - dropInPassPurchases
+            attributes:
+              type: object
+              required:
+              - dropInPasses
+              - acceptedTerms
+              - name
+              - billingAddress
+              - email
+              additionalProperties: false
+              properties:
+                dropInPasses:
+                  type: array
+                  items:
+                    description: An Array of drop-in passes to pay for. At the moment, only paying for one pass at a time is supported. The payment needs to be created before creating the drop-in pass.
+                    type: object
+                    required:
+                    - type
+                    - attributes
+                    - relationships
+                    additionalProperties: false
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - dropInPasses
+                      attributes:
+                        type: object
+                        required:
+                        - validOn
+                        - numberOfPasses
+                        additionalProperties: false
+                        properties:
+                          validOn:
+                            $ref: '#/components/schemas/date'
+                          numberOfPasses:
+                            description: Not yet fully supported, currently always buying 1 drop-in pass
+                            type: integer
+                            minimum: 1
+                      relationships:
+                        type: object
+                        required:
+                        - dropInPassTemplate
+                        additionalProperties: false
+                        properties:
+                          dropInPassTemplate:
+                            type: object
+                            required:
+                            - data
+                            additionalProperties: false
+                            properties:
+                              data:
+                                properties:
+                                  id:
+                                    type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                    - dropInPassTemplates
+                acceptedTerms:
+                  type: boolean
+                  enum:
+                  - true
+                  description: Terms need to be accepted.
+                name:
+                  type: string
+                company:
+                  type:
+                  - string
+                  - 'null'
+                billingAddress:
+                  description: If the object is passed here, its name and company will be used
+                  oneOf:
+                  - $ref: '#/components/schemas/structuredAddress'
+                  - $ref: '#/components/schemas/address-2'
+                  - type: string
+                phone:
+                  type:
+                  - string
+                  - 'null'
+                email:
+                  $ref: '#/components/schemas/email'
+                taxId:
+                  type:
+                  - string
+                  - 'null'
+                comments:
+                  type:
+                  - string
+                  - 'null'
+            relationships:
+              oneOf:
+              - type: object
+                additionalProperties: false
+                required:
+                - payment
+                properties:
+                  payment:
+                    description: Pass a previously created payment to pay for the drop-in pass, or no payment relationship at all if paid without a payment method
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - payments
+                          id:
+                            type: string
+              - type: object
+                additionalProperties: false
+                required:
+                - paymentMethod
+                properties:
+                  paymentMethod:
+                    description: Instead of passing a payment for automated payment processing, you can pass a payment method that does not do automatic processing. Doing so will result in the payment method's instructions being added to the purchase confirmation email.
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - paymentMethods
+                          id:
+                            type: string
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    address-2:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        fullAddress:
+          type: string
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    relationship-linkage-array:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/linkage'
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

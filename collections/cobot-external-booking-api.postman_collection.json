@@ -1,0 +1,1491 @@
+{
+  "item": [
+    {
+      "id": "fa515e5b-0a75-499c-a55d-c0a262460c24",
+      "name": "External Booking",
+      "description": {
+        "content": "After a resource has been enabled for external booking (see _External Resource_) it can be\nbooked by visitors (non-members) using external booking endpoints.\nMaking an external booking also results in a Booking to be created.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "db34fb1c-f35b-4603-b625-5480725773f1",
+          "name": "Create",
+          "request": {
+            "name": "Create",
+            "description": {
+              "content": "Create an external booking.\n\n**Access**: Any user can create external bookings.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "external_bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"numberOfVisitors\": \"<integer>\",\n      \"acceptedTerms\": \"<boolean>\",\n      \"name\": \"<string>\",\n      \"billingAddress\": {\n        \"name\": \"<string,null>\",\n        \"company\": \"<string,null>\",\n        \"street\": \"<string>\",\n        \"postCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"countryCode\": \"<string>\",\n        \"state\": \"<string>\"\n      },\n      \"email\": \"<string>\",\n      \"title\": \"<string>\",\n      \"company\": \"<string>\",\n      \"comments\": \"<string>\",\n      \"adminComments\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"taxId\": \"<string>\",\n      \"bookingExtras\": [\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"payment\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b5a5e80f-05c1-499c-8ce8-67fa9ea9c079",
+              "name": "The created booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"bookingExtras\": [\n        {\n          \"productId\": \"5d2bd10cdab1647e6e49dafa319ad365\",\n          \"quantity\": \"2.0\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"id\": \"e6a53fb4a996cfa147e174e265edc5e0\",\n          \"type\": \"discountCodes\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"11.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.0\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"totalPrice\": {\n        \"net\": \"11.0\",\n        \"gross\": \"12.1\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.1\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n      \"structuredBillingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"fullAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n        \"street\": \"1422 Nuede Extension\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"status\": \"approved\",\n      \"accountingCode\": \"EB1\",\n      \"canUpdate\": true,\n      \"discount\": {\n        \"code\": \"SUMMER2024\",\n        \"name\": \"Summer Sale\",\n        \"value\": \"10.0\",\n        \"unit\": \"percentage\",\n        \"amounts\": [\n          {\n            \"net\": \"1.1\",\n            \"gross\": \"1.21\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"10.0\",\n                \"amount\": \"0.11\",\n                \"name\": \"VAT\"\n              }\n            ]\n          }\n        ]\n      },\n      \"bookingExtras\": [\n        {\n          \"name\": \"Cup of coffee\",\n          \"accountingCode\": \"coffee1\",\n          \"description\": \"Hot\",\n          \"id\": \"extra-uuid-1234\",\n          \"productId\": \"a1b2c3d4e5f6\",\n          \"pricing\": {\n            \"amount\": {\n              \"net\": \"1.0\",\n              \"gross\": \"1.1\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.1\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"2.0\",\n              \"gross\": \"2.2\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.2\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"quantity\": \"2.0\",\n            \"unit\": \"item\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": null\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n            \"type\": \"invoices\"\n          }\n        ]\n      },\n      \"contact\": {\n        \"data\": {\n          \"id\": \"u2374d68h2j067d708qhj6whgn372872\",\n          \"type\": \"contacts\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4faa849f-73ed-4197-a041-a6c6e846e46a",
+              "name": "The booking's resource is not bookable.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"bookingExtras\": [\n        {\n          \"productId\": \"5d2bd10cdab1647e6e49dafa319ad365\",\n          \"quantity\": \"2.0\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"id\": \"e6a53fb4a996cfa147e174e265edc5e0\",\n          \"type\": \"discountCodes\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Resource is not bookable.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79ec3c2c-0902-42ad-8e44-df6bca89b4b0",
+              "name": "External resources are a paid add-on.\nThe space does not have the required subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"bookingExtras\": [\n        {\n          \"productId\": \"5d2bd10cdab1647e6e49dafa319ad365\",\n          \"quantity\": \"2.0\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"id\": \"e6a53fb4a996cfa147e174e265edc5e0\",\n          \"type\": \"discountCodes\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"title\": \"Payment required\",\n      \"detail\": \"This API requires the space to have the external bookings subscription.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62866982-f9d2-43bd-a80c-edb3d9fa4498",
+              "name": "When sending a payment and capturing the payment fails, an error is returned.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"street\": \"123 Main St\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"bookingExtras\": [\n        {\n          \"productId\": \"5d2bd10cdab1647e6e49dafa319ad365\",\n          \"quantity\": \"2.0\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"id\": \"e6a53fb4a996cfa147e174e265edc5e0\",\n          \"type\": \"discountCodes\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Payment could not be captured.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "284fe8bf-f36d-4d7e-91a5-f6a5977648db",
+          "name": "Single booking",
+          "request": {
+            "name": "Single booking",
+            "description": {
+              "content": "Show an external booking.\n\n**Access**: Any user can see external bookings.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "external_bookings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response as comma separated string.\n\nIncluding `invoices` requires the `read_invoices` scope.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "List of related resources to include in response as comma separated string.\n\nIncluding `invoices` requires the `read_invoices` scope.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "523554c1-3b72-4ded-a8ce-1e45df61b347",
+              "name": "The external booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"11.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.0\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"totalPrice\": {\n        \"net\": \"11.0\",\n        \"gross\": \"12.1\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.1\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n      \"structuredBillingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"fullAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n        \"street\": \"1422 Nuede Extension\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"status\": \"approved\",\n      \"accountingCode\": \"EB1\",\n      \"canUpdate\": true,\n      \"discount\": {\n        \"code\": \"SUMMER2024\",\n        \"name\": \"Summer Sale\",\n        \"value\": \"10.0\",\n        \"unit\": \"percentage\",\n        \"amounts\": [\n          {\n            \"net\": \"1.1\",\n            \"gross\": \"1.21\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"10.0\",\n                \"amount\": \"0.11\",\n                \"name\": \"VAT\"\n              }\n            ]\n          }\n        ]\n      },\n      \"bookingExtras\": [\n        {\n          \"name\": \"Cup of coffee\",\n          \"accountingCode\": \"coffee1\",\n          \"description\": \"Hot\",\n          \"id\": \"extra-uuid-1234\",\n          \"productId\": \"a1b2c3d4e5f6\",\n          \"pricing\": {\n            \"amount\": {\n              \"net\": \"1.0\",\n              \"gross\": \"1.1\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.1\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"2.0\",\n              \"gross\": \"2.2\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.2\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"quantity\": \"2.0\",\n            \"unit\": \"item\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": null\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n            \"type\": \"invoices\"\n          }\n        ]\n      },\n      \"contact\": {\n        \"data\": {\n          \"id\": \"u2374d68h2j067d708qhj6whgn372872\",\n          \"type\": \"contacts\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66041043-09c4-4964-9a2d-5253a8c9ed27",
+              "name": "External resources are a paid add-on.\nThe space does not have the required subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"title\": \"Payment required\",\n      \"detail\": \"This API requires the space to have the external bookings subscription.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "baacade0-a56d-4b8a-aebd-14e53eb19dc0",
+          "name": "Cancel as admin",
+          "request": {
+            "name": "Cancel as admin",
+            "description": {
+              "content": "Cancel an external booking as an admin of a space.\nThe external booking is marked as canceled\nand removed from the booking calendar (i.e. from any `/bookings` endpoints).\n\nPast bookings can only be canceled while they are still pending.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "external_bookings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f873cf01-d0ec-452f-ae91-fa66f58f62d7",
+              "name": "The canceled external booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"11.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.0\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"accountingCode\": \"EB1\",\n      \"totalPrice\": {\n        \"net\": \"11.0\",\n        \"gross\": \"12.1\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.1\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"title\": \"Company Retreat\",\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": \"1422 Nuede Extension\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"canUpdate\": false,\n      \"status\": \"canceled\",\n      \"canceledBy\": \"space\",\n      \"bookingExtras\": [\n        {\n          \"name\": \"Cup of coffee\",\n          \"accountingCode\": \"coffee1\",\n          \"description\": \"Hot\",\n          \"id\": \"extra-uuid-1234\",\n          \"productId\": \"a1b2c3d4e5f6\",\n          \"pricing\": {\n            \"amount\": {\n              \"net\": \"1.0\",\n              \"gross\": \"1.1\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.1\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"2.0\",\n              \"gross\": \"2.2\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.2\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"quantity\": \"2.0\",\n            \"unit\": \"item\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": null\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"4a7dd89e-ff9c-5efd-897a-f40fb7138594\",\n          \"type\": \"resources\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n            \"type\": \"invoices\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d370110c-4ec2-426a-a0b7-cd8b13b03d6e",
+              "name": "External resources are a paid add-on.\nThe space does not have the required subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"title\": \"Payment required\",\n      \"detail\": \"This API requires the space to have the external bookings subscription.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca260876-0668-4bb0-b697-e59f3ee2112f",
+              "name": "The external booking is already canceled, or in the past and not pending.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"This external booking is already canceled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fef171b6-cea0-431e-b4f5-824d7f6a7e1f",
+          "name": "Update booking",
+          "request": {
+            "name": "Update booking",
+            "description": {
+              "content": "Update an external booking.\n\n**Access**: The current user must be an admin of the space the booking belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "external_bookings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"title\": \"<string>\",\n      \"adminComments\": \"<string>\",\n      \"customPrice\": \"<null>\",\n      \"numberOfVisitors\": \"<integer>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "03639adf-9628-4f3f-8358-ff4ae7f94745",
+              "name": "The updated external booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"8524f660-b2e6-583e-87ee-7c4ed4cdbfd9\",\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"customPrice\": {\n        \"net\": \"25.5\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"11.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.0\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"totalPrice\": {\n        \"net\": \"11.0\",\n        \"gross\": \"12.1\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.1\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"numberOfVisitors\": 1,\n      \"acceptedTerms\": true,\n      \"name\": \"Earl McBride\",\n      \"company\": \"ACME Inc.\",\n      \"billingAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n      \"structuredBillingAddress\": {\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"fullAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n        \"street\": \"1422 Nuede Extension\",\n        \"postCode\": \"12345\",\n        \"city\": \"Springfield\",\n        \"state\": \"IL\",\n        \"countryCode\": \"US\"\n      },\n      \"taxId\": \"123456789A\",\n      \"phone\": \"(959) 645-9532\",\n      \"email\": \"fe@haos.eg\",\n      \"comments\": \"we need catering\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"status\": \"approved\",\n      \"accountingCode\": \"EB1\",\n      \"canUpdate\": true,\n      \"discount\": {\n        \"code\": \"SUMMER2024\",\n        \"name\": \"Summer Sale\",\n        \"value\": \"10.0\",\n        \"unit\": \"percentage\",\n        \"amounts\": [\n          {\n            \"net\": \"1.1\",\n            \"gross\": \"1.21\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"10.0\",\n                \"amount\": \"0.11\",\n                \"name\": \"VAT\"\n              }\n            ]\n          }\n        ]\n      },\n      \"bookingExtras\": [\n        {\n          \"name\": \"Cup of coffee\",\n          \"accountingCode\": \"coffee1\",\n          \"description\": \"Hot\",\n          \"id\": \"extra-uuid-1234\",\n          \"productId\": \"a1b2c3d4e5f6\",\n          \"pricing\": {\n            \"amount\": {\n              \"net\": \"1.0\",\n              \"gross\": \"1.1\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.1\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"2.0\",\n              \"gross\": \"2.2\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.2\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"quantity\": \"2.0\",\n            \"unit\": \"item\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"paymentMethod\": {\n        \"data\": null\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n            \"type\": \"invoices\"\n          }\n        ]\n      },\n      \"contact\": {\n        \"data\": {\n          \"id\": \"u2374d68h2j067d708qhj6whgn372872\",\n          \"type\": \"contacts\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9d518a6-bb17-40dc-82d9-08a05d3e70cd",
+              "name": "External resources are a paid add-on.\nThe space does not have the required subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"8524f660-b2e6-583e-87ee-7c4ed4cdbfd9\",\n    \"type\": \"externalBookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"Company Retreat\",\n      \"adminComments\": \"make sure to air the room before\",\n      \"customPrice\": {\n        \"net\": \"25.5\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"title\": \"Payment required\",\n      \"detail\": \"This API requires the space to have the external bookings subscription.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "626787f3-b801-4aeb-b599-5cbcd0f808a2",
+          "name": "Request cancellation",
+          "request": {
+            "name": "Request cancellation",
+            "description": {
+              "content": "Request to cancel an external booking as a visitor. This will not\ncancel the booking but send an email with a cancellation link\nto the email address used to make the booking.\n\n**Access**: Any user can request to cancel a booking.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "external_bookings",
+                ":id",
+                "cancellation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d4996765-756d-4885-ab82-b22cadb16bfc",
+              "name": "Confirmation email is being sent. No changes to the external booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id",
+                    "cancellation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14991af6-3520-4671-9676-94eb23bf45b3",
+              "name": "External resources are a paid add-on.\nThe space does not have the required subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id",
+                    "cancellation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"title\": \"Payment required\",\n      \"detail\": \"This API requires the space to have the external bookings subscription.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9cf57cd-7f28-4a1a-871c-96df9e1beefb",
+              "name": "The external booking is in the past or already canceled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings",
+                    ":id",
+                    "cancellation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"This external booking is already canceled.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "faef5f4f-a9aa-4001-968b-38d7b30b2187",
+          "name": "Preview",
+          "request": {
+            "name": "Preview",
+            "description": {
+              "content": "Preview creating an external booking.\nDepending on the resource pricing, returned attributes will contain either `appliedFixedRates` array, or `appliedDiscounts` and `appliedPriceCap`.\n\n**Access**: Any user can preview external bookings.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "external_bookings_preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"bookingExtras\": [\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1556db25-92ff-449f-a1fb-bc51e5e2bbcd",
+              "name": "The booking preview.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings_preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"externalBookingPreviews\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"bookingExtras\": [\n        {\n          \"productId\": \"fc099ce2ec4df93ba0fd0db7352e5421\",\n          \"quantity\": \"2.0\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"id\": \"e6a53fb4a996cfa147e174e265edc5e0\",\n          \"type\": \"discountCodes\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"externalBookingPreviews\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"finalPrice\": {\n        \"net\": \"16.0\",\n        \"gross\": \"17.6\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"1.6\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"fullPrice\": {\n        \"net\": \"30.0\",\n        \"gross\": \"33.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"3.0\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"totalPrice\": {\n        \"net\": \"30.0\",\n        \"gross\": \"33.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"10.0\",\n            \"amount\": \"3.0\",\n            \"name\": \"VAT\"\n          }\n        ]\n      },\n      \"appliedDiscounts\": [\n        {\n          \"pricePerHour\": {\n            \"net\": \"6.0\",\n            \"gross\": \"6.6\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"10.0\",\n                \"amount\": \"0.6\",\n                \"name\": \"VAT\"\n              }\n            ]\n          },\n          \"minimumDuration\": {\n            \"hours\": 1,\n            \"minutes\": 0\n          }\n        }\n      ],\n      \"appliedPriceCaps\": [\n        {\n          \"maximumDuration\": {\n            \"hours\": 2,\n            \"minutes\": 0\n          },\n          \"price\": {\n            \"net\": \"10.0\",\n            \"gross\": \"11.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"rate\": \"10.0\",\n                \"amount\": \"1.0\",\n                \"name\": \"VAT\"\n              }\n            ]\n          }\n        }\n      ],\n      \"appliedPriceCap\": {\n        \"maximumDuration\": {\n          \"hours\": 2,\n          \"minutes\": 0\n        }\n      },\n      \"appliedFixedRates\": [\n        {\n          \"maximumDuration\": {\n            \"hours\": 2,\n            \"minutes\": 0\n          },\n          \"price\": \"10.0\",\n          \"count\": 2\n        }\n      ],\n      \"bookingExtras\": [\n        {\n          \"name\": \"Catering\",\n          \"description\": \"Tacos\",\n          \"accountingCode\": \"COFF\",\n          \"id\": \"extra-uuid-5678\",\n          \"productId\": \"fc099ce2ec4df93ba0fd0db7352e5421\",\n          \"pricing\": {\n            \"unit\": \"person\",\n            \"quantity\": \"2.0\",\n            \"amount\": {\n              \"net\": \"10.0\",\n              \"gross\": \"11.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"1.0\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"20.0\",\n              \"gross\": \"22.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"2.0\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            }\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "959fb321-3420-43b5-a6c8-e79d88dbe7a7",
+              "name": "External resources are a paid add-on.\nThe space does not have the required subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "external_bookings_preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"externalBookingPreviews\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"bookingExtras\": [\n        {\n          \"productId\": \"fc099ce2ec4df93ba0fd0db7352e5421\",\n          \"quantity\": \"2.0\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"externalResources\"\n        }\n      },\n      \"discount\": {\n        \"data\": {\n          \"id\": \"e6a53fb4a996cfa147e174e265edc5e0\",\n          \"type\": \"discountCodes\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"title\": \"Payment required\",\n      \"detail\": \"This API requires the space to have the external bookings subscription.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "db7cc010-8a40-4c2f-9192-530388c23bf8",
+          "name": "List for space",
+          "request": {
+            "name": "List for space",
+            "description": {
+              "content": "List a space's external bookings for a given timespan.\nThe bookings are filtered by their `from` attribute, not by testing for overlap.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "external_bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The start of the time range to return external bookings for."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) The end of the time range to return external bookings for."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[sortOrder]",
+                  "value": "asc",
+                  "description": "Whether to sort external bookings by date ascending or descending date."
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>,<string>",
+                  "description": "List of related resources to include in response. Provide a comma separated list of relationship names.\n`invoices` requires the `read_invoices` scope.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space to get the bookings for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "89e2b752-5f50-4d2a-8214-8a11575dafa6",
+              "name": "The external bookings for the given space and time frame.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "external_bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "2012-04-12T10:00:00Z"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "2012-04-14T20:00:00Z"
+                    },
+                    {
+                      "key": "filter[sortOrder]",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space to get the bookings for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n      \"type\": \"externalBookings\",\n      \"attributes\": {\n        \"from\": \"2018-01-01T12:00:00Z\",\n        \"to\": \"2018-01-01T14:00:00Z\",\n        \"title\": \"Company Retreat\",\n        \"price\": {\n          \"net\": \"10.0\",\n          \"gross\": \"11.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"10.0\",\n              \"amount\": \"1.0\",\n              \"name\": \"VAT\"\n            }\n          ]\n        },\n        \"totalPrice\": {\n          \"net\": \"11.0\",\n          \"gross\": \"12.1\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"rate\": \"10.0\",\n              \"amount\": \"1.1\",\n              \"name\": \"VAT\"\n            }\n          ]\n        },\n        \"numberOfVisitors\": 1,\n        \"acceptedTerms\": true,\n        \"name\": \"Earl McBride\",\n        \"company\": \"ACME Inc.\",\n        \"billingAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n        \"structuredBillingAddress\": {\n          \"name\": \"Earl McBride\",\n          \"company\": \"ACME Inc.\",\n          \"fullAddress\": \"1422 Nuede Extension\\\\nSpringfield, IL, 12345\",\n          \"street\": \"1422 Nuede Extension\",\n          \"postCode\": \"12345\",\n          \"city\": \"Springfield\",\n          \"state\": \"IL\",\n          \"countryCode\": \"US\"\n        },\n        \"taxId\": \"123456789A\",\n        \"phone\": \"(959) 645-9532\",\n        \"email\": \"fe@haos.eg\",\n        \"comments\": \"we need catering\",\n        \"adminComments\": \"make sure to air the room before\",\n        \"status\": \"approved\",\n        \"accountingCode\": \"EB1\",\n        \"canUpdate\": true,\n        \"discount\": {\n          \"code\": \"SUMMER2024\",\n          \"name\": \"Summer Sale\",\n          \"value\": \"10.0\",\n          \"unit\": \"percentage\",\n          \"amounts\": [\n            {\n              \"net\": \"1.1\",\n              \"gross\": \"1.21\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.11\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            }\n          ]\n        },\n        \"bookingExtras\": [\n          {\n            \"name\": \"Cup of coffee\",\n            \"accountingCode\": \"coffee1\",\n            \"description\": \"Hot\",\n            \"id\": \"extra-uuid-1234\",\n            \"productId\": \"a1b2c3d4e5f6\",\n            \"pricing\": {\n              \"amount\": {\n                \"net\": \"1.0\",\n                \"gross\": \"1.1\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"10.0\",\n                    \"amount\": \"0.1\",\n                    \"name\": \"VAT\"\n                  }\n                ]\n              },\n              \"totalAmount\": {\n                \"net\": \"2.0\",\n                \"gross\": \"2.2\",\n                \"currency\": \"EUR\",\n                \"taxes\": [\n                  {\n                    \"rate\": \"10.0\",\n                    \"amount\": \"0.2\",\n                    \"name\": \"VAT\"\n                  }\n                ]\n              },\n              \"quantity\": \"2.0\",\n              \"unit\": \"item\"\n            }\n          }\n        ]\n      },\n      \"relationships\": {\n        \"paymentMethod\": {\n          \"data\": null\n        },\n        \"resource\": {\n          \"data\": {\n            \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n            \"type\": \"externalResources\"\n          }\n        },\n        \"space\": {\n          \"data\": {\n            \"id\": \"99a12ca68b5e6bc9007890854kd368f2\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"invoices\": {\n          \"data\": [\n            {\n              \"id\": \"a07fed27-b35b-5c67-8367-3e52c397c528\",\n              \"type\": \"invoices\"\n            }\n          ]\n        },\n        \"contact\": {\n          \"data\": {\n            \"id\": \"u2374d68h2j067d708qhj6whgn372872\",\n            \"type\": \"contacts\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f7d21b97-773e-4d27-bf96-475cf21dca84",
+    "name": "Cobot External Booking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

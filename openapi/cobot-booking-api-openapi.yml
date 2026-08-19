@@ -1,0 +1,2413 @@
+openapi: 3.2.0
+info:
+  title: Cobot Booking API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Booking
+  description: A booking of a resource in the booking calendar.
+paths:
+  /bookings:
+    post:
+      summary: Book as admin
+      description: 'Create booking as an admin. Optionally a booking can be assigned to a membership.
+
+
+        **Access**: The current user must be an admin of the space. If the
+
+        space is part of a network, the user must be an admin of any
+
+        space in the network.
+
+        '
+      operationId: create-admin-booking
+      security:
+      - OAuth2:
+        - write_bookings
+      tags:
+      - Booking
+      responses:
+        '201':
+          description: New booking
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        units: 1
+                        title: team meeting
+                        url: https://example.com/team-meeting
+                        comments: there is going to be coffe and cake
+                        attendeesMessage: Please bring your laptop
+                        attendees:
+                        - email: attendee@example.com
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        canUpdate: true
+                        cancellationPeriod: 0
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: 89da3cb66b5e6b39007690854kd66da4
+                            type: memberships
+                        externalBooking:
+                          data: null
+        '202':
+          description: 'New recurring booking. Returns 202 since the bookings are created
+
+            asynchronously (except the first one).
+
+
+            The bookings can be fetched via
+
+            the _recurringBookings_ relationship, which also lets you track
+
+            if all bookings have been written.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        units: 1
+                        title: team meeting
+                        url: https://example.com/team-meeting
+                        comments: there is going to be coffe and cake
+                        attendeesMessage: Please bring your laptop
+                        attendees:
+                        - email: attendee@example.com
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        recurrence:
+                          rule:
+                            frequency: weekly
+                            interval: 1
+                            from: '2018-01-01'
+                            until: '2018-01-22'
+                            count: null
+                            weekdays: null
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        recurringBookings:
+                          links:
+                            related: /recurring_bookings/a3281b61ac8df98d29de357180d212e4
+                        followingRecurringBookings:
+                          links:
+                            related: /bookings/a3281b61ac8df98d29de357180d212e4/following
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: 89da3cb66b5e6b39007690854kd66da4
+                            type: memberships
+                        externalBooking:
+                          data: null
+        '400':
+          description: 'The booking''s resource is not bookable.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Resource is not bookable.
+      requestBody:
+        description: Booking to be created
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-booking'
+            examples:
+              default:
+                value:
+                  data:
+                    type: bookings
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      units: 1
+                      title: team meeting
+                      url: https://example.com/team-meeting
+                      comments: there is going to be coffe and cake
+                      attendeesMessage: Please bring your laptop
+                      attendees:
+                      - email: attendee@example.com
+                      customPrice:
+                        net: '12.00'
+                    relationships:
+                      resource:
+                        data:
+                          id: 99da6cb66b5e6b39007690854fd66df9
+                          type: resources
+                      membership:
+                        data:
+                          id: 89da3cb66b5e6b39007690854kd66da4
+                          type: memberships
+              recurring:
+                value:
+                  data:
+                    type: bookings
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      units: 1
+                      recurrence:
+                        rule:
+                          frequency: weekly
+                          interval: 1
+                          until: '2018-01-22'
+                          weekdays:
+                          - 1
+                          - 3
+                    relationships:
+                      resource:
+                        data:
+                          id: 99da6cb66b5e6b39007690854fd66df9
+                          type: resources
+                      membership:
+                        data:
+                          id: 89da3cb66b5e6b39007690854kd66da4
+                          type: memberships
+  /recurring_bookings/{recurringId}:
+    get:
+      summary: List recurring
+      description: 'List all the recurring bookings belonging to a booking with recurrence.
+
+
+        The data returned by this endpoint is only eventually consistent.
+
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-recurring-bookings
+      parameters:
+      - name: recurringId
+        in: path
+        required: true
+        description: The id of the recurrence.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_bookings
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: All bookings belonging to the same recurrence.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/recurring-bookings'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: meeting
+                        url: https://example.com/meeting
+                        comments: nil
+                        attendees: []
+                        price:
+                          $ref: ../examples/price.yml
+                        canUpdate: true
+                        units: 1
+                        cancellationPeriod: 0
+                        recurrence:
+                          rule:
+                            frequency: weekly
+                            interval: 1
+                            from: '2018-01-01'
+                            until: '2018-01-22'
+                            weekdays: null
+                            count: null
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: f11h2a71ac8df98d29de357180d273a3
+                            type: memberships
+                        recurringBookings:
+                          links:
+                            related: /recurring_bookings/a3281b61ac8df98d29de357180d212e4
+                        followingRecurringBookings:
+                          links:
+                            related: /bookings/b8f21a71ac8df98d29de357180d27358/following
+                        externalBooking:
+                          data: null
+                    meta:
+                      consistent: true
+                      totalPages: 1
+                      currentPage: 1
+  /recurring_bookings/{bookingId}/following:
+    delete:
+      summary: Delete following
+      description: 'Delete a recurring booking and all the following instances.
+
+
+        **Access**: The current user must be an admin of the space or the member who made the booking.
+
+        '
+      operationId: delete-following-recurring-bookings
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        description: The id of the booking to delete.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_bookings
+      tags:
+      - Booking
+      responses:
+        '202':
+          description: The deleted booking.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: meeting
+                        url: https://example.com/meeting
+                        comments: nil
+                        attendees: []
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        units: 1
+                        recurrence:
+                          rule:
+                            frequency: weekly
+                            interval: 1
+                            from: '2018-01-01'
+                            until: '2018-01-22'
+                            count: null
+                            weekdays: null
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: f11h2a71ac8df98d29de357180d273a3
+                            type: memberships
+                        recurringBookings:
+                          links:
+                            related: /recurring_bookings/a3281b61ac8df98d29de357180d212e4
+                        followingRecurringBookings:
+                          links:
+                            related: /bookings/b8f21a71ac8df98d29de357180d27358/following
+                        externalBooking:
+                          data: null
+  /bookings_preview:
+    post:
+      summary: Bookings preview
+      description: 'Return all booking previews for given resources for a membership in the given time range.
+
+
+        **Access**: The current user must be the owner of the membership the booking belongs to or an admin of the space or network.
+
+        '
+      operationId: post-bookings-preview
+      requestBody:
+        description: The time range and resource ids list.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-bookings-preview'
+            examples:
+              default:
+                value:
+                  data:
+                    type: bookingPreviews
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                    relationships:
+                      booking:
+                        data:
+                          id: 42ac6cb66b5ebb30007290854fd46ae0
+                          type: bookings
+                      resources:
+                        data:
+                        - id: 99da6cb66b5e6b39007690854fd66df9
+                          type: resources
+                      membership:
+                        data:
+                          id: 89da3cb66b5e6b39007690854kd66da4
+                          type: memberships
+              recurring:
+                value:
+                  data:
+                    type: bookingPreviews
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      recurrence:
+                        rule:
+                          frequency: daily
+                          from: '2018-01-01'
+                          until: '2018-01-02'
+                    relationships:
+                      resources:
+                        data:
+                        - id: 99da6cb66b5e6b39007690854fd66df9
+                          type: resources
+                      membership:
+                        data:
+                          id: 89da3cb66b5e6b39007690854kd66da4
+                          type: memberships
+      security:
+      - OAuth2:
+        - read_resources
+        - read_memberships
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Booking previews for given resources for a membership in the given time range.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking-previews'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: bookingPreviews
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        appliedDiscounts:
+                        - pricePerHour:
+                            net: '6.0'
+                            gross: '6.6'
+                            currency: EUR
+                            taxes:
+                            - rate: '10.0'
+                              amount: '0.6'
+                              name: VAT
+                          minimumDuration:
+                            hours: 1
+                            minutes: 0
+                        appliedFixedRates:
+                        - maximumDuration:
+                            hours: 2
+                            minutes: 0
+                          price: '10.0'
+                          count: 2
+                        appliedPriceCap:
+                          maximumDuration:
+                            hours: 2
+                            minutes: 0
+                        attendees: []
+                        title: meeting
+                        comments: null
+                        price:
+                          $ref: ../examples/price.yml
+                        estimatedPayablePrice:
+                          $ref: ../examples/price.yml
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        bookingExtras: []
+                        bookingCredits:
+                          estimatedMinutesUsed: 30
+                          estimatedAmountUsed:
+                            $ref: ../examples/price.yml
+                        bookingPasses:
+                          estimatedMinutesUsed: 60
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: b5a99a71ac8df98d2gn8380d273d3
+                            type: memberships
+                        externalBooking:
+                          data: null
+                recurring:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: bookingPreviews
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        appliedDiscounts:
+                        - pricePerHour:
+                            net: '6.0'
+                            gross: '6.6'
+                            currency: EUR
+                            taxes:
+                            - rate: '10.0'
+                              amount: '0.6'
+                              name: VAT
+                          minimumDuration:
+                            hours: 1
+                            minutes: 0
+                        appliedFixedRates:
+                        - maximumDuration:
+                            hours: 2
+                            minutes: 0
+                          price: '10.0'
+                          count: 2
+                        appliedPriceCap:
+                          maximumDuration:
+                            hours: 2
+                            minutes: 0
+                        attendees: []
+                        title: meeting
+                        comments: null
+                        price:
+                          $ref: ../examples/price.yml
+                        estimatedPayablePrice:
+                          $ref: ../examples/price.yml
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        bookingExtras: []
+                        errors: {}
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: b5a99a71ac8df98d2gn8380d273d3
+                            type: memberships
+                        externalBooking:
+                          data: null
+                    - id: cy75b4b9b5y34e656d76phobaf79my9i
+                      type: bookingPreviews
+                      attributes:
+                        from: '2018-01-02T12:00:00Z'
+                        to: '2018-01-02T14:00:00Z'
+                        appliedDiscounts:
+                        - pricePerHour:
+                            net: '6.0'
+                            gross: '6.6'
+                            currency: EUR
+                            taxes:
+                            - rate: '10.0'
+                              amount: '0.6'
+                              name: VAT
+                          minimumDuration:
+                            hours: 1
+                            minutes: 0
+                        appliedFixedRates:
+                        - maximumDuration:
+                            hours: 2
+                            minutes: 0
+                          price: '10.0'
+                          count: 2
+                        appliedPriceCap:
+                          maximumDuration:
+                            hours: 2
+                            minutes: 0
+                        attendees: []
+                        title: meeting
+                        comments: null
+                        price:
+                          $ref: ../examples/price.yml
+                        estimatedPayablePrice:
+                          $ref: ../examples/price.yml
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        bookingExtras: []
+                        errors: {}
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: b5a99a71ac8df98d2gn8380d273d3
+                            type: memberships
+                        externalBooking:
+                          data: null
+                    meta:
+                      totalBookings: 2
+                      totalPrice: '120.00'
+  /bookings/{id}:
+    delete:
+      summary: Delete booking
+      description: '**Access**: The current user must either be an admin or a member of a space or the space''s network. A member can only delete their own bookings and additionally only those that are not in the past.
+
+        '
+      operationId: delete-space-booking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the booking to be deleted.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_bookings
+      tags:
+      - Booking
+      responses:
+        '204':
+          description: Booking deleted.
+        '409':
+          description: Booking has been made by an event and can't be deleted through this endpoint.
+    get:
+      summary: Single booking
+      description: '**Access**: The current user must be an admin or member of the space
+
+        the booking belongs to. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-booking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the booking.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_bookings
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Details of a booking.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        units: 1
+                        title: meeting
+                        url: https://example.com/meeting
+                        name: joe
+                        comments: nil
+                        attendeesMessage: null
+                        attendees:
+                        - email: attendee@example.com
+                        hasCustomPrice: false
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        bookingCredits:
+                          estimatedMinutesUsed: 30
+                        bookingPasses:
+                          estimatedMinutesUsed: 60
+                        estimatedPayablePrice:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        bookingExtras:
+                        - name: Cup of coffee
+                          accountingCode: coffee1
+                          description: Hot
+                          id: extra-uuid-1234
+                          productId: a1b2c3d4e5f6
+                          pricing:
+                            amount:
+                              net: '1.0'
+                              gross: '1.1'
+                              currency: EUR
+                              taxes:
+                              - rate: '10.0'
+                                amount: '0.1'
+                                name: VAT
+                            totalAmount:
+                              net: '2.0'
+                              gross: '2.2'
+                              currency: EUR
+                              taxes:
+                              - rate: '10.0'
+                                amount: '0.2'
+                                name: VAT
+                            quantity: '2.0'
+                            unit: item
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        externalBooking:
+                          data: null
+    patch:
+      summary: Update booking
+      description: '**Access**: The current user must either be an admin or a member of a space or the space''s network. A member can only update their own bookings and additionally only those that are not in the past.
+
+        '
+      operationId: update-space-booking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the booking to be updated.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_bookings
+      tags:
+      - Booking
+      requestBody:
+        description: Booking to be updated
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/update-booking'
+            examples:
+              default:
+                value:
+                  data:
+                    id: b8f21a71ac8df98d29de357180d27358
+                    type: bookings
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      units: 1
+                      title: team meeting
+                      url: https://example.com/team-meeting
+                      comments: there is going to be coffe and cake
+                      attendeesMessage: Please bring your laptop
+                      attendees:
+                      - email: attendee@example.com
+                      updateFollowing: true
+      responses:
+        '200':
+          description: Details of the updated booking.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        units: 1
+                        name: joe
+                        title: team meeting
+                        url: https://example.com/team-meeting
+                        comments: there is going to be coffe and cake
+                        attendeesMessage: Please bring your laptop
+                        attendees:
+                        - email: attendee@example.com
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        estimatedPayablePrice:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        bookingExtras: []
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: 89da3cb66b5e6b39007690854kd66da4
+                            type: memberships
+                        externalBooking:
+                          data: null
+        '400':
+          description: 'The booking''s resource is not bookable.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Resource is not bookable.
+        '409':
+          description: Booking has been made by an event and can't be changed through this endpoint.
+  /memberships/{membershipId}/bookings:
+    get:
+      summary: For membership/time
+      description: 'List all bookings of the membership in the given time range.
+
+        If the membership''s space belongs to a network, this
+
+        includes bookings from all spaces in the network.
+
+
+        **Access**: The current user must be the owner of the membership or an admin
+
+        in the space the membership belongs to.
+
+        '
+      operationId: get-membership-bookings
+      parameters:
+      - name: membershipId
+        in: path
+        required: true
+        description: The id of the membership the bookings belong to.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: Start of the time range.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-04-12T10:00:00Z'
+      - name: filter[to]
+        in: query
+        required: true
+        description: End of the time range.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-04-12T18:00:00Z'
+      security:
+      - OAuth2:
+        - read_bookings
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Membership bookings for a given time range.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/bookings'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: meeting
+                        url: https://example.com/meeting
+                        comments: null
+                        attendeesMessage: null
+                        attendees: []
+                        price:
+                          $ref: ../examples/price.yml
+                        estimatedPayablePrice:
+                          $ref: ../examples/price.yml
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        units: 1
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: b5a99a71ac8df98d2gn8380d273d3
+                            type: memberships
+                        externalBooking:
+                          data: null
+    post:
+      summary: Book as member
+      description: 'Create booking for the membership.
+
+        **Access**: The current user must be a member of the space. If the
+
+        space is part of a network, the user must be a member of any
+
+        space in the network.
+
+        '
+      operationId: create-membership-booking
+      parameters:
+      - name: membershipId
+        in: path
+        required: true
+        description: The id of the membership the bookings belong to.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_bookings
+      tags:
+      - Booking
+      responses:
+        '201':
+          description: New booking for a membership
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/booking'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: team meeting
+                        url: https://example.com/team-meeting
+                        comments: there is going to be coffe and cake
+                        attendeesMessage: Please bring your laptop
+                        attendees: []
+                        price:
+                          net: '0.0'
+                          gross: '0.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '0.0'
+                            name: Tax
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        units: 1
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        membership:
+                          data:
+                            id: 89da3cb66b5e6b39007690854kd66da4
+                            type: memberships
+                        externalBooking:
+                          data: null
+        '400':
+          description: 'The booking''s resource is not bookable.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Resource is not bookable.
+      requestBody:
+        description: Booking to be created
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-booking'
+            examples:
+              default:
+                value:
+                  data:
+                    type: bookings
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      title: team meeting
+                      url: https://example.com/team-meeting
+                      comments: there is going to be coffe and cake
+                      attendeesMessage: Please bring your laptop
+                    relationships:
+                      resource:
+                        data:
+                          id: 99da6cb66b5e6b39007690854fd66df9
+                          type: resources
+                      membership:
+                        data:
+                          id: 89da3cb66b5e6b39007690854kd66da4
+                          type: memberships
+  /spaces/{spaceId}/bookings:
+    get:
+      summary: List space bookings
+      description: 'List all the bookings for a space in the given time.
+
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: get-space-bookings
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space the bookings belong to.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: Start of the time range.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-04-12T10:00:00Z'
+      - name: filter[to]
+        in: query
+        required: true
+        description: End of the time range.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-04-12T18:00:00Z'
+      - name: include
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: "List of related resources to include in response. \nProvide a comma separated list of relationship names. When requesting \nevents, the access token needs the read_events scope. When requesting\nexternal bookings, the access token needs the read_external_bookings\nscope.\n"
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - membership
+            - event
+            - externalBooking
+      security:
+      - OAuth2:
+        - read_bookings
+        - read_events
+        - read_external_bookings
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Bookings of a space for a given time range.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/bookings'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: bookings
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: meeting
+                        url: https://example.com/meeting
+                        comments: null
+                        attendees: []
+                        price:
+                          $ref: ../examples/price.yml
+                        estimatedPayablePrice:
+                          $ref: ../examples/price.yml
+                        canUpdate: true
+                        cancellationPeriod: 0
+                        units: 1
+                      relationships:
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        resource:
+                          data:
+                            id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+                        membership:
+                          data:
+                            id: f11h2a71ac8df98d29de357180d273a3
+                            type: memberships
+                        externalBooking:
+                          data: null
+components:
+  schemas:
+    create-bookings-preview:
+      id: create-bookings-preview.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - bookingPreviews
+            attributes:
+              type: object
+              required:
+              - from
+              - to
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                units:
+                  type: integer
+                  minimum: 1
+                recurrence:
+                  $ref: '#/components/schemas/recurrence'
+                bookingExtras:
+                  description: Extras to be booked with this booking. They have to be linked with the associated resource.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/booking-extra'
+              additionalProperties: false
+            relationships:
+              type: object
+              required:
+              - resources
+              additionalProperties: false
+              properties:
+                resources:
+                  type: object
+                  properties:
+                    data:
+                      type: array
+                      minItems: 1
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        properties:
+                          type:
+                            type: string
+                            const: resources
+                          id:
+                            type: string
+                        additionalProperties: false
+                  additionalProperties: false
+                membership:
+                  description: When creating a preview for a network membership, pass it here so Cobot can choose the correct network membership of possibly multiple
+                  type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                        id:
+                          type: string
+                      additionalProperties: false
+                  additionalProperties: false
+                booking:
+                  description: When updating an existing booking, pass it here so Cobot can calculate the correct number of booking credits.
+                  type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - bookings
+                        id:
+                          type: string
+                      additionalProperties: false
+                  additionalProperties: false
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    recurrence-2:
+      type: object
+      required:
+      - rule
+      additionalProperties: false
+      properties:
+        rule:
+          type: object
+          additionalProperties: false
+          required:
+          - frequency
+          - from
+          - until
+          - interval
+          - count
+          - weekdays
+          properties:
+            frequency:
+              enum:
+              - daily
+              - weekly
+              - monthly
+              - yearly
+            from:
+              $ref: '#/components/schemas/date'
+            until:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            interval:
+              type: integer
+              minimum: 1
+            count:
+              oneOf:
+              - type: integer
+                minimum: 1
+              - type: 'null'
+            weekdays:
+              $ref: '#/components/schemas/recurrence-weekdays'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    update-booking:
+      id: update-booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: bookings
+            id:
+              type: string
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                url:
+                  description: Optional link related to the booking (e.g. meeting or video call).
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                units:
+                  type: integer
+                  minimum: 1
+                customPrice:
+                  description: When set by an admin it overwrites price calculation and uses the set price
+                  oneOf:
+                  - $ref: '#/components/schemas/money'
+                  - type: 'null'
+                comments:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                attendeesMessage:
+                  description: Message to be sent to additional attendees after the booking is updated. If no message is provided, the existing message is removed to avoid re-sending the same message.
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                bookingExtras:
+                  description: Extras to be booked with this booking. Use id to update an existing extra's quantity (preserves original pricing). Use productId to add a new extra from a product (uses current product pricing). Products must be enabled for the resource.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/booking-extra'
+                attendees:
+                  description: Optional list of additional attendees for this booking. Excluding the member the booking is for.
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - email
+                    properties:
+                      email:
+                        type: string
+                        format: email
+                updateFollowing:
+                  description: If set to true on a booking with a recurrence, updates all following recurring bookings as well. Currently only updates comments and url, only works if user is an admin
+                  type: boolean
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                resource:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - resources
+                        id:
+                          type: string
+                membership:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      oneOf:
+                      - type: 'null'
+                      - type: object
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - memberships
+                          id:
+                            type: string
+    booking-previews:
+      id: booking-previews.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          type: object
+          additionalProperties: false
+          properties:
+            totalPages:
+              type: number
+            currentPage:
+              type: number
+            totalBookings:
+              type: number
+            totalPrice:
+              type: string
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-booking-preview-data'
+        included:
+          type: array
+          items:
+            type: object
+    -booking-preview-data:
+      id: -booking-preview-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        attributes:
+          type: object
+          required:
+          - from
+          - to
+          - canUpdate
+          - cancellationPeriod
+          - appliedFixedRates
+          - appliedPriceCap
+          - appliedDiscounts
+          - bookingExtras
+          additionalProperties: false
+          properties:
+            name:
+              description: Name of the membership the booking belongs to if any.
+              oneOf:
+              - type: string
+              - type: 'null'
+            title:
+              oneOf:
+              - type: string
+              - type: 'null'
+            comments:
+              oneOf:
+              - type: string
+              - type: 'null'
+            hasCustomPrice:
+              description: Indicates that the booking has a fixed price set that does not change with the resource or duration
+              type: boolean
+            price:
+              description: Price of the booking, excluding extras and discount code.
+              $ref: '#/components/schemas/price'
+            estimatedPayablePrice:
+              $ref: '#/components/schemas/estimated-payable-price'
+            errors:
+              type: object
+              properties:
+                conflict:
+                  type: boolean
+              additionalProperties: false
+            recurrence:
+              $ref: '#/components/schemas/recurrence-2'
+            recurringId:
+              type: string
+              description: Only present if booking is part of a recurring booking. All recurring bookings created together have the same recurring id.
+            appliedDiscounts:
+              type: array
+              items:
+                $ref: '#/components/schemas/resource-discount'
+            appliedFixedRates:
+              type: array
+              items:
+                $ref: '#/components/schemas/fixed-rate-count'
+            appliedPriceCap:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/resource-paid-time-cap'
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+            units:
+              type: integer
+              description: Number of units booked of the resource
+            canUpdate:
+              description: Whether the current user is allowed to make changes to this booking.
+              type: boolean
+            cancellationPeriod:
+              description: This limits how many hours in advance of a booking's start time it can still be edited or canceled by members.
+              type: number
+            bookingCredits:
+              type: object
+              properties:
+                estimatedMinutesUsed:
+                  type: integer
+                  description: Estimated no. of booking credits minutes used.
+                estimatedAmountUsed:
+                  $ref: '#/components/schemas/price'
+              additionalProperties: false
+            bookingPasses:
+              type: object
+              properties:
+                estimatedMinutesUsed:
+                  type: integer
+                  description: No. of booking passes minutes used.
+              additionalProperties: false
+            bookingExtras:
+              type: array
+              description: Extras booked with this booking.
+              items:
+                $ref: '#/components/schemas/-booking-extra-data'
+            attendees:
+              type: array
+              description: Attendees of this booking.
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    format: email
+            attendeesMessage:
+              description: Message sent to additional attendees.
+              oneOf:
+              - type: string
+              - type: 'null'
+        relationships:
+          type: object
+          required:
+          - resource
+          - space
+          - externalBooking
+          additionalProperties: false
+          properties:
+            membership:
+              oneOf:
+              - $ref: '#/components/schemas/relationship-linkage'
+              - type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: 'null'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            resource:
+              $ref: '#/components/schemas/relationship-linkage'
+            event:
+              $ref: '#/components/schemas/relationship-linkage'
+            externalBooking:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            recurringBookings:
+              $ref: '#/components/schemas/related-link'
+            followingRecurringBookings:
+              $ref: '#/components/schemas/related-link'
+        meta:
+          type: object
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    estimated-payable-price:
+      description: Estimated price to be payable after any credits or discounts are applied upon invoicing for that item.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    recurrence:
+      type: object
+      required:
+      - rule
+      additionalProperties: false
+      properties:
+        rule:
+          type: object
+          additionalProperties: false
+          required:
+          - frequency
+          properties:
+            frequency:
+              enum:
+              - daily
+              - weekly
+              - monthly
+              - yearly
+            from:
+              $ref: '#/components/schemas/date'
+            until:
+              $ref: '#/components/schemas/date'
+            count:
+              type: integer
+              minimum: 1
+              maximum: 200
+              description: How many times the booking should repeat. You have to provie `count` or `until` but not both.
+            interval:
+              type: integer
+              minimum: 1
+              default: 1
+            weekdays:
+              $ref: '#/components/schemas/recurrence-weekdays'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    resource-paid-time-cap:
+      type: object
+      required:
+      - maximumDuration
+      properties:
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+      additionalProperties: false
+    fixed-rate-count:
+      type: object
+      required:
+      - price
+      - maximumDuration
+      - count
+      properties:
+        price:
+          type: string
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+        count:
+          type: integer
+      additionalProperties: false
+    hours-minutes-object:
+      type: object
+      required:
+      - hours
+      - minutes
+      additionalProperties: false
+      properties:
+        hours:
+          type: integer
+          minimum: 0
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 59
+    resource-discount:
+      type: object
+      required:
+      - pricePerHour
+      - minimumDuration
+      additionalProperties: false
+      properties:
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        minimumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    booking:
+      id: booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-booking-data'
+        included:
+          type: array
+          items:
+            type: object
+    -booking-data:
+      id: -booking-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        attributes:
+          type: object
+          required:
+          - from
+          - to
+          - canUpdate
+          - cancellationPeriod
+          - units
+          additionalProperties: false
+          properties:
+            name:
+              description: Name of the membership the booking belongs to if any.
+              oneOf:
+              - type: string
+              - type: 'null'
+            title:
+              oneOf:
+              - type: string
+              - type: 'null'
+            url:
+              description: Optional link related to the booking (e.g. meeting or video call).
+              oneOf:
+              - type: string
+              - type: 'null'
+            comments:
+              oneOf:
+              - type: string
+              - type: 'null'
+            attendeesMessage:
+              description: Message sent to additional attendees.
+              oneOf:
+              - type: string
+              - type: 'null'
+            hasCustomPrice:
+              description: Indicates that the booking has a fixed price set that does not change with the resource or duration
+              type: boolean
+            price:
+              $ref: '#/components/schemas/price'
+            estimatedPayablePrice:
+              $ref: '#/components/schemas/estimated-payable-price'
+            recurrence:
+              $ref: '#/components/schemas/recurrence-2'
+            recurringId:
+              type: string
+              description: Only present if booking is part of a recurring booking. All recurring bookings created together have the same recurring id.
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+            units:
+              type: integer
+              description: Number of units booked of the resource
+            canUpdate:
+              description: Whether the current user is allowed to make changes to this booking.
+              type: boolean
+            cancellationPeriod:
+              description: This limits how many hours in advance of a booking's start time it can still be edited or canceled by members.
+              type: number
+            bookingCredits:
+              type: object
+              description: The estimated amount of booking credits used, split into time and amount based credits.
+              properties:
+                estimatedMinutesUsed:
+                  type: integer
+                estimatedAmountUsed:
+                  $ref: '#/components/schemas/price'
+              additionalProperties: false
+            bookingPasses:
+              type: object
+              properties:
+                estimatedMinutesUsed:
+                  type: integer
+                  description: No. of booking passes minutes used.
+              additionalProperties: false
+            bookingExtras:
+              type: array
+              description: Extras booked with this booking.
+              items:
+                $ref: '#/components/schemas/-booking-extra-data'
+            attendees:
+              type: array
+              description: Attendees of this booking.
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    format: email
+        relationships:
+          type: object
+          required:
+          - resource
+          - space
+          - externalBooking
+          additionalProperties: false
+          properties:
+            membership:
+              oneOf:
+              - $ref: '#/components/schemas/relationship-linkage'
+              - type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: 'null'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            resource:
+              $ref: '#/components/schemas/relationship-linkage'
+            event:
+              $ref: '#/components/schemas/relationship-linkage'
+            externalBooking:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            recurringBookings:
+              $ref: '#/components/schemas/related-link'
+            followingRecurringBookings:
+              $ref: '#/components/schemas/related-link'
+        meta:
+          type: object
+    booking-extra:
+      oneOf:
+      - title: updateExistingExtra
+        type: object
+        additionalProperties: false
+        required:
+        - id
+        - quantity
+        properties:
+          id:
+            type: string
+            description: ID of an existing booking extra to update. Only quantity can be changed.
+          quantity:
+            $ref: '#/components/schemas/decimal'
+      - title: createNewExtra
+        type: object
+        additionalProperties: false
+        required:
+        - productId
+        - quantity
+        properties:
+          productId:
+            type: string
+            description: ID of a product to create a new booking extra from.
+          quantity:
+            $ref: '#/components/schemas/decimal'
+    create-booking:
+      id: create-booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: bookings
+            attributes:
+              type: object
+              required:
+              - from
+              - to
+              additionalProperties: false
+              properties:
+                units:
+                  type: integer
+                  minimum: 1
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                url:
+                  description: Optional link related to the booking (e.g. meeting or video call).
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                customPrice:
+                  description: When set by an admin it overwrites price calculation and uses the set price
+                  oneOf:
+                  - $ref: '#/components/schemas/money'
+                  - type: 'null'
+                comments:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                attendeesMessage:
+                  description: Message to be sent to additional attendees (see attendees attribute).
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                recurrence:
+                  $ref: '#/components/schemas/recurrence'
+                bookingExtras:
+                  description: Extras to be booked with this booking. They have to be linked with the associated resource.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/booking-extra'
+                attendees:
+                  description: Optional list of additional attendees for this booking.
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - email
+                    properties:
+                      email:
+                        type: string
+                        format: email
+            relationships:
+              type: object
+              required:
+              - resource
+              additionalProperties: false
+              properties:
+                resource:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - resources
+                        id:
+                          type: string
+                membership:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                        id:
+                          type: string
+    -booking-extra-data:
+      id: -booking-extra-data.json
+      type: object
+      required:
+      - name
+      - pricing
+      - accountingCode
+      - description
+      - id
+      - productId
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        accountingCode:
+          type:
+          - string
+          - 'null'
+        id:
+          type: string
+          description: Unique ID for this booking extra. Use this to update the extra.
+        productId:
+          type: string
+          description: ID of the product this extra was created from.
+        pricing:
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/price'
+            totalAmount:
+              $ref: '#/components/schemas/price'
+            unit:
+              type: string
+              enum:
+              - fixed
+              - minute
+              - person
+              - item
+            quantity:
+              $ref: '#/components/schemas/decimal'
+          additionalProperties: false
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    bookings:
+      id: bookings.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          type: object
+          additionalProperties: false
+          properties:
+            recurrence:
+              type: boolean
+            totalPages:
+              type: number
+            totalBookings:
+              type: number
+            currentPage:
+              type: number
+            consistent:
+              type: boolean
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-booking-data'
+        included:
+          type: array
+          items:
+            type: object
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    recurrence-weekdays:
+      description: 'Only when frequency is weekly: Allows to repeat a booking on multiple weekdays. 1 is Monday, 7 is Sunday.'
+      oneOf:
+      - type: array
+        items:
+          type: integer
+          minimum: 1
+          maximum: 7
+      - type: 'null'
+    money:
+      type: object
+      required:
+      - net
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+    recurring-bookings:
+      id: recurring-bookings.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          type: object
+          additionalProperties: false
+          properties:
+            recurrence:
+              type: boolean
+            totalPages:
+              type: number
+            currentPage:
+              type: number
+            consistent:
+              type: boolean
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-booking-data'
+        included:
+          type: array
+          items:
+            type: object
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

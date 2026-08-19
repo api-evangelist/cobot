@@ -1,0 +1,1640 @@
+{
+  "item": [
+    {
+      "id": "6d0ef3e1-0ba3-47b4-9a5d-1c15ddf71cee",
+      "name": "Booking",
+      "description": {
+        "content": "A booking of a resource in the booking calendar.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "60b8c61e-752d-4126-b776-1eaa707e8e1a",
+          "name": "Book as admin",
+          "request": {
+            "name": "Book as admin",
+            "description": {
+              "content": "Create booking as an admin. Optionally a booking can be assigned to a membership.\n\n**Access**: The current user must be an admin of the space. If the\nspace is part of a network, the user must be an admin of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"units\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"url\": \"<string>\",\n      \"customPrice\": {\n        \"net\": \"<string>\"\n      },\n      \"comments\": \"<string>\",\n      \"attendeesMessage\": \"<string>\",\n      \"recurrence\": {\n        \"rule\": {\n          \"frequency\": \"<string>\",\n          \"from\": \"<string>\",\n          \"until\": \"<string>\",\n          \"count\": \"<integer>\",\n          \"interval\": 1,\n          \"weekdays\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        }\n      },\n      \"bookingExtras\": [\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        }\n      ],\n      \"attendees\": [\n        {\n          \"email\": \"<email>\"\n        },\n        {\n          \"email\": \"<email>\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e6e519c7-c516-4fd2-86cf-ee557d587fb9",
+              "name": "New booking",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"customPrice\": {\n        \"net\": \"12.00\"\n      }\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"canUpdate\": true,\n      \"cancellationPeriod\": 0\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"externalBooking\": {\n        \"data\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09cf9705-ca95-4949-8d48-2aed74582d9c",
+              "name": "New recurring booking. Returns 202 since the bookings are created\nasynchronously (except the first one).\n\nThe bookings can be fetched via\nthe _recurringBookings_ relationship, which also lets you track\nif all bookings have been written.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"customPrice\": {\n        \"net\": \"12.00\"\n      }\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"canUpdate\": true,\n      \"cancellationPeriod\": 0,\n      \"recurrence\": {\n        \"rule\": {\n          \"frequency\": \"weekly\",\n          \"interval\": 1,\n          \"from\": \"2018-01-01\",\n          \"until\": \"2018-01-22\",\n          \"count\": null,\n          \"weekdays\": null\n        }\n      }\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"recurringBookings\": {\n        \"links\": {\n          \"related\": \"/recurring_bookings/a3281b61ac8df98d29de357180d212e4\"\n        }\n      },\n      \"followingRecurringBookings\": {\n        \"links\": {\n          \"related\": \"/bookings/a3281b61ac8df98d29de357180d212e4/following\"\n        }\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"externalBooking\": {\n        \"data\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a075555-726c-402a-b9f6-c14a9b1711cd",
+              "name": "The booking's resource is not bookable.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"customPrice\": {\n        \"net\": \"12.00\"\n      }\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Resource is not bookable.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d1b5f0f-463e-41e8-86ce-c761a1a17234",
+          "name": "List recurring",
+          "request": {
+            "name": "List recurring",
+            "description": {
+              "content": "List all the recurring bookings belonging to a booking with recurrence.\n\nThe data returned by this endpoint is only eventually consistent.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "recurring_bookings",
+                ":recurringId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "recurringId",
+                  "description": "(Required) The id of the recurrence."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af6db361-3cbb-4c8a-ba80-e416996c6536",
+              "name": "All bookings belonging to the same recurrence.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "recurring_bookings",
+                    ":recurringId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "recurringId",
+                      "description": "(Required) The id of the recurrence."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n      \"type\": \"bookings\",\n      \"attributes\": {\n        \"from\": \"2018-01-01T12:00:00Z\",\n        \"to\": \"2018-01-01T14:00:00Z\",\n        \"title\": \"meeting\",\n        \"url\": \"https://example.com/meeting\",\n        \"comments\": \"nil\",\n        \"attendees\": [],\n        \"price\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"canUpdate\": true,\n        \"units\": 1,\n        \"cancellationPeriod\": 0,\n        \"recurrence\": {\n          \"rule\": {\n            \"frequency\": \"weekly\",\n            \"interval\": 1,\n            \"from\": \"2018-01-01\",\n            \"until\": \"2018-01-22\",\n            \"weekdays\": null,\n            \"count\": null\n          }\n        }\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resource\": {\n          \"data\": {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"f11h2a71ac8df98d29de357180d273a3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"recurringBookings\": {\n          \"links\": {\n            \"related\": \"/recurring_bookings/a3281b61ac8df98d29de357180d212e4\"\n          }\n        },\n        \"followingRecurringBookings\": {\n          \"links\": {\n            \"related\": \"/bookings/b8f21a71ac8df98d29de357180d27358/following\"\n          }\n        },\n        \"externalBooking\": {\n          \"data\": null\n        }\n      }\n    }\n  ],\n  \"meta\": {\n    \"consistent\": true,\n    \"totalPages\": 1,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "836def2f-9603-451e-ba0b-26793c0639f2",
+          "name": "Delete following",
+          "request": {
+            "name": "Delete following",
+            "description": {
+              "content": "Delete a recurring booking and all the following instances.\n\n**Access**: The current user must be an admin of the space or the member who made the booking.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "recurring_bookings",
+                ":bookingId",
+                "following"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "bookingId",
+                  "description": "(Required) The id of the booking to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0bf02afe-5e2f-4c41-8ac6-adc00e5cfdd6",
+              "name": "The deleted booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "recurring_bookings",
+                    ":bookingId",
+                    "following"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "bookingId",
+                      "description": "(Required) The id of the booking to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"meeting\",\n      \"url\": \"https://example.com/meeting\",\n      \"comments\": \"nil\",\n      \"attendees\": [],\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"canUpdate\": true,\n      \"cancellationPeriod\": 0,\n      \"units\": 1,\n      \"recurrence\": {\n        \"rule\": {\n          \"frequency\": \"weekly\",\n          \"interval\": 1,\n          \"from\": \"2018-01-01\",\n          \"until\": \"2018-01-22\",\n          \"count\": null,\n          \"weekdays\": null\n        }\n      }\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"f11h2a71ac8df98d29de357180d273a3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"recurringBookings\": {\n        \"links\": {\n          \"related\": \"/recurring_bookings/a3281b61ac8df98d29de357180d212e4\"\n        }\n      },\n      \"followingRecurringBookings\": {\n        \"links\": {\n          \"related\": \"/bookings/b8f21a71ac8df98d29de357180d27358/following\"\n        }\n      },\n      \"externalBooking\": {\n        \"data\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b50408f-f359-4244-9832-b595aacee483",
+          "name": "Bookings preview",
+          "request": {
+            "name": "Bookings preview",
+            "description": {
+              "content": "Return all booking previews for given resources for a membership in the given time range.\n\n**Access**: The current user must be the owner of the membership the booking belongs to or an admin of the space or network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings_preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"units\": \"<integer>\",\n      \"recurrence\": {\n        \"rule\": {\n          \"frequency\": \"<string>\",\n          \"from\": \"<string>\",\n          \"until\": \"<string>\",\n          \"count\": \"<integer>\",\n          \"interval\": 1,\n          \"weekdays\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        }\n      },\n      \"bookingExtras\": [\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        ]\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"booking\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "31ce5a95-6cea-4074-9334-ef821170359c",
+              "name": "Booking previews for given resources for a membership in the given time range.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings_preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"bookingPreviews\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\"\n    },\n    \"relationships\": {\n      \"booking\": {\n        \"data\": {\n          \"id\": \"42ac6cb66b5ebb30007290854fd46ae0\",\n          \"type\": \"bookings\"\n        }\n      },\n      \"resources\": {\n        \"data\": [\n          {\n            \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n            \"type\": \"resources\"\n          }\n        ]\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n      \"type\": \"bookingPreviews\",\n      \"attributes\": {\n        \"from\": \"2018-01-01T12:00:00Z\",\n        \"to\": \"2018-01-01T14:00:00Z\",\n        \"appliedDiscounts\": [\n          {\n            \"pricePerHour\": {\n              \"net\": \"6.0\",\n              \"gross\": \"6.6\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.6\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"minimumDuration\": {\n              \"hours\": 1,\n              \"minutes\": 0\n            }\n          }\n        ],\n        \"appliedFixedRates\": [\n          {\n            \"maximumDuration\": {\n              \"hours\": 2,\n              \"minutes\": 0\n            },\n            \"price\": \"10.0\",\n            \"count\": 2\n          }\n        ],\n        \"appliedPriceCap\": {\n          \"maximumDuration\": {\n            \"hours\": 2,\n            \"minutes\": 0\n          }\n        },\n        \"attendees\": [],\n        \"title\": \"meeting\",\n        \"comments\": null,\n        \"price\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"estimatedPayablePrice\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"canUpdate\": true,\n        \"cancellationPeriod\": 0,\n        \"bookingExtras\": [],\n        \"bookingCredits\": {\n          \"estimatedMinutesUsed\": 30,\n          \"estimatedAmountUsed\": {\n            \"$ref\": \"../examples/price.yml\"\n          }\n        },\n        \"bookingPasses\": {\n          \"estimatedMinutesUsed\": 60\n        }\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resource\": {\n          \"data\": {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"b5a99a71ac8df98d2gn8380d273d3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"externalBooking\": {\n          \"data\": null\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "25b8dd6b-90e7-402c-944b-1c198047b7a2",
+          "name": "Delete booking",
+          "request": {
+            "name": "Delete booking",
+            "description": {
+              "content": "**Access**: The current user must either be an admin or a member of a space or the space's network. A member can only delete their own bookings and additionally only those that are not in the past.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking to be deleted."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9cb32653-18d0-40ff-85c1-1f4905e10beb",
+              "name": "Booking deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "58da5561-b36d-40d4-80eb-f6b4164d27e6",
+              "name": "Booking has been made by an event and can't be deleted through this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95831dc5-01dc-4ae7-ac57-ab130ce9f4bb",
+          "name": "Single booking",
+          "request": {
+            "name": "Single booking",
+            "description": {
+              "content": "**Access**: The current user must be an admin or member of the space\nthe booking belongs to. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "95acdb0f-3235-45c3-a842-2ea04d8fa98a",
+              "name": "Details of a booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"meeting\",\n      \"url\": \"https://example.com/meeting\",\n      \"name\": \"joe\",\n      \"comments\": \"nil\",\n      \"attendeesMessage\": null,\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"hasCustomPrice\": false,\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"canUpdate\": true,\n      \"cancellationPeriod\": 0,\n      \"bookingCredits\": {\n        \"estimatedMinutesUsed\": 30\n      },\n      \"bookingPasses\": {\n        \"estimatedMinutesUsed\": 60\n      },\n      \"estimatedPayablePrice\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"bookingExtras\": [\n        {\n          \"name\": \"Cup of coffee\",\n          \"accountingCode\": \"coffee1\",\n          \"description\": \"Hot\",\n          \"id\": \"extra-uuid-1234\",\n          \"productId\": \"a1b2c3d4e5f6\",\n          \"pricing\": {\n            \"amount\": {\n              \"net\": \"1.0\",\n              \"gross\": \"1.1\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.1\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"2.0\",\n              \"gross\": \"2.2\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"rate\": \"10.0\",\n                  \"amount\": \"0.2\",\n                  \"name\": \"VAT\"\n                }\n              ]\n            },\n            \"quantity\": \"2.0\",\n            \"unit\": \"item\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      },\n      \"externalBooking\": {\n        \"data\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "96b1bcd4-7130-4589-a33f-1d7b3a9a09a8",
+          "name": "Update booking",
+          "request": {
+            "name": "Update booking",
+            "description": {
+              "content": "**Access**: The current user must either be an admin or a member of a space or the space's network. A member can only update their own bookings and additionally only those that are not in the past.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the booking to be updated."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"title\": \"<string>\",\n      \"url\": \"<string>\",\n      \"units\": \"<integer>\",\n      \"customPrice\": {\n        \"net\": \"<string>\"\n      },\n      \"comments\": \"<string>\",\n      \"attendeesMessage\": \"<string>\",\n      \"bookingExtras\": [\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        }\n      ],\n      \"attendees\": [\n        {\n          \"email\": \"<email>\"\n        },\n        {\n          \"email\": \"<email>\"\n        }\n      ],\n      \"updateFollowing\": \"<boolean>\"\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"membership\": {\n        \"data\": \"<null>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3f0b7fdb-0323-4e96-8889-9ae43619bf5d",
+              "name": "Details of the updated booking.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking to be updated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"updateFollowing\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"name\": \"joe\",\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"price\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"estimatedPayablePrice\": {\n        \"net\": \"10.0\",\n        \"gross\": \"12.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"20.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"canUpdate\": true,\n      \"cancellationPeriod\": 0,\n      \"bookingExtras\": []\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"externalBooking\": {\n        \"data\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4dd2f35f-cb67-495a-8c1c-f39b9705aeeb",
+              "name": "The booking's resource is not bookable.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking to be updated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"updateFollowing\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Resource is not bookable.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fcde0cd-9fa0-4a1d-907d-16173c04e825",
+              "name": "Booking has been made by an event and can't be changed through this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the booking to be updated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"units\": 1,\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [\n        {\n          \"email\": \"attendee@example.com\"\n        }\n      ],\n      \"updateFollowing\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d32b0092-e918-4958-b633-4d4d4dc1a4ca",
+          "name": "For membership/time",
+          "request": {
+            "name": "For membership/time",
+            "description": {
+              "content": "List all bookings of the membership in the given time range.\nIf the membership's space belongs to a network, this\nincludes bookings from all spaces in the network.\n\n**Access**: The current user must be the owner of the membership or an admin\nin the space the membership belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "memberships",
+                ":membershipId",
+                "bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start of the time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) End of the time range."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "membershipId",
+                  "description": "(Required) The id of the membership the bookings belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c921d91a-6b8b-4740-b076-748b43e81bee",
+              "name": "Membership bookings for a given time range.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "memberships",
+                    ":membershipId",
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "2012-04-12T10:00:00Z"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "2012-04-12T18:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "membershipId",
+                      "description": "(Required) The id of the membership the bookings belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n      \"type\": \"bookings\",\n      \"attributes\": {\n        \"from\": \"2018-01-01T12:00:00Z\",\n        \"to\": \"2018-01-01T14:00:00Z\",\n        \"title\": \"meeting\",\n        \"url\": \"https://example.com/meeting\",\n        \"comments\": null,\n        \"attendeesMessage\": null,\n        \"attendees\": [],\n        \"price\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"estimatedPayablePrice\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"canUpdate\": true,\n        \"cancellationPeriod\": 0,\n        \"units\": 1\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resource\": {\n          \"data\": {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"b5a99a71ac8df98d2gn8380d273d3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"externalBooking\": {\n          \"data\": null\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c706a418-6693-4adb-8f42-f9b50599b47c",
+          "name": "Book as member",
+          "request": {
+            "name": "Book as member",
+            "description": {
+              "content": "Create booking for the membership.\n**Access**: The current user must be a member of the space. If the\nspace is part of a network, the user must be a member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "memberships",
+                ":membershipId",
+                "bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "membershipId",
+                  "description": "(Required) The id of the membership the bookings belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\",\n      \"units\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"url\": \"<string>\",\n      \"customPrice\": {\n        \"net\": \"<string>\"\n      },\n      \"comments\": \"<string>\",\n      \"attendeesMessage\": \"<string>\",\n      \"recurrence\": {\n        \"rule\": {\n          \"frequency\": \"<string>\",\n          \"from\": \"<string>\",\n          \"until\": \"<string>\",\n          \"count\": \"<integer>\",\n          \"interval\": 1,\n          \"weekdays\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        }\n      },\n      \"bookingExtras\": [\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"quantity\": \"<string>\"\n        }\n      ],\n      \"attendees\": [\n        {\n          \"email\": \"<email>\"\n        },\n        {\n          \"email\": \"<email>\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bea25190-b064-4947-bdd7-39b4547f1480",
+              "name": "New booking for a membership",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "memberships",
+                    ":membershipId",
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "membershipId",
+                      "description": "(Required) The id of the membership the bookings belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\"\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\",\n      \"attendees\": [],\n      \"price\": {\n        \"net\": \"0.0\",\n        \"gross\": \"0.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"rate\": \"0.0\",\n            \"name\": \"Tax\"\n          }\n        ]\n      },\n      \"canUpdate\": true,\n      \"cancellationPeriod\": 0,\n      \"units\": 1\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"resource\": {\n        \"data\": {\n          \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"externalBooking\": {\n        \"data\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84ed8538-974a-4c6f-88d5-2d0f454d75d1",
+              "name": "The booking's resource is not bookable.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "memberships",
+                    ":membershipId",
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "membershipId",
+                      "description": "(Required) The id of the membership the bookings belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"bookings\",\n    \"attributes\": {\n      \"from\": \"2018-01-01T12:00:00Z\",\n      \"to\": \"2018-01-01T14:00:00Z\",\n      \"title\": \"team meeting\",\n      \"url\": \"https://example.com/team-meeting\",\n      \"comments\": \"there is going to be coffe and cake\",\n      \"attendeesMessage\": \"Please bring your laptop\"\n    },\n    \"relationships\": {\n      \"resource\": {\n        \"data\": {\n          \"id\": \"99da6cb66b5e6b39007690854fd66df9\",\n          \"type\": \"resources\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"89da3cb66b5e6b39007690854kd66da4\",\n          \"type\": \"memberships\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"Resource is not bookable.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bc9f800e-d73f-4405-ad5c-b7949c04b32f",
+          "name": "List space bookings",
+          "request": {
+            "name": "List space bookings",
+            "description": {
+              "content": "List all the bookings for a space in the given time.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start of the time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<dateTime>",
+                  "description": "(Required) End of the time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>,<string>",
+                  "description": "List of related resources to include in response. \nProvide a comma separated list of relationship names. When requesting \nevents, the access token needs the read_events scope. When requesting\nexternal bookings, the access token needs the read_external_bookings\nscope.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space the bookings belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0510ea4a-b66d-4306-b7ab-72211a2e82f4",
+              "name": "Bookings of a space for a given time range.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "2012-04-12T10:00:00Z"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "2012-04-12T18:00:00Z"
+                    },
+                    {
+                      "key": "include",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space the bookings belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n      \"type\": \"bookings\",\n      \"attributes\": {\n        \"from\": \"2018-01-01T12:00:00Z\",\n        \"to\": \"2018-01-01T14:00:00Z\",\n        \"title\": \"meeting\",\n        \"url\": \"https://example.com/meeting\",\n        \"comments\": null,\n        \"attendees\": [],\n        \"price\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"estimatedPayablePrice\": {\n          \"$ref\": \"../examples/price.yml\"\n        },\n        \"canUpdate\": true,\n        \"cancellationPeriod\": 0,\n        \"units\": 1\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"f9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"resource\": {\n          \"data\": {\n            \"id\": \"a4a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"resources\"\n          }\n        },\n        \"event\": {\n          \"data\": {\n            \"id\": \"b8f21a71ac8df98d29de357180d27358\",\n            \"type\": \"events\"\n          }\n        },\n        \"membership\": {\n          \"data\": {\n            \"id\": \"f11h2a71ac8df98d29de357180d273a3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"externalBooking\": {\n          \"data\": null\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "83e9aec9-8deb-4b55-a787-05b3988d4804",
+    "name": "Cobot Booking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

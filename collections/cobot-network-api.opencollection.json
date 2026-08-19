@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Network API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Network",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get single network",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/networks/:id",
+            "params": [
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response.\nProvide a comma separated list of relationship names.\nIncluding `memberSpaces` requires the `read_spaces` scope.\n"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the network."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a network by its id. Spaces that are in a network expose a link to it.\n**Access**: The current user must be an admin or member of any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "List network resource availabilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/networks/:networkId/resource_availabilities",
+            "params": [
+              {
+                "name": "networkId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the network."
+              },
+              {
+                "name": "filter[from]",
+                "value": "",
+                "type": "query",
+                "description": "The time from when on to return the availability."
+              },
+              {
+                "name": "filter[to]",
+                "value": "",
+                "type": "query",
+                "description": "The time until when to return the availability."
+              },
+              {
+                "name": "filter[resourceIds]",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of resource ids to return availabilities for. Only resources belonging to spaces in this network will be included."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List the availability of multiple resources across all spaces in a network for a given time range. Considers existing bookings, each resource's booking times, cutoff, and calendar blockers.\n\nOnly resources that belong to spaces within the specified network will be included in the results. Resource IDs from outside the network will be filtered out.\n\n**Access**: The current user must be an admin or member of any space in the network.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

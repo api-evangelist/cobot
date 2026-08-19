@@ -1,0 +1,1071 @@
+openapi: 3.2.0
+info:
+  title: Cobot Subscription API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Subscription
+  description: How much a space pays Cobot, how many members they can have and the extras they have booked.
+paths:
+  /spaces/{spaceId}/subscription_preview:
+    post:
+      summary: Preview
+      description: 'Preview a space''s subscription for the specified number of members and extras.
+
+        Send a request without extras to get the available extra/tier ids.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: preview-subscription
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_space_subscriptions
+      tags:
+      - Subscription
+      requestBody:
+        description: Parameters of the subscription to preview.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/preview-subscription'
+            examples:
+              default:
+                value:
+                  data:
+                    type: spaceSubscriptionPreviewRequests
+                    attributes:
+                      maximumNumberOfMemberships: 25
+                      extras:
+                      - type: premiumSupportSubscriptionExtras
+                      - type: externalBookingsSubscriptionExtras
+                        tier:
+                          name: Accelerate
+      responses:
+        '200':
+          description: 'Returns a subscription preview.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/subscription-preview'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 01339ea9-411f-5a32-8934-c0ffeb04f981
+                      type: spaceSubscriptionPreviews
+                      attributes:
+                        available: true
+                        pricePerCycle:
+                          net: '44.1'
+                          gross: '52.48'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '8.38'
+                        totalPricePerCycle:
+                          net: '54.1'
+                          gross: '64.38'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '10.28'
+                        discount:
+                          percentage: '10.0'
+                          originalPricePerCycle:
+                            net: '49.0'
+                            gross: '58.31'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '9.31'
+                        cycleDuration: 1
+                        maximumNumberOfMemberships: 15
+                        nextInvoiceDate: '2021-09-15'
+                        extras:
+                        - name: Custom extra
+                          id: fac1d22a-c12a-54a1-a04b-84e08ebb2cbf
+                          type: subscriptionExtras
+                          subscribed: true
+                          pricePerCycle:
+                            net: '10.0'
+                            gross: '11.9'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '1.9'
+                          cycleDuration: 1
+                      relationships:
+                        space:
+                          data:
+                            id: 4c15edaa-45a2-5704-9b52-20e8a8241297
+                            type: spaces
+  /spaces/{spaceId}/subscription:
+    get:
+      summary: Current
+      description: 'Returns a space''s current subscription, including member limit
+
+        and any extras (subscribed and unsubscribed).
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: get-current-subscription
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_space_subscriptions
+      tags:
+      - Subscription
+      responses:
+        '200':
+          description: 'Details of the subscription, including extras.
+
+
+            Price per cycle is the price for just the subscription.
+
+            Total price per cycle includes the price of all extras.
+
+
+            Extras can have different cycle durations than the subscription, which
+
+            will result in extras being charged more or less often than the subscription.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/subscription'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 01339ea9-411f-5a32-8934-c0ffeb04f981
+                      type: subscriptions
+                      attributes:
+                        pricePerCycle:
+                          net: '44.1'
+                          gross: '52.48'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '8.38'
+                        totalPricePerCycle:
+                          net: '54.1'
+                          gross: '64.38'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '10.28'
+                        discount:
+                          percentage: '10.0'
+                          originalPricePerCycle:
+                            net: '49.0'
+                            gross: '58.31'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '9.31'
+                        cycleDuration: 1
+                        maximumNumberOfMemberships: 15
+                        nextInvoiceDate: '2021-09-15'
+                        extras:
+                        - name: Custom extra
+                          id: fac1d22a-c12a-54a1-a04b-84e08ebb2cbf
+                          type: subscriptionExtras
+                          subscribed: true
+                          pricePerCycle:
+                            net: '10.0'
+                            gross: '11.9'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '1.9'
+                          cycleDuration: 1
+                      relationships:
+                        space:
+                          data:
+                            id: 4c15edaa-45a2-5704-9b52-20e8a8241297
+                            type: spaces
+        '404':
+          description: The space has no subscription yet (is still in trial).
+    put:
+      summary: Change
+      description: 'Update or change a space''s subscription.
+
+
+        To update the extras but not change the subscription, pass the id of a space''s current
+
+        subscription as the `chosenSubscription` relationship.
+
+
+        To change the subscriptipn to one returned by the list subscriptions
+
+        endpoint, pass the id of one of these subscriptions.
+
+
+        If the space had a previous subscription, custom extras
+
+        (type `subscriptionExtras`) are kept automatically and cannot be modified.
+
+
+        Other extras are dropped and extras whose id is passed in the request
+
+        payload are added. The id needs to be taken from the extras of the
+
+        `chosenSubscription`.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: change-subscription
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_space_subscriptions
+      tags:
+      - Subscription
+      requestBody:
+        description: New subscription data.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-subscription'
+            examples:
+              default:
+                value:
+                  data:
+                    type: subscriptions
+                    attributes:
+                      extras:
+                      - id: 5138414e-9625-5a46-b959-ac1b81ae89d1
+                        type: radiusSubscriptionExtras
+                      - id: 94682544-3c6e-508e-ab5c-1b298bd71fe2
+                        type: premiumSupportSubscriptionExtras
+                      - id: 84cafc6c-da9d-580c-a164-8ce92e420630
+                        type: externalBookingsSubscriptionExtras
+                        tier:
+                          id: b2e0da32-08df-56d7-b1b1-9b63d6ebf42e
+                    relationships:
+                      space:
+                        data:
+                          id: 144f3e8b-add4-5b88-945c-ceebe7feb136
+                          type: spaces
+                      chosenSubscription:
+                        data:
+                          id: 10dffb83-df28-5111-9a9c-3d042a4c164e
+                          type: subscriptions
+      responses:
+        '200':
+          description: 'The subscription was changed.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/subscription'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 01339ea9-411f-5a32-8934-c0ffeb04f981
+                      type: subscriptions
+                      attributes:
+                        pricePerCycle:
+                          net: '44.1'
+                          gross: '52.48'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '8.38'
+                        totalPricePerCycle:
+                          net: '54.1'
+                          gross: '64.38'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '10.28'
+                        discount:
+                          percentage: '10.0'
+                          originalPricePerCycle:
+                            net: '49.0'
+                            gross: '58.31'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '9.31'
+                        cycleDuration: 1
+                        maximumNumberOfMemberships: 15
+                        nextInvoiceDate: '2021-09-15'
+                        extras:
+                        - name: Custom extra
+                          id: fac1d22a-c12a-54a1-a04b-84e08ebb2cbf
+                          type: subscriptionExtras
+                          subscribed: true
+                          pricePerCycle:
+                            net: '10.0'
+                            gross: '11.9'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '1.9'
+                          cycleDuration: 1
+                      relationships:
+                        space:
+                          data:
+                            id: 4c15edaa-45a2-5704-9b52-20e8a8241297
+                            type: spaces
+        '422':
+          description: The requested `chosenSubscription` could not be found.
+  /spaces/{spaceId}/subscriptions:
+    get:
+      summary: List
+      description: 'Returns all subscriptions available to spaces, including member limit,
+
+        whether they are available and any extras.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: get-subscriptions
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_space_subscriptions
+      tags:
+      - Subscription
+      responses:
+        '200':
+          description: 'A list of all subscriptions that can potentially be booked, including all extras.
+
+            Each subscription has an `available` flag denoting whether it can be booked, based on
+
+            its member limit and the number of members in the space.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/subscriptions'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 01339ea9-411f-5a32-8934-c0ffeb04f981
+                      type: subscriptions
+                      attributes:
+                        available: true
+                        pricePerCycle:
+                          net: '44.1'
+                          gross: '52.48'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '8.38'
+                        totalPricePerCycle:
+                          net: '54.1'
+                          gross: '64.38'
+                          currency: EUR
+                          taxes:
+                          - name: MwSt.
+                            rate: '19.0'
+                            amount: '10.28'
+                        discount:
+                          percentage: '10.0'
+                          originalPricePerCycle:
+                            net: '49.0'
+                            gross: '58.31'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '9.31'
+                        cycleDuration: 1
+                        maximumNumberOfMemberships: 15
+                        nextInvoiceDate: '2021-09-15'
+                        extras:
+                        - name: Custom extra
+                          id: fac1d22a-c12a-54a1-a04b-84e08ebb2cbf
+                          type: subscriptionExtras
+                          subscribed: true
+                          pricePerCycle:
+                            net: '10.0'
+                            gross: '11.9'
+                            currency: EUR
+                            taxes:
+                            - name: MwSt.
+                              rate: '19.0'
+                              amount: '1.9'
+                          cycleDuration: 1
+                      relationships:
+                        space:
+                          data:
+                            id: 4c15edaa-45a2-5704-9b52-20e8a8241297
+                            type: spaces
+components:
+  schemas:
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    subscription:
+      id: subscription.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-subscription-data'
+    discount:
+      description: When a discount is applied to the subscription, the pricePerCycle attribute shows the discounted price. The original price is shown in discount/originalPricPerCycle.
+      oneOf:
+      - type: object
+        required:
+        - percentage
+        - originalPricePerCycle
+        additionalProperties: false
+        properties:
+          originalPricePerCycle:
+            $ref: '#/components/schemas/price'
+          percentage:
+            $ref: '#/components/schemas/decimal'
+      - type: 'null'
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    nextInvoiceDate:
+      description: When the next invoice for the subscription is due.
+      oneOf:
+      - $ref: '#/components/schemas/date'
+      - type: 'null'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    -subscriptions-data:
+      id: -subscriptions-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - subscriptions
+        attributes:
+          $ref: '#/components/schemas/-subscriptions-attributes'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+    cycleDuration:
+      description: Determines the duration of a billing cycle in months. When cycle duration is 1, a subscription is charged every month. For cycle duration 12, a subscription is charged annually.
+      type: integer
+      minimum: 1
+    preview-subscription:
+      id: preview-subscription.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: spaceSubscriptionPreviewRequests
+            attributes:
+              type: object
+              required:
+              - maximumNumberOfMemberships
+              additionalProperties: false
+              properties:
+                maximumNumberOfMemberships:
+                  type: integer
+                  minimum: 0
+                extras:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      required:
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - radiusSubscriptionExtras
+                          - premiumSupportSubscriptionExtras
+                    - type: object
+                      required:
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - externalBookingsSubscriptionExtras
+                        tier:
+                          description: One of the tiers from the list of tiers. The tier is used to determine the monthly price of the extra and the processing fee. If no tier is passed, the lowest is chosen.
+                          type: object
+                          required:
+                          - name
+                          additionalProperties: false
+                          properties:
+                            name:
+                              type: string
+    subscriptions:
+      id: subscription.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-subscriptions-data'
+    -subscription-data:
+      id: -subscription-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          pattern: subscriptions
+        attributes:
+          type: object
+          required:
+          - pricePerCycle
+          - totalPricePerCycle
+          - cycleDuration
+          - maximumNumberOfMemberships
+          - extras
+          - discount
+          additionalProperties: false
+          properties:
+            pricePerCycle:
+              $ref: '#/components/schemas/price'
+            totalPricePerCycle:
+              $ref: '#/components/schemas/price'
+            cycleDuration:
+              $ref: '#/components/schemas/cycleDuration'
+            maximumNumberOfMemberships:
+              $ref: '#/components/schemas/maximumNumberOfMemberships'
+            discount:
+              $ref: '#/components/schemas/discount'
+            nextInvoiceDate:
+              $ref: '#/components/schemas/nextInvoiceDate'
+            extras:
+              $ref: '#/components/schemas/extras'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+    maximumNumberOfMemberships:
+      type:
+      - integer
+      - 'null'
+      minimum: 1
+      description: The maximum number of memberships this subscription allows. Only memberships with a paid plan count towards the subscription. If null, there is no member limit.
+    -subscriptions-attributes:
+      id: -subscriptions-attributes.json#
+      type: object
+      required:
+      - pricePerCycle
+      - totalPricePerCycle
+      - cycleDuration
+      - maximumNumberOfMemberships
+      - extras
+      - discount
+      - available
+      additionalProperties: false
+      properties:
+        available:
+          type: boolean
+          description: True if this subscription can be selecected by this space, based on how many members it has.
+        pricePerCycle:
+          $ref: '#/components/schemas/price'
+        totalPricePerCycle:
+          $ref: '#/components/schemas/price'
+        cycleDuration:
+          $ref: '#/components/schemas/cycleDuration'
+        maximumNumberOfMemberships:
+          $ref: '#/components/schemas/maximumNumberOfMemberships'
+        discount:
+          $ref: '#/components/schemas/discount'
+        nextInvoiceDate:
+          $ref: '#/components/schemas/nextInvoiceDate'
+        extras:
+          $ref: '#/components/schemas/extras'
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    extras:
+      description: Extras can be subscribed to in addition to a subscription. Extras can have different types. Each type has its own additional attributes.
+      type: array
+      items:
+        oneOf:
+        - type: object
+          additionalProperties: false
+          required:
+          - id
+          - type
+          - subscribed
+          - name
+          - pricePerCycle
+          - cycleDuration
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - subscriptionExtras
+            subscribed:
+              $ref: '#/components/schemas/subscribed'
+            name:
+              type: string
+            pricePerCycle:
+              $ref: '#/components/schemas/price'
+            cycleDuration:
+              $ref: '#/components/schemas/cycleDuration'
+        - type: object
+          additionalProperties: false
+          required:
+          - id
+          - type
+          - subscribed
+          - name
+          - pricePerCycle
+          - cycleDuration
+          - maximumNumberOfMemberships
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - radiusSubscriptionExtras
+            subscribed:
+              $ref: '#/components/schemas/subscribed'
+            name:
+              type: string
+            pricePerCycle:
+              $ref: '#/components/schemas/price'
+            cycleDuration:
+              $ref: '#/components/schemas/cycleDuration'
+            maximumNumberOfMemberships:
+              type:
+              - integer
+              - 'null'
+              minimum: 1
+              description: The maximum number of memberships this Radius extra allows. This is always the same number as on the subscription.
+        - type: object
+          additionalProperties: false
+          required:
+          - id
+          - type
+          - subscribed
+          - name
+          - pricePerCycle
+          - cycleDuration
+          - tiers
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - externalBookingsSubscriptionExtras
+            subscribed:
+              $ref: '#/components/schemas/subscribed'
+            name:
+              type: string
+            pricePerCycle:
+              $ref: '#/components/schemas/price'
+            cycleDuration:
+              $ref: '#/components/schemas/cycleDuration'
+            trial:
+              description: This extra has a trial period, during which it is free to use (no fees, no commission).
+              type: object
+              additionalProperties: false
+              properties:
+                available:
+                  type: boolean
+                  description: Whether the trial for the extra is still available (can only be trialled once).
+                daysRemaining:
+                  type: integer
+                  minimum: 0
+                  description: The number of days remaining in the free trial period. Only shown while the extra is in the free trial period.
+            tiers:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - id
+                - name
+                - pricePerCycle
+                - cycleDuration
+                - subscribed
+                - commission
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  pricePerCycle:
+                    $ref: '#/components/schemas/price'
+                  cycleDuration:
+                    $ref: '#/components/schemas/cycleDuration'
+                  subscribed:
+                    $ref: '#/components/schemas/subscribed'
+                  commission:
+                    description: The commission that Cobot charges on each external booking in percent.
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - percentage
+                    properties:
+                      percentage:
+                        $ref: '#/components/schemas/decimal'
+        - type: object
+          additionalProperties: false
+          required:
+          - id
+          - type
+          - subscribed
+          - name
+          - pricePerCycle
+          - cycleDuration
+          - callHoursPerMonth
+          - usedCallHoursInMonth
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - premiumSupportSubscriptionExtras
+            subscribed:
+              $ref: '#/components/schemas/subscribed'
+            name:
+              type: string
+            pricePerCycle:
+              $ref: '#/components/schemas/price'
+            cycleDuration:
+              $ref: '#/components/schemas/cycleDuration'
+            callHoursPerMonth:
+              description: How many hours worth of support calls are included in the extra.
+              type: integer
+            usedCallHoursInMonth:
+              description: How many hours worth of support calls have been used in the current month.
+              type: integer
+    create-subscription:
+      id: create-subscription.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: subscriptions
+            attributes:
+              type: object
+              required:
+              - extras
+              additionalProperties: false
+              properties:
+                extras:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - radiusSubscriptionExtras
+                          - premiumSupportSubscriptionExtras
+                    - type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - externalBookingsSubscriptionExtras
+                        tier:
+                          description: One of the tiers from the list of tiers. The tier is used to determine the monthly price of the extra and the commission. If no tier is passed, the lowest is chosen.
+                          type: object
+                          required:
+                          - id
+                          additionalProperties: false
+                          properties:
+                            id:
+                              type: string
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              - chosenSubscription
+              properties:
+                space:
+                  $ref: '#/components/schemas/relationship-linkage'
+                chosenSubscription:
+                  $ref: '#/components/schemas/relationship-linkage'
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    subscription-preview:
+      id: subscription-preview.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - spaceSubscriptionPreviews
+            attributes:
+              $ref: '#/components/schemas/-subscriptions-attributes'
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              properties:
+                space:
+                  $ref: '#/components/schemas/relationship-linkage'
+    subscribed:
+      type: boolean
+      description: All available extras are returned. Only the ones the space has actually subscribed to have `subscribed` set to true.
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

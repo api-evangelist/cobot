@@ -1,0 +1,673 @@
+{
+  "item": [
+    {
+      "id": "df3b1580-928f-4f6e-973f-3f16030348dd",
+      "name": "Subscription",
+      "description": {
+        "content": "How much a space pays Cobot, how many members they can have and the extras they have booked.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a4aae954-a722-4e44-8c28-27a9f57d3c7b",
+          "name": "Preview",
+          "request": {
+            "name": "Preview",
+            "description": {
+              "content": "Preview a space's subscription for the specified number of members and extras.\nSend a request without extras to get the available extra/tier ids.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "subscription_preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"maximumNumberOfMemberships\": \"<integer>\",\n      \"extras\": [\n        {\n          \"type\": \"<string>\"\n        },\n        {\n          \"type\": \"<string>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4d340371-fa76-4689-903c-5623ad94b3de",
+              "name": "Returns a subscription preview.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "subscription_preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"spaceSubscriptionPreviewRequests\",\n    \"attributes\": {\n      \"maximumNumberOfMemberships\": 25,\n      \"extras\": [\n        {\n          \"type\": \"premiumSupportSubscriptionExtras\"\n        },\n        {\n          \"type\": \"externalBookingsSubscriptionExtras\",\n          \"tier\": {\n            \"name\": \"Accelerate\"\n          }\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"01339ea9-411f-5a32-8934-c0ffeb04f981\",\n    \"type\": \"spaceSubscriptionPreviews\",\n    \"attributes\": {\n      \"available\": true,\n      \"pricePerCycle\": {\n        \"net\": \"44.1\",\n        \"gross\": \"52.48\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"MwSt.\",\n            \"rate\": \"19.0\",\n            \"amount\": \"8.38\"\n          }\n        ]\n      },\n      \"totalPricePerCycle\": {\n        \"net\": \"54.1\",\n        \"gross\": \"64.38\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"MwSt.\",\n            \"rate\": \"19.0\",\n            \"amount\": \"10.28\"\n          }\n        ]\n      },\n      \"discount\": {\n        \"percentage\": \"10.0\",\n        \"originalPricePerCycle\": {\n          \"net\": \"49.0\",\n          \"gross\": \"58.31\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"MwSt.\",\n              \"rate\": \"19.0\",\n              \"amount\": \"9.31\"\n            }\n          ]\n        }\n      },\n      \"cycleDuration\": 1,\n      \"maximumNumberOfMemberships\": 15,\n      \"nextInvoiceDate\": \"2021-09-15\",\n      \"extras\": [\n        {\n          \"name\": \"Custom extra\",\n          \"id\": \"fac1d22a-c12a-54a1-a04b-84e08ebb2cbf\",\n          \"type\": \"subscriptionExtras\",\n          \"subscribed\": true,\n          \"pricePerCycle\": {\n            \"net\": \"10.0\",\n            \"gross\": \"11.9\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"MwSt.\",\n                \"rate\": \"19.0\",\n                \"amount\": \"1.9\"\n              }\n            ]\n          },\n          \"cycleDuration\": 1\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"4c15edaa-45a2-5704-9b52-20e8a8241297\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40330929-2d2e-47d1-a0d0-5a1b24b1270a",
+          "name": "Current",
+          "request": {
+            "name": "Current",
+            "description": {
+              "content": "Returns a space's current subscription, including member limit\nand any extras (subscribed and unsubscribed).\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "subscription"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cbeb63c3-d385-44ee-b6fc-95ebbac61317",
+              "name": "Details of the subscription, including extras.\n\nPrice per cycle is the price for just the subscription.\nTotal price per cycle includes the price of all extras.\n\nExtras can have different cycle durations than the subscription, which\nwill result in extras being charged more or less often than the subscription.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"01339ea9-411f-5a32-8934-c0ffeb04f981\",\n    \"type\": \"subscriptions\",\n    \"attributes\": {\n      \"pricePerCycle\": {\n        \"net\": \"44.1\",\n        \"gross\": \"52.48\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"MwSt.\",\n            \"rate\": \"19.0\",\n            \"amount\": \"8.38\"\n          }\n        ]\n      },\n      \"totalPricePerCycle\": {\n        \"net\": \"54.1\",\n        \"gross\": \"64.38\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"MwSt.\",\n            \"rate\": \"19.0\",\n            \"amount\": \"10.28\"\n          }\n        ]\n      },\n      \"discount\": {\n        \"percentage\": \"10.0\",\n        \"originalPricePerCycle\": {\n          \"net\": \"49.0\",\n          \"gross\": \"58.31\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"MwSt.\",\n              \"rate\": \"19.0\",\n              \"amount\": \"9.31\"\n            }\n          ]\n        }\n      },\n      \"cycleDuration\": 1,\n      \"maximumNumberOfMemberships\": 15,\n      \"nextInvoiceDate\": \"2021-09-15\",\n      \"extras\": [\n        {\n          \"name\": \"Custom extra\",\n          \"id\": \"fac1d22a-c12a-54a1-a04b-84e08ebb2cbf\",\n          \"type\": \"subscriptionExtras\",\n          \"subscribed\": true,\n          \"pricePerCycle\": {\n            \"net\": \"10.0\",\n            \"gross\": \"11.9\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"MwSt.\",\n                \"rate\": \"19.0\",\n                \"amount\": \"1.9\"\n              }\n            ]\n          },\n          \"cycleDuration\": 1\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"4c15edaa-45a2-5704-9b52-20e8a8241297\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e81f3ff5-8c40-4196-8b22-06f8f938f2de",
+              "name": "The space has no subscription yet (is still in trial).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9666161-620e-42ee-b58a-7730aadff91c",
+          "name": "Change",
+          "request": {
+            "name": "Change",
+            "description": {
+              "content": "Update or change a space's subscription.\n\nTo update the extras but not change the subscription, pass the id of a space's current\nsubscription as the `chosenSubscription` relationship.\n\nTo change the subscriptipn to one returned by the list subscriptions\nendpoint, pass the id of one of these subscriptions.\n\nIf the space had a previous subscription, custom extras\n(type `subscriptionExtras`) are kept automatically and cannot be modified.\n\nOther extras are dropped and extras whose id is passed in the request\npayload are added. The id needs to be taken from the extras of the\n`chosenSubscription`.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "subscription"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"extras\": [\n        {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      },\n      \"chosenSubscription\": {\n        \"data\": {\n          \"type\": \"<string>\",\n          \"id\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "21ddacef-8f12-4e50-86be-88decec7d300",
+              "name": "The subscription was changed.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"subscriptions\",\n    \"attributes\": {\n      \"extras\": [\n        {\n          \"id\": \"5138414e-9625-5a46-b959-ac1b81ae89d1\",\n          \"type\": \"radiusSubscriptionExtras\"\n        },\n        {\n          \"id\": \"94682544-3c6e-508e-ab5c-1b298bd71fe2\",\n          \"type\": \"premiumSupportSubscriptionExtras\"\n        },\n        {\n          \"id\": \"84cafc6c-da9d-580c-a164-8ce92e420630\",\n          \"type\": \"externalBookingsSubscriptionExtras\",\n          \"tier\": {\n            \"id\": \"b2e0da32-08df-56d7-b1b1-9b63d6ebf42e\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"144f3e8b-add4-5b88-945c-ceebe7feb136\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"chosenSubscription\": {\n        \"data\": {\n          \"id\": \"10dffb83-df28-5111-9a9c-3d042a4c164e\",\n          \"type\": \"subscriptions\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"01339ea9-411f-5a32-8934-c0ffeb04f981\",\n    \"type\": \"subscriptions\",\n    \"attributes\": {\n      \"pricePerCycle\": {\n        \"net\": \"44.1\",\n        \"gross\": \"52.48\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"MwSt.\",\n            \"rate\": \"19.0\",\n            \"amount\": \"8.38\"\n          }\n        ]\n      },\n      \"totalPricePerCycle\": {\n        \"net\": \"54.1\",\n        \"gross\": \"64.38\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"MwSt.\",\n            \"rate\": \"19.0\",\n            \"amount\": \"10.28\"\n          }\n        ]\n      },\n      \"discount\": {\n        \"percentage\": \"10.0\",\n        \"originalPricePerCycle\": {\n          \"net\": \"49.0\",\n          \"gross\": \"58.31\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"MwSt.\",\n              \"rate\": \"19.0\",\n              \"amount\": \"9.31\"\n            }\n          ]\n        }\n      },\n      \"cycleDuration\": 1,\n      \"maximumNumberOfMemberships\": 15,\n      \"nextInvoiceDate\": \"2021-09-15\",\n      \"extras\": [\n        {\n          \"name\": \"Custom extra\",\n          \"id\": \"fac1d22a-c12a-54a1-a04b-84e08ebb2cbf\",\n          \"type\": \"subscriptionExtras\",\n          \"subscribed\": true,\n          \"pricePerCycle\": {\n            \"net\": \"10.0\",\n            \"gross\": \"11.9\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"MwSt.\",\n                \"rate\": \"19.0\",\n                \"amount\": \"1.9\"\n              }\n            ]\n          },\n          \"cycleDuration\": 1\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"4c15edaa-45a2-5704-9b52-20e8a8241297\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e307840d-7f29-420c-a552-5a0849eaaa80",
+              "name": "The requested `chosenSubscription` could not be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"subscriptions\",\n    \"attributes\": {\n      \"extras\": [\n        {\n          \"id\": \"5138414e-9625-5a46-b959-ac1b81ae89d1\",\n          \"type\": \"radiusSubscriptionExtras\"\n        },\n        {\n          \"id\": \"94682544-3c6e-508e-ab5c-1b298bd71fe2\",\n          \"type\": \"premiumSupportSubscriptionExtras\"\n        },\n        {\n          \"id\": \"84cafc6c-da9d-580c-a164-8ce92e420630\",\n          \"type\": \"externalBookingsSubscriptionExtras\",\n          \"tier\": {\n            \"id\": \"b2e0da32-08df-56d7-b1b1-9b63d6ebf42e\"\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"144f3e8b-add4-5b88-945c-ceebe7feb136\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"chosenSubscription\": {\n        \"data\": {\n          \"id\": \"10dffb83-df28-5111-9a9c-3d042a4c164e\",\n          \"type\": \"subscriptions\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a036fb96-d9d2-45a4-beb8-dd5e410fc5d1",
+          "name": "List",
+          "request": {
+            "name": "List",
+            "description": {
+              "content": "Returns all subscriptions available to spaces, including member limit,\nwhether they are available and any extras.\n\n**Access**: The current user must be an admin of the space.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5c6edaee-3a1d-4f47-9764-8eebb92bded3",
+              "name": "A list of all subscriptions that can potentially be booked, including all extras.\nEach subscription has an `available` flag denoting whether it can be booked, based on\nits member limit and the number of members in the space.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"01339ea9-411f-5a32-8934-c0ffeb04f981\",\n      \"type\": \"subscriptions\",\n      \"attributes\": {\n        \"available\": true,\n        \"pricePerCycle\": {\n          \"net\": \"44.1\",\n          \"gross\": \"52.48\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"MwSt.\",\n              \"rate\": \"19.0\",\n              \"amount\": \"8.38\"\n            }\n          ]\n        },\n        \"totalPricePerCycle\": {\n          \"net\": \"54.1\",\n          \"gross\": \"64.38\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"MwSt.\",\n              \"rate\": \"19.0\",\n              \"amount\": \"10.28\"\n            }\n          ]\n        },\n        \"discount\": {\n          \"percentage\": \"10.0\",\n          \"originalPricePerCycle\": {\n            \"net\": \"49.0\",\n            \"gross\": \"58.31\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"MwSt.\",\n                \"rate\": \"19.0\",\n                \"amount\": \"9.31\"\n              }\n            ]\n          }\n        },\n        \"cycleDuration\": 1,\n        \"maximumNumberOfMemberships\": 15,\n        \"nextInvoiceDate\": \"2021-09-15\",\n        \"extras\": [\n          {\n            \"name\": \"Custom extra\",\n            \"id\": \"fac1d22a-c12a-54a1-a04b-84e08ebb2cbf\",\n            \"type\": \"subscriptionExtras\",\n            \"subscribed\": true,\n            \"pricePerCycle\": {\n              \"net\": \"10.0\",\n              \"gross\": \"11.9\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"MwSt.\",\n                  \"rate\": \"19.0\",\n                  \"amount\": \"1.9\"\n                }\n              ]\n            },\n            \"cycleDuration\": 1\n          }\n        ]\n      },\n      \"relationships\": {\n        \"space\": {\n          \"data\": {\n            \"id\": \"4c15edaa-45a2-5704-9b52-20e8a8241297\",\n            \"type\": \"spaces\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ce73c891-46ed-4ba3-b56c-5babdef14ffc",
+    "name": "Cobot Subscription API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

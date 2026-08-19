@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Allocation API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Allocation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Show allocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/allocations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the allocation."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show a single resource allocation.\n\n**Access**: The current user must be an admin of the space the allocation belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "List space allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/allocations",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the allocations belong to."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2018-01-01",
+                "type": "query",
+                "description": "Start of the date range (inclusive)."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2018-12-31",
+                "type": "query",
+                "description": "End of the date range (inclusive)."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Related resources to include. `allocatee` is the membership or team the resource is allocated to.\nWhen used, the access token must include `read_memberships` and `read_teams`.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List resource allocations for a space that overlap the given date range (inclusive).\nAn allocation is included if its period intersects `filter[from]` through `filter[to]`\nas calendar dates.\n\n**Access**: The current user must be an admin of the space (or of another\nspace in the same network). Members cannot use this endpoint.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

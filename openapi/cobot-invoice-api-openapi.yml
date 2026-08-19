@@ -1,0 +1,2832 @@
+openapi: 3.2.0
+info:
+  title: Cobot Invoice API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Invoice
+  description: Invoices are automatically generated once a month, based on members' activity. In addition, manual invoices can be generated at any time.
+paths:
+  /invoice_charges:
+    post:
+      summary: Charge invoices
+      description: 'Bulk-charge invoices. The invoices will be charged in the background.
+
+
+        **Access**: The current user must be an admin of the space of each invoice.
+
+        '
+      operationId: create-invoice-charges
+      security:
+      - OAuth2:
+        - write_invoices
+      tags:
+      - Invoice
+      requestBody:
+        description: Invoices to be charged.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-invoice-charges'
+            examples:
+              default:
+                value:
+                  data:
+                    type: invoiceCharges
+                    relationships:
+                      invoices:
+                        data:
+                        - id: 411f2702c500049ef4dc94229517631b
+                          type: invoices
+                        - id: 511f2702c500049ef4dc94229517631c
+                          type: invoices
+      responses:
+        '202':
+          description: Invoice charges scheduled.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice-charges'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 123e4567-e89b-12d3-a456-426614174000
+                      type: invoiceCharges
+                      relationships:
+                        invoices:
+                          data:
+                          - id: 411f2702c500049ef4dc94229517631b
+                            type: invoices
+                          - id: 511f2702c500049ef4dc94229517631c
+                            type: invoices
+  /invoices:
+    post:
+      summary: Create custom
+      description: 'Create a custom invoice in a space.
+
+
+        Pass a *membership* relationship to assign the invoice to a membership.
+
+        Pass a *correctedInvoice* relationship and optional *writeOffCorrectedInvoice* flag to create a correction invoice.
+
+
+        **Access**: The current user must be an admin of the space where the invoice is created.
+
+        '
+      operationId: post-invoices
+      security:
+      - OAuth2:
+        - write_invoices
+      tags:
+      - Invoice
+      requestBody:
+        description: Data required to create an invoice.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-custom-invoice'
+            examples:
+              default:
+                value:
+                  data:
+                    type: invoices
+                    attributes:
+                      invoiceText: Thanks for your business!
+                      invoiceDate: '2019-01-10'
+                      notes: Thanks for your business!
+                      items:
+                      - description: 2h meeting room
+                        quantity: '2.0'
+                        accountingCode: MTR-200
+                        costCenter:
+                          name: Bookings
+                          number: MTR-200
+                        revenueAccount:
+                          name: Bookings
+                          number: '4000'
+                        amount:
+                          net: '20.0'
+                          taxes:
+                          - name: VAT
+                            rate: '19.0'
+                    relationships:
+                      debitor:
+                        data:
+                          id: 32c76cb66b5e6b39007690854fd668a1
+                          type: memberships
+                      correctedInvoice:
+                        data:
+                          id: 12376af66b5e6b39007690854fd668f4
+                          type: invoices
+                      space:
+                        data:
+                          id: 12376af66b5e6b39007690854fd668f4
+                          type: spaces
+      responses:
+        '201':
+          description: 'Creates and returns a custom invoice, meaning the line items are
+
+            not based on any previous actions in Cobot, but are passed in.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+        '422':
+          description: 'Creating the invoice failed because of missing/invalid data.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - source:
+                        pointer: /data/attributes/items
+                      detail: can't be empty
+  /invoices/{id}:
+    get:
+      summary: Single invoice
+      description: 'Show a single invoice.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created, and admin of any space in the network,
+
+        or the user of the membership the invoice belongs to.
+
+        '
+      operationId: get-invoice
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_invoices
+      tags:
+      - Invoice
+      responses:
+        '200':
+          description: Details of an invoice.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+  /invoices/{id}.pdf:
+    get:
+      summary: Single invoice PDF
+      description: 'Show a single invoice PDF.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created, and admin of any space in the network,
+
+        or the user of the membership the invoice belongs to.
+
+
+        Alternatively, a token parameter can be provided to acces the PDF.
+
+        '
+      operationId: get-invoice-pdf
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      - name: token
+        in: query
+        required: false
+        description: Optional token to access the PDF without API authentication.
+        schema:
+          type: string
+      - name: e_invoice
+        in: query
+        required: false
+        description: If set to true, returns the PDF without any payment related information.
+        schema:
+          type: boolean
+      security:
+      - OAuth2:
+        - read_invoices
+      tags:
+      - Invoice
+      responses:
+        '200':
+          description: An invoice's PDF.
+  /invoices/{id}/lock:
+    post:
+      summary: Lock invoice
+      description: 'Locks an invoice so it can not be edited anymore.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created.
+
+        '
+      operationId: lock-invoice
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_invoices
+      tags:
+      - Invoice
+      responses:
+        '200':
+          description: The locked invoice. `canUpdate` will be false.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: false
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+    delete:
+      summary: Remove invoice lock
+      description: 'Removes the invoice lock so the invoice can be edited again (for example after external
+
+        e-invoice generation failed). This is not allowed if the invoice already has a final PDF
+
+        or e-invoicing data attached; in that case the request fails with
+
+        HTTP 409.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created.
+
+        '
+      operationId: unlock-invoice
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_invoices
+      tags:
+      - Invoice
+      responses:
+        '200':
+          description: The invoice after removing the lock.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+        '409':
+          description: The invoice has an e-invoice or final PDF attached and cannot be unlocked.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                e_invoice_attached:
+                  value:
+                    errors:
+                    - detail: This invoice has an e-invoice or final PDF attached and cannot be unlocked.
+  /invoices/{id}/e_invoice:
+    post:
+      summary: Create an e-invoice for invoice
+      description: 'Create an e-invoice for the passed invoice and attach it to the PDF.
+
+        This will lock the invoice, preventing it from being changed manually afterwards.
+
+        If generation fails before a PDF is attached, call `DELETE /invoices/{id}/lock` so the invoice can be edited again.
+
+        After an e-invoice or final PDF is attached, `DELETE /invoices/{id}/lock` returns HTTP 409 and does not unlock.
+
+
+        Supports e-invoicing in Germany (ZUGFeRD) and Poland (KSeF).
+
+
+        For Polish KSeF e-invoices, pass `e_invoice_standard: "KSeF"` along with
+
+        `ksef_reference_number` and `ksef_acceptance_timestamp` in the request body.
+
+        These will be stored on the invoice and the reference number will be displayed
+
+        on the PDF.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created.
+
+        '
+      operationId: create-e-invoice
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_invoices
+      tags:
+      - Invoice
+      requestBody:
+        description: Optional e-invoicing metadata (required for Polish KSeF).
+        required: false
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create_e_invoice'
+            examples:
+              ksef:
+                summary: Polish KSeF e-invoice
+                value:
+                  data:
+                    type: invoices
+                    attributes:
+                      e_invoice_standard: KSeF
+                      ksef_reference_number: 1234567890-20260126-ABC123DEF456-00
+                      ksef_acceptance_timestamp: '2026-01-26T10:30:00Z'
+      responses:
+        '200':
+          description: The invoice.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+  /invoices/{id}/pdf:
+    post:
+      summary: Attach PDF to invoice
+      description: 'Attaches a PDF to an invoice.
+
+        This can be used to create an e-invoice externally to replace the regular invoice pdf.
+
+
+        The invoice has to be locked.
+
+        An invoice that has been requested to be sent will be sent after the PDF is attached.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created.
+
+        '
+      operationId: attach-invoice-pdf
+      parameters:
+      - name: invoice_id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_invoices
+      tags:
+      - Invoice
+      requestBody:
+        description: The file to attach.
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/attach-invoice-pdf'
+            examples:
+              default:
+                value:
+                  eInvoice: true
+                  eInvoiceStandard: Zugferd
+                  pdf: new_invoice.pdf
+      responses:
+        '200':
+          description: The invoice.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoice: true
+                          eInvoiceStandard: Zugferd
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+  /invoices/{id}/payment_methods:
+    get:
+      summary: Payment methods
+      description: 'Lists the payment methods used to pay an invoice.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created.
+
+        '
+      operationId: get-invoice-payment-methods
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the invoice.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_payment_methods
+      tags:
+      - Invoice
+      responses:
+        '200':
+          description: List of payment methods.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/payment-methods'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 2465b308-df41-5857-a474-22361acdc7b3
+                      type: paymentMethods
+                      attributes:
+                        name: Credit Card
+                        paymentProvider: stripe
+                        providerAttributes:
+                          publishableKey: pk_4ef3a2a7-950f-5c97-bdf3-e6606455540f
+                        supportsPayLater: true
+                        enabledFor:
+                        - externalBookings
+                        - dropInPasses
+                        - members
+                        - publicEventTickets
+  /spaces/{spaceId}/invoice_previews:
+    get:
+      summary: Previews
+      description: 'List the previews of the invoices that will be generated in a space
+
+        for a timespan.
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice is created.
+
+        '
+      operationId: get-space-membership-invoice-previews
+      security:
+      - OAuth2:
+        - read_invoices
+      tags:
+      - Invoice
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space the invoices belong to.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: true
+        description: The start of the timespan to list previews for. Must be today or in the future.
+        schema:
+          type: string
+          format: date
+      - name: filter[to]
+        in: query
+        required: true
+        description: The end of the timespan to list previews for.
+        schema:
+          type: string
+          format: date
+      - name: filter[dateFilterField]
+        in: query
+        required: false
+        description: "What field to use for filtering the invoice previews by date.\n* When using `invoiceDate` (default), previews are filtered based on the date the\ninvoice would be generated (this respects when invoices are generated before their due date).\n* When using `dueDate`, previews are filtered based on the due date of the future invoice\n  (disregarding that invoices might be generated before their due date).\n"
+        schema:
+          type: string
+          enum:
+          - dueDate
+          - invoiceDate
+      responses:
+        '200':
+          description: 'Returns a list of invoice previews. The schema is the same as for invoices.
+
+
+            For performance reasons, invoice previews are limited to 10 per page. In
+
+            addition, no `totalPages` is returned in the pagination meta section and
+
+            no `last` link is returned. Clients have to keep requesting the `next` link
+
+            until it is `null`.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoice-previews'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+  /spaces/{spaceId}/invoices:
+    get:
+      summary: List
+      description: 'List the invoices issued by a space:
+
+
+        * all invoices in a given time (pass `filter[to/from]`)
+
+        * for a single membership or team (pass `filter[debitorId]`)
+
+        * all invoices with a specific paid status (pass `filter[paidStatus]`)
+
+
+        **Access**: The current user must be an admin of the space where
+
+        the invoice was created. If the space is part of a network,
+
+        the user must be an admin of any space in the network.
+
+        '
+      operationId: get-space-invoices
+      security:
+      - OAuth2:
+        - read_invoices
+      tags:
+      - Invoice
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space the invoices belong to.
+        schema:
+          type: string
+      - name: filter[debitorId]
+        in: query
+        required: false
+        description: To list invoices that belong to a single debitor (membership or team), pass the id of that membership or team.
+        schema:
+          type: string
+      - name: filter[membershipId]
+        in: query
+        required: false
+        description: Same as `filter[debitorId]`, left for backward compatibility. Will be deprecated.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: false
+        description: List invoices for all debitors whose invoice date is within the given timespan.
+        schema:
+          type: string
+          format: date
+      - name: filter[to]
+        in: query
+        required: false
+        description: List invoices for all debitors whose invoice date is within the given timespan.
+        schema:
+          type: string
+          format: date
+      - name: filter[dateFilterField]
+        in: query
+        required: false
+        description: "What field to use for filtering the invoices by date.\n* When using `invoiceDate` (default), invoices are filtered based on the date the\n  invoice was generated (this respects when invoices are generated before their due date).\n* When using `dueDate`, invoices are filtered based on their due date\n  (disregarding that invoices might be generated before their due date).\n* When using `remindAt`, invoices are filtered based on the date the invoice's reminder is due. Only unpaid invoices are included.\n"
+        schema:
+          type: string
+          enum:
+          - dueDate
+          - invoiceDate
+          - remindAt
+      - name: filter[paidStatus]
+        in: query
+        required: false
+        description: 'Filter the invoices by their paid status. Can not be combined with any of the other filters.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - unpaid
+            - paid
+            - writtenOff
+            - pending
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: 'Returns a list of invoice for the given space or a debitor (membership or team) in the space. When a space
+
+            is part of a network, its members can have invoices in other spaces of the network.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoices'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+  /spaces/{spaceId}/invoices/search:
+    get:
+      summary: Search
+      description: 'Text query searches through invoice number, invoice items and recipient name or company.
+
+        Returns paginated list of invoices and number of pages in total.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        If the space is part of a network, the user must be an admin of any space in the network.
+
+        '
+      operationId: search-space-invoices
+      security:
+      - OAuth2:
+        - read_invoices
+      tags:
+      - Invoice
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space the invoices belong to.
+        schema:
+          type: string
+      - name: filter[query]
+        in: query
+        required: true
+        description: The text query to search for.
+        schema:
+          type: string
+      - name: filter[paidStatus]
+        in: query
+        required: false
+        description: 'Provide a comma separated list. Default: all.
+
+          paidStatus=late returns unpaid invoices with remind_at date in the past.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - paid
+            - unpaid
+            - pending
+            - writtenOff
+            - late
+      - name: filter[sentStatus]
+        in: query
+        required: false
+        description: 'Provide a comma separated list. Default: all.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - sent
+            - unsent
+      - name: filter[sortBy]
+        in: query
+        required: false
+        description: 'One from the list, default: invoiceDate.
+
+          '
+        schema:
+          type: string
+          enum:
+          - invoiceDate
+          - number
+          - paidStatus
+          - sentStatus
+          - company
+          - name
+          - totalAmount
+      - name: filter[sortOrder]
+        in: query
+        required: false
+        description: 'Default: desc.
+
+          '
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: 'Returns the list of invoices matching the query.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/invoices'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 14c12f62ac8df98d29de357180d673e1
+                      type: invoices
+                      attributes:
+                        invoiceText: Thanks for your business!
+                        invoiceDate: '2019-01-10'
+                        paidDate: null
+                        dueDate: '2019-01-10'
+                        eInvoicingReady: false
+                        remindAt: '2019-01-17'
+                        number: CW-2019-100
+                        senderTaxId: DE753207
+                        taxId: DE12345
+                        taxIdName: UID
+                        customerNumber: '100'
+                        pdf:
+                          archived: false
+                          eInvoiceStandard: null
+                          eInvoice: false
+                          url: https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976
+                        recipientAddress:
+                          name: Jane Smith
+                          company: Acme Inc.
+                          fullAddress: 2 Coworking Road, Big City 88888, Coworking State
+                          street: 2 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        senderAddress:
+                          name: null
+                          company: Coworking Ltd.
+                          fullAddress: 1 Coworking Road, Big City 88888, Coworking State
+                          street: 1 Coworking Road
+                          postCode: '88888'
+                          city: Big City
+                          state: Coworking State
+                          countryCode: US
+                        notes: Customer will pay later.
+                        billingEmails:
+                        - mupi@lubbuw.bh
+                        items:
+                        - description: 2h meeting room
+                          quantity: '2.0'
+                          accountingCode: MTR-200
+                          costCenter:
+                            name: Bookings
+                            number: MTR-200
+                          revenueAccount:
+                            name: Bookings
+                            number: '4000'
+                          paid: false
+                          amount:
+                            net: '20.0'
+                            gross: '22.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '2.0'
+                          totalAmount:
+                            net: '40.0'
+                            gross: '44.0'
+                            currency: EUR
+                            taxes:
+                            - name: VAT
+                              rate: '10.0'
+                              amount: '4.0'
+                        payableAmount: '44.0'
+                        paidAmount: '0.0'
+                        paidStatus: unpaid
+                        reminderStatus: sent
+                        sentRemindersCount: 1
+                        lastReminderSentAt: '2019-01-17T00:00:00Z'
+                        chargeAt: '2019-01-02T11:00:00Z'
+                        canCharge: true
+                        canUpdate: true
+                        sentStatus: unsent
+                        totalAmount:
+                          net: '40.0'
+                          gross: '44.0'
+                          currency: EUR
+                          taxes:
+                          - name: VAT
+                            rate: '10.0'
+                            amount: '4.0'
+                      relationships:
+                        debitor:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: memberships
+                        space:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: spaces
+                        paymentMethods:
+                          links:
+                            related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
+components:
+  schemas:
+    positive-decimal:
+      description: A positive decimal number (>= 0).
+      type: string
+      pattern: ^\d+(\.\d+)?$
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    create-invoice-charges:
+      id: create-invoice-charges.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: invoiceCharges
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - invoices
+              properties:
+                invoices:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            pattern: invoices
+                          id:
+                            type: string
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    -invoice-data:
+      id: -invoice-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - invoices
+        attributes:
+          type: object
+          required:
+          - invoiceDate
+          - dueDate
+          - eInvoicingReady
+          - remindAt
+          - number
+          - recipientAddress
+          - senderAddress
+          - items
+          - payableAmount
+          - paidAmount
+          - totalAmount
+          - paidStatus
+          - sentStatus
+          - reminderStatus
+          - canUpdate
+          - sentRemindersCount
+          - senderTaxId
+          - taxId
+          - billingEmails
+          additionalProperties: false
+          properties:
+            invoiceText:
+              type:
+              - string
+              - 'null'
+            billingEmails:
+              type:
+              - array
+              items:
+                type: string
+                format: email
+            invoiceDate:
+              $ref: '#/components/schemas/date'
+            paidDate:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            paidStatus:
+              type: string
+              enum:
+              - unpaid
+              - paid
+              - pending
+              - canceled
+              - writtenOff
+            dueDate:
+              $ref: '#/components/schemas/date'
+            eInvoicingReady:
+              type: boolean
+            remindAt:
+              $ref: '#/components/schemas/date'
+            number:
+              type: string
+            sentStatus:
+              type: string
+              enum:
+              - unsent
+              - sent
+              - sending
+              - sendingRequested
+              - failedToSend
+            reminderStatus:
+              type: string
+              description: The status of the last invoice reminder.
+              enum:
+              - notSent
+              - sending
+              - sent
+              - failedToSend
+            sentRemindersCount:
+              type: integer
+              minimum: 0
+              description: The number of invoice reminders already sent.
+            lastReminderSentAt:
+              oneOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+            senderTaxId:
+              description: The tax id of the invoice sender.
+              oneOf:
+              - type: string
+              - type: 'null'
+            taxId:
+              description: The tax id of the invoice recipient.
+              oneOf:
+              - type: string
+              - type: 'null'
+            taxIdName:
+              type: string
+              description: What the tax id is called (differs by country).
+            pdf:
+              type: object
+              required:
+              - url
+              - archived
+              - eInvoiceStandard
+              - eInvoice
+              additionalProperties: false
+              properties:
+                eInvoice:
+                  type: boolean
+                eInvoiceStandard:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                url:
+                  type: string
+                  format: uri
+                  description: The URL to the PDF version of the invoice. Note that the URL is not stable and will only work for a few minutes. It works without API authentication.
+                archived:
+                  type: boolean
+                  description: Whether the PDF is archived, i.e. a PDF has been uploaded for the invoice. Before it is archived, a new PDF is generated on the fly on every request. Once archived, the PDF is guaranteed to never change.
+            chargeAt:
+              oneOf:
+              - type: string
+                format: date-time
+              - type: 'null'
+              description: If set, the invoice will automatically be charged at the given time.
+            canCharge:
+              type: boolean
+              description: Whether the invoice can automatically be charged by Cobot.
+            canUpdate:
+              type: boolean
+              description: Whether the invoice can be edited. Invoices can be edited until they are locked.
+            customerNumber:
+              oneOf:
+              - type: string
+              - type: 'null'
+            recipientAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            senderAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            notes:
+              oneOf:
+              - type: string
+              - type: 'null'
+            items:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - description
+                - quantity
+                - amount
+                - totalAmount
+                properties:
+                  description:
+                    type: string
+                  paid:
+                    type: boolean
+                    description: Indicates an item that was already paid when the invoice was generated, i.e. does not contribute to the payable amount.
+                  quantity:
+                    $ref: '#/components/schemas/decimal'
+                  accountingCode:
+                    oneOf:
+                    - type: string
+                    - type: 'null'
+                  costCenter:
+                    oneOf:
+                    - $ref: '#/components/schemas/cost-center'
+                    - type: 'null'
+                  revenueAccount:
+                    oneOf:
+                    - type: 'null'
+                    - $ref: '#/components/schemas/revenue-account'
+                  amount:
+                    $ref: '#/components/schemas/price'
+                  totalAmount:
+                    $ref: '#/components/schemas/price'
+            payableAmount:
+              $ref: '#/components/schemas/decimal'
+            paidAmount:
+              $ref: '#/components/schemas/decimal'
+            totalAmount:
+              $ref: '#/components/schemas/price'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          - paymentMethods
+          properties:
+            contact:
+              description: 'Deprecated: use the debitor relationship.'
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - contacts
+            debitor:
+              type: object
+              description: The member or team the invoice is assigned to. Invoices for external products (external bookings, drop-in passes, event tickets) are linked to a contact.
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - memberships
+                      - teams
+                      - contacts
+            membership:
+              type: object
+              description: 'Deprecated: use the debitor relationship.'
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - memberships
+            team:
+              type: object
+              description: 'Deprecated: use the debitor relationship.'
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - teams
+            space:
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - spaces
+            correctedInvoice:
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - invoices
+            paymentMethods:
+              type: object
+              required:
+              - links
+              additionalProperties: false
+              properties:
+                links:
+                  type: object
+                  required:
+                  - related
+                  additionalProperties: false
+                  properties:
+                    related:
+                      type: string
+                      format: uri
+    invoice-previews:
+      id: invoice-previews.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-invoice-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    attach-invoice-pdf:
+      id: attach-invoice-pdf.json#
+      type: object
+      required:
+      - pdf
+      additionalProperties: false
+      properties:
+        eInvoice:
+          type: boolean
+          description: Set to true if the PDF fulfills the e-invoicing criteria for the space.
+        eInvoiceStandard:
+          type: string
+          description: The e-invoicing standard of the uploaded PDF, e.g. 'Zugferd' in Germany.
+        pdf:
+          type: file
+    invoice:
+      id: invoice.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-invoice-data'
+    invoices:
+      id: invoices.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-invoice-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    invoice-charges:
+      id: invoice-charges.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - relationships
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - invoiceCharges
+            relationships:
+              type: object
+              required:
+              - invoices
+              additionalProperties: false
+              properties:
+                invoices:
+                  type: object
+                  required:
+                  - data
+                  additionalProperties: false
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        additionalProperties: false
+                        properties:
+                          id:
+                            type: string
+                          type:
+                            type: string
+                            enum:
+                            - invoices
+    create_e_invoice:
+      id: create_e_invoice.json#
+      type: object
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: invoices
+            id:
+              type: string
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - e_invoice_standard
+              - ksef_reference_number
+              - ksef_acceptance_timestamp
+              properties:
+                e_invoice_standard:
+                  type: string
+                  enum:
+                  - KSeF
+                  description: The e-invoicing standard to use
+                ksef_reference_number:
+                  type: string
+                  minLength: 1
+                  description: The reference number returned by Polish KSeF authorities
+                ksef_acceptance_timestamp:
+                  type: string
+                  minLength: 1
+                  description: The timestamp when the invoice was accepted by Polish KSeF authorities
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    payment-methods:
+      id: payment-methods.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - id
+            - type
+            - attributes
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+                enum:
+                - paymentMethods
+              attributes:
+                type: object
+                required:
+                - name
+                - paymentProvider
+                - supportsPayLater
+                - enabledFor
+                additionalProperties: false
+                properties:
+                  name:
+                    description: A custom name set by the space.
+                    type: string
+                  paymentProvider:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - stripe
+                    - paypal
+                    - null
+                    description: The provider used for processing payments. Null for manual payment methods.
+                  enabledFor:
+                    type: array
+                    items:
+                      type: string
+                      enum:
+                      - externalBookings
+                      - dropInPasses
+                      - members
+                      - publicEventTickets
+                  providerAttributes:
+                    description: The attributes are custom to the payment provider, for example tokens needed for initiating payment processing.
+                    oneOf:
+                    - type: 'null'
+                    - type: object
+                      required:
+                      - publishableKey
+                      additionalProperties: false
+                      properties:
+                        publishableKey:
+                          description: Needed to render a Stripe.JS form.
+                          type: string
+                    - type: object
+                      required:
+                      - clientId
+                      - merchantId
+                      additionalProperties: false
+                      properties:
+                        clientId:
+                          description: Needed to render a paypal button.
+                          type: string
+                        merchantId:
+                          description: Space-specific, needed to render a paypal button.
+                          type: string
+                  supportsPayLater:
+                    description: Can be used to create a payment, then update and charge it later.
+                    type: boolean
+              relationships:
+                type: object
+                required:
+                - space
+                additionalProperties: false
+                properties:
+                  space:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - spaces
+                          id:
+                            type: string
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    address-2:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        fullAddress:
+          type: string
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    taxes:
+      oneOf:
+      - type: 'null'
+      - type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+          - rate
+          - name
+          properties:
+            rate:
+              $ref: '#/components/schemas/positive-decimal'
+            name:
+              type: string
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    create-custom-invoice:
+      id: create-custom-invoice.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - invoices
+            attributes:
+              type: object
+              required:
+              - items
+              additionalProperties: false
+              properties:
+                billingEmails:
+                  type: array
+                  items:
+                    type:
+                    - string
+                    format: email
+                notes:
+                  description: Only visible to admins. Not added to the PDF version.
+                  type:
+                  - string
+                  - 'null'
+                taxId:
+                  type:
+                  - string
+                  - 'null'
+                invoiceText:
+                  type: string
+                invoiceDate:
+                  $ref: '#/components/schemas/date'
+                recipientAddress:
+                  oneOf:
+                  - $ref: '#/components/schemas/structuredAddress'
+                  - $ref: '#/components/schemas/address-2'
+                items:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - description
+                    - amount
+                    properties:
+                      description:
+                        type: string
+                      quantity:
+                        $ref: '#/components/schemas/decimal'
+                      accountingCode:
+                        type: string
+                      costCenter:
+                        oneOf:
+                        - type: 'null'
+                        - $ref: '#/components/schemas/cost-center'
+                      revenueAccount:
+                        oneOf:
+                        - type: 'null'
+                        - $ref: '#/components/schemas/revenue-account'
+                      amount:
+                        type: object
+                        additionalProperties: false
+                        required:
+                        - net
+                        properties:
+                          net:
+                            $ref: '#/components/schemas/decimal'
+                          taxes:
+                            $ref: '#/components/schemas/taxes'
+                      paid:
+                        description: Whether the item has already been paid. Paid items do not contribute to the invoice's payable amount.
+                        type: boolean
+                writeOffCorrectedInvoice:
+                  type: boolean
+                  description: If set, a passed correctedInvoice will be written off.
+                  default: false
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              properties:
+                membership:
+                  type: object
+                  required:
+                  - data
+                  additionalProperties: false
+                  description: 'Deprecated: use the debitor relationship.'
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                        id:
+                          type: string
+                debitor:
+                  type: object
+                  required:
+                  - data
+                  additionalProperties: false
+                  description: The membership, team, or contact the invoice belongs to. Members must be individual members, not team members. Passing contacts needs to be enabled by Cobot support
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                          - teams
+                          - contacts
+                        id:
+                          type: string
+                space:
+                  type: object
+                  required:
+                  - data
+                  additionalProperties: false
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - spaces
+                        id:
+                          type: string
+                correctedInvoice:
+                  type: object
+                  required:
+                  - data
+                  additionalProperties: false
+                  description: Passing an Invoice to be corrected will link the new invoice to the corrected one as a correction.
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - invoices
+                        id:
+                          type: string
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

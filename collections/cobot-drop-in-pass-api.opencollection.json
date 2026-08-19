@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Drop-In Pass API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Drop-In Pass",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a single pass",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/drop_in_passes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the pass."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a single drop-in pass.\nThese represent a drop-in pass a person bought from a space.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Cancel a drop-in pass",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/drop_in_passes/:id/cancellation",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the drop-in pass."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancel a drop-in pass. The pass must not already be canceled.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "List for space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/drop_in_passes",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the drop-in passes for."
+              },
+              {
+                "name": "filter[valid_on_from]",
+                "value": "2012-04-12",
+                "type": "query",
+                "description": "The start of the time range."
+              },
+              {
+                "name": "filter[valid_on_to]",
+                "value": "2012-04-30",
+                "type": "query",
+                "description": "The end of the time range."
+              },
+              {
+                "name": "filter[sortOrder]",
+                "value": "",
+                "type": "query",
+                "description": "Whether to sort drop-in passes by ascending or descending date."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List/filter drop-in passes for a time range.\n\n**Access**: Only admins of the space can see the list of passes.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

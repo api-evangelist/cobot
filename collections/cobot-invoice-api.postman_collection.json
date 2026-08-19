@@ -1,0 +1,1834 @@
+{
+  "item": [
+    {
+      "id": "73bbf79e-1d87-4603-b602-967feddb24fa",
+      "name": "Invoice",
+      "description": {
+        "content": "Invoices are automatically generated once a month, based on members' activity. In addition, manual invoices can be generated at any time.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f2a5f662-e9d5-494e-98c0-5b7948be0016",
+          "name": "Charge invoices",
+          "request": {
+            "name": "Charge invoices",
+            "description": {
+              "content": "Bulk-charge invoices. The invoices will be charged in the background.\n\n**Access**: The current user must be an admin of the space of each invoice.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoice_charges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"relationships\": {\n      \"invoices\": {\n        \"data\": [\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\"\n          },\n          {\n            \"type\": \"<string>\",\n            \"id\": \"<string>\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b58f666c-af87-477a-b4a5-9f576570c156",
+              "name": "Invoice charges scheduled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoice_charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"invoiceCharges\",\n    \"relationships\": {\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"411f2702c500049ef4dc94229517631b\",\n            \"type\": \"invoices\"\n          },\n          {\n            \"id\": \"511f2702c500049ef4dc94229517631c\",\n            \"type\": \"invoices\"\n          }\n        ]\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"type\": \"invoiceCharges\",\n    \"relationships\": {\n      \"invoices\": {\n        \"data\": [\n          {\n            \"id\": \"411f2702c500049ef4dc94229517631b\",\n            \"type\": \"invoices\"\n          },\n          {\n            \"id\": \"511f2702c500049ef4dc94229517631c\",\n            \"type\": \"invoices\"\n          }\n        ]\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "427e6edc-f6a2-4812-b0b3-092fc8a6c31c",
+          "name": "Create custom",
+          "request": {
+            "name": "Create custom",
+            "description": {
+              "content": "Create a custom invoice in a space.\n\nPass a *membership* relationship to assign the invoice to a membership.\nPass a *correctedInvoice* relationship and optional *writeOffCorrectedInvoice* flag to create a correction invoice.\n\n**Access**: The current user must be an admin of the space where the invoice is created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"items\": [\n        {\n          \"description\": \"<string>\",\n          \"amount\": {\n            \"net\": \"<string>\",\n            \"taxes\": \"<null>\"\n          },\n          \"quantity\": \"<string>\",\n          \"accountingCode\": \"<string>\",\n          \"costCenter\": \"<null>\",\n          \"revenueAccount\": \"<null>\",\n          \"paid\": \"<boolean>\"\n        }\n      ],\n      \"billingEmails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"notes\": \"<string,null>\",\n      \"taxId\": \"<string,null>\",\n      \"invoiceText\": \"<string>\",\n      \"invoiceDate\": \"<string>\",\n      \"recipientAddress\": {\n        \"name\": \"<string,null>\",\n        \"company\": \"<string,null>\",\n        \"street\": \"<string>\",\n        \"postCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"countryCode\": \"<string>\",\n        \"state\": \"<string>\"\n      },\n      \"writeOffCorrectedInvoice\": false\n    },\n    \"relationships\": {\n      \"space\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"membership\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      },\n      \"correctedInvoice\": {\n        \"data\": {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "42cb7d53-bb0f-4288-a490-3a036114c7cb",
+              "name": "Creates and returns a custom invoice, meaning the line items are\nnot based on any previous actions in Cobot, but are passed in.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"notes\": \"Thanks for your business!\",\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"19.0\"\n              }\n            ]\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"32c76cb66b5e6b39007690854fd668a1\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"correctedInvoice\": {\n        \"data\": {\n          \"id\": \"12376af66b5e6b39007690854fd668f4\",\n          \"type\": \"invoices\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"12376af66b5e6b39007690854fd668f4\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"paidDate\": null,\n      \"dueDate\": \"2019-01-10\",\n      \"eInvoicingReady\": false,\n      \"remindAt\": \"2019-01-17\",\n      \"number\": \"CW-2019-100\",\n      \"senderTaxId\": \"DE753207\",\n      \"taxId\": \"DE12345\",\n      \"taxIdName\": \"UID\",\n      \"customerNumber\": \"100\",\n      \"pdf\": {\n        \"archived\": false,\n        \"eInvoiceStandard\": null,\n        \"eInvoice\": false,\n        \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n      },\n      \"recipientAddress\": {\n        \"name\": \"Jane Smith\",\n        \"company\": \"Acme Inc.\",\n        \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"2 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"senderAddress\": {\n        \"name\": null,\n        \"company\": \"Coworking Ltd.\",\n        \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"1 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"notes\": \"Customer will pay later.\",\n      \"billingEmails\": [\n        \"mupi@lubbuw.bh\"\n      ],\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"paid\": false,\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"gross\": \"22.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"2.0\"\n              }\n            ]\n          },\n          \"totalAmount\": {\n            \"net\": \"40.0\",\n            \"gross\": \"44.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"4.0\"\n              }\n            ]\n          }\n        }\n      ],\n      \"payableAmount\": \"44.0\",\n      \"paidAmount\": \"0.0\",\n      \"paidStatus\": \"unpaid\",\n      \"reminderStatus\": \"sent\",\n      \"sentRemindersCount\": 1,\n      \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n      \"chargeAt\": \"2019-01-02T11:00:00Z\",\n      \"canCharge\": true,\n      \"canUpdate\": true,\n      \"sentStatus\": \"unsent\",\n      \"totalAmount\": {\n        \"net\": \"40.0\",\n        \"gross\": \"44.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"VAT\",\n            \"rate\": \"10.0\",\n            \"amount\": \"4.0\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"paymentMethods\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75f3721c-fe4e-46ac-b9ba-9e6b6290d18e",
+              "name": "Creating the invoice failed because of missing/invalid data.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"notes\": \"Thanks for your business!\",\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"19.0\"\n              }\n            ]\n          }\n        }\n      ]\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"32c76cb66b5e6b39007690854fd668a1\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"correctedInvoice\": {\n        \"data\": {\n          \"id\": \"12376af66b5e6b39007690854fd668f4\",\n          \"type\": \"invoices\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"12376af66b5e6b39007690854fd668f4\",\n          \"type\": \"spaces\"\n        }\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/items\"\n      },\n      \"detail\": \"can't be empty\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1bc259a8-f12c-45a9-ac89-a77ca336b1ad",
+          "name": "Single invoice",
+          "request": {
+            "name": "Single invoice",
+            "description": {
+              "content": "Show a single invoice.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created, and admin of any space in the network,\nor the user of the membership the invoice belongs to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the invoice."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fef61f3f-f386-42a3-b43a-f8091dad98c9",
+              "name": "Details of an invoice.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"paidDate\": null,\n      \"dueDate\": \"2019-01-10\",\n      \"eInvoicingReady\": false,\n      \"remindAt\": \"2019-01-17\",\n      \"number\": \"CW-2019-100\",\n      \"senderTaxId\": \"DE753207\",\n      \"taxId\": \"DE12345\",\n      \"taxIdName\": \"UID\",\n      \"customerNumber\": \"100\",\n      \"pdf\": {\n        \"archived\": false,\n        \"eInvoiceStandard\": null,\n        \"eInvoice\": false,\n        \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n      },\n      \"recipientAddress\": {\n        \"name\": \"Jane Smith\",\n        \"company\": \"Acme Inc.\",\n        \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"2 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"senderAddress\": {\n        \"name\": null,\n        \"company\": \"Coworking Ltd.\",\n        \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"1 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"notes\": \"Customer will pay later.\",\n      \"billingEmails\": [\n        \"mupi@lubbuw.bh\"\n      ],\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"paid\": false,\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"gross\": \"22.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"2.0\"\n              }\n            ]\n          },\n          \"totalAmount\": {\n            \"net\": \"40.0\",\n            \"gross\": \"44.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"4.0\"\n              }\n            ]\n          }\n        }\n      ],\n      \"payableAmount\": \"44.0\",\n      \"paidAmount\": \"0.0\",\n      \"paidStatus\": \"unpaid\",\n      \"reminderStatus\": \"sent\",\n      \"sentRemindersCount\": 1,\n      \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n      \"chargeAt\": \"2019-01-02T11:00:00Z\",\n      \"canCharge\": true,\n      \"canUpdate\": true,\n      \"sentStatus\": \"unsent\",\n      \"totalAmount\": {\n        \"net\": \"40.0\",\n        \"gross\": \"44.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"VAT\",\n            \"rate\": \"10.0\",\n            \"amount\": \"4.0\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"paymentMethods\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b71102e9-979e-406c-ae69-212908a12605",
+          "name": "Single invoice PDF",
+          "request": {
+            "name": "Single invoice PDF",
+            "description": {
+              "content": "Show a single invoice PDF.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created, and admin of any space in the network,\nor the user of the membership the invoice belongs to.\n\nAlternatively, a token parameter can be provided to acces the PDF.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                "{{id}}.pdf"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "Optional token to access the PDF without API authentication."
+                },
+                {
+                  "disabled": false,
+                  "key": "e_invoice",
+                  "value": "<boolean>",
+                  "description": "If set to true, returns the PDF without any payment related information."
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f76ce4af-26f8-4736-bbd0-cea373c3ba02",
+              "name": "An invoice's PDF.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    "{{id}}.pdf"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "e_invoice",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6554587-b5dd-4331-b267-3b84b6e3c277",
+          "name": "Lock invoice",
+          "request": {
+            "name": "Lock invoice",
+            "description": {
+              "content": "Locks an invoice so it can not be edited anymore.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                ":id",
+                "lock"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the invoice."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5973f6a5-f78c-4221-b0f2-b2957c4dfaff",
+              "name": "The locked invoice. `canUpdate` will be false.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id",
+                    "lock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"paidDate\": null,\n      \"dueDate\": \"2019-01-10\",\n      \"eInvoicingReady\": false,\n      \"remindAt\": \"2019-01-17\",\n      \"number\": \"CW-2019-100\",\n      \"senderTaxId\": \"DE753207\",\n      \"taxId\": \"DE12345\",\n      \"taxIdName\": \"UID\",\n      \"customerNumber\": \"100\",\n      \"pdf\": {\n        \"archived\": false,\n        \"eInvoiceStandard\": null,\n        \"eInvoice\": false,\n        \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n      },\n      \"recipientAddress\": {\n        \"name\": \"Jane Smith\",\n        \"company\": \"Acme Inc.\",\n        \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"2 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"senderAddress\": {\n        \"name\": null,\n        \"company\": \"Coworking Ltd.\",\n        \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"1 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"notes\": \"Customer will pay later.\",\n      \"billingEmails\": [\n        \"mupi@lubbuw.bh\"\n      ],\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"paid\": false,\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"gross\": \"22.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"2.0\"\n              }\n            ]\n          },\n          \"totalAmount\": {\n            \"net\": \"40.0\",\n            \"gross\": \"44.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"4.0\"\n              }\n            ]\n          }\n        }\n      ],\n      \"payableAmount\": \"44.0\",\n      \"paidAmount\": \"0.0\",\n      \"paidStatus\": \"unpaid\",\n      \"reminderStatus\": \"sent\",\n      \"sentRemindersCount\": 1,\n      \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n      \"chargeAt\": \"2019-01-02T11:00:00Z\",\n      \"canCharge\": true,\n      \"canUpdate\": false,\n      \"sentStatus\": \"unsent\",\n      \"totalAmount\": {\n        \"net\": \"40.0\",\n        \"gross\": \"44.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"VAT\",\n            \"rate\": \"10.0\",\n            \"amount\": \"4.0\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"paymentMethods\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab192b37-b282-4199-bb2a-78ccd7d02bb5",
+          "name": "Remove invoice lock",
+          "request": {
+            "name": "Remove invoice lock",
+            "description": {
+              "content": "Removes the invoice lock so the invoice can be edited again (for example after external\ne-invoice generation failed). This is not allowed if the invoice already has a final PDF\nor e-invoicing data attached; in that case the request fails with\nHTTP 409.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                ":id",
+                "lock"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the invoice."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "608c243e-5830-4aeb-ad7d-d39a7ef455af",
+              "name": "The invoice after removing the lock.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id",
+                    "lock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"paidDate\": null,\n      \"dueDate\": \"2019-01-10\",\n      \"eInvoicingReady\": false,\n      \"remindAt\": \"2019-01-17\",\n      \"number\": \"CW-2019-100\",\n      \"senderTaxId\": \"DE753207\",\n      \"taxId\": \"DE12345\",\n      \"taxIdName\": \"UID\",\n      \"customerNumber\": \"100\",\n      \"pdf\": {\n        \"archived\": false,\n        \"eInvoiceStandard\": null,\n        \"eInvoice\": false,\n        \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n      },\n      \"recipientAddress\": {\n        \"name\": \"Jane Smith\",\n        \"company\": \"Acme Inc.\",\n        \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"2 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"senderAddress\": {\n        \"name\": null,\n        \"company\": \"Coworking Ltd.\",\n        \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"1 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"notes\": \"Customer will pay later.\",\n      \"billingEmails\": [\n        \"mupi@lubbuw.bh\"\n      ],\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"paid\": false,\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"gross\": \"22.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"2.0\"\n              }\n            ]\n          },\n          \"totalAmount\": {\n            \"net\": \"40.0\",\n            \"gross\": \"44.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"4.0\"\n              }\n            ]\n          }\n        }\n      ],\n      \"payableAmount\": \"44.0\",\n      \"paidAmount\": \"0.0\",\n      \"paidStatus\": \"unpaid\",\n      \"reminderStatus\": \"sent\",\n      \"sentRemindersCount\": 1,\n      \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n      \"chargeAt\": \"2019-01-02T11:00:00Z\",\n      \"canCharge\": true,\n      \"canUpdate\": true,\n      \"sentStatus\": \"unsent\",\n      \"totalAmount\": {\n        \"net\": \"40.0\",\n        \"gross\": \"44.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"VAT\",\n            \"rate\": \"10.0\",\n            \"amount\": \"4.0\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"paymentMethods\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eaafdbcf-a38b-48a8-9e97-21bbba86190f",
+              "name": "The invoice has an e-invoice or final PDF attached and cannot be unlocked.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id",
+                    "lock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"detail\": \"This invoice has an e-invoice or final PDF attached and cannot be unlocked.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d34f1b36-fb9e-4f68-ae2f-c88d44c83037",
+          "name": "Create an e-invoice for invoice",
+          "request": {
+            "name": "Create an e-invoice for invoice",
+            "description": {
+              "content": "Create an e-invoice for the passed invoice and attach it to the PDF.\nThis will lock the invoice, preventing it from being changed manually afterwards.\nIf generation fails before a PDF is attached, call `DELETE /invoices/{id}/lock` so the invoice can be edited again.\nAfter an e-invoice or final PDF is attached, `DELETE /invoices/{id}/lock` returns HTTP 409 and does not unlock.\n\nSupports e-invoicing in Germany (ZUGFeRD) and Poland (KSeF).\n\nFor Polish KSeF e-invoices, pass `e_invoice_standard: \"KSeF\"` along with\n`ksef_reference_number` and `ksef_acceptance_timestamp` in the request body.\nThese will be stored on the invoice and the reference number will be displayed\non the PDF.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                ":id",
+                "e_invoice"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the invoice."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\",\n    \"attributes\": {\n      \"e_invoice_standard\": \"<string>\",\n      \"ksef_reference_number\": \"<string>\",\n      \"ksef_acceptance_timestamp\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7731abc4-a9d0-4728-85dc-cd8466254b07",
+              "name": "The invoice.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id",
+                    "e_invoice"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"e_invoice_standard\": \"KSeF\",\n      \"ksef_reference_number\": \"1234567890-20260126-ABC123DEF456-00\",\n      \"ksef_acceptance_timestamp\": \"2026-01-26T10:30:00Z\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"paidDate\": null,\n      \"dueDate\": \"2019-01-10\",\n      \"eInvoicingReady\": false,\n      \"remindAt\": \"2019-01-17\",\n      \"number\": \"CW-2019-100\",\n      \"senderTaxId\": \"DE753207\",\n      \"taxId\": \"DE12345\",\n      \"taxIdName\": \"UID\",\n      \"customerNumber\": \"100\",\n      \"pdf\": {\n        \"archived\": false,\n        \"eInvoiceStandard\": null,\n        \"eInvoice\": false,\n        \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n      },\n      \"recipientAddress\": {\n        \"name\": \"Jane Smith\",\n        \"company\": \"Acme Inc.\",\n        \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"2 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"senderAddress\": {\n        \"name\": null,\n        \"company\": \"Coworking Ltd.\",\n        \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"1 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"notes\": \"Customer will pay later.\",\n      \"billingEmails\": [\n        \"mupi@lubbuw.bh\"\n      ],\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"paid\": false,\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"gross\": \"22.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"2.0\"\n              }\n            ]\n          },\n          \"totalAmount\": {\n            \"net\": \"40.0\",\n            \"gross\": \"44.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"4.0\"\n              }\n            ]\n          }\n        }\n      ],\n      \"payableAmount\": \"44.0\",\n      \"paidAmount\": \"0.0\",\n      \"paidStatus\": \"unpaid\",\n      \"reminderStatus\": \"sent\",\n      \"sentRemindersCount\": 1,\n      \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n      \"chargeAt\": \"2019-01-02T11:00:00Z\",\n      \"canCharge\": true,\n      \"canUpdate\": true,\n      \"sentStatus\": \"unsent\",\n      \"totalAmount\": {\n        \"net\": \"40.0\",\n        \"gross\": \"44.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"VAT\",\n            \"rate\": \"10.0\",\n            \"amount\": \"4.0\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"paymentMethods\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40060629-d983-47fd-baa5-f5768a6e018c",
+          "name": "Attach PDF to invoice",
+          "request": {
+            "name": "Attach PDF to invoice",
+            "description": {
+              "content": "Attaches a PDF to an invoice.\nThis can be used to create an e-invoice externally to replace the regular invoice pdf.\n\nThe invoice has to be locked.\nAn invoice that has been requested to be sent will be sent after the PDF is attached.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                ":id",
+                "pdf"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoice_id",
+                  "description": "(Required) The id of the invoice."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "pdf",
+                  "value": "<file>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "eInvoice",
+                  "value": "<boolean>",
+                  "type": "text",
+                  "description": "Set to true if the PDF fulfills the e-invoicing criteria for the space."
+                },
+                {
+                  "key": "eInvoiceStandard",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "The e-invoicing standard of the uploaded PDF, e.g. 'Zugferd' in Germany."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8ae56852-32fa-4705-9b33-85c354cd7109",
+              "name": "The invoice.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id",
+                    "pdf"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoice_id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Set to true if the PDF fulfills the e-invoicing criteria for the space.",
+                        "type": "text/plain"
+                      },
+                      "key": "eInvoice",
+                      "value": "true",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "The e-invoicing standard of the uploaded PDF, e.g. 'Zugferd' in Germany.",
+                        "type": "text/plain"
+                      },
+                      "key": "eInvoiceStandard",
+                      "value": "Zugferd",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "pdf",
+                      "value": "new_invoice.pdf",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n    \"type\": \"invoices\",\n    \"attributes\": {\n      \"invoiceText\": \"Thanks for your business!\",\n      \"invoiceDate\": \"2019-01-10\",\n      \"paidDate\": null,\n      \"dueDate\": \"2019-01-10\",\n      \"eInvoicingReady\": false,\n      \"remindAt\": \"2019-01-17\",\n      \"number\": \"CW-2019-100\",\n      \"senderTaxId\": \"DE753207\",\n      \"taxId\": \"DE12345\",\n      \"taxIdName\": \"UID\",\n      \"customerNumber\": \"100\",\n      \"pdf\": {\n        \"archived\": false,\n        \"eInvoice\": true,\n        \"eInvoiceStandard\": \"Zugferd\",\n        \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n      },\n      \"recipientAddress\": {\n        \"name\": \"Jane Smith\",\n        \"company\": \"Acme Inc.\",\n        \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"2 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"senderAddress\": {\n        \"name\": null,\n        \"company\": \"Coworking Ltd.\",\n        \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n        \"street\": \"1 Coworking Road\",\n        \"postCode\": \"88888\",\n        \"city\": \"Big City\",\n        \"state\": \"Coworking State\",\n        \"countryCode\": \"US\"\n      },\n      \"notes\": \"Customer will pay later.\",\n      \"billingEmails\": [\n        \"mupi@lubbuw.bh\"\n      ],\n      \"items\": [\n        {\n          \"description\": \"2h meeting room\",\n          \"quantity\": \"2.0\",\n          \"accountingCode\": \"MTR-200\",\n          \"costCenter\": {\n            \"name\": \"Bookings\",\n            \"number\": \"MTR-200\"\n          },\n          \"revenueAccount\": {\n            \"name\": \"Bookings\",\n            \"number\": \"4000\"\n          },\n          \"paid\": false,\n          \"amount\": {\n            \"net\": \"20.0\",\n            \"gross\": \"22.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"2.0\"\n              }\n            ]\n          },\n          \"totalAmount\": {\n            \"net\": \"40.0\",\n            \"gross\": \"44.0\",\n            \"currency\": \"EUR\",\n            \"taxes\": [\n              {\n                \"name\": \"VAT\",\n                \"rate\": \"10.0\",\n                \"amount\": \"4.0\"\n              }\n            ]\n          }\n        }\n      ],\n      \"payableAmount\": \"44.0\",\n      \"paidAmount\": \"0.0\",\n      \"paidStatus\": \"unpaid\",\n      \"reminderStatus\": \"sent\",\n      \"sentRemindersCount\": 1,\n      \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n      \"chargeAt\": \"2019-01-02T11:00:00Z\",\n      \"canCharge\": true,\n      \"canUpdate\": true,\n      \"sentStatus\": \"unsent\",\n      \"totalAmount\": {\n        \"net\": \"40.0\",\n        \"gross\": \"44.0\",\n        \"currency\": \"EUR\",\n        \"taxes\": [\n          {\n            \"name\": \"VAT\",\n            \"rate\": \"10.0\",\n            \"amount\": \"4.0\"\n          }\n        ]\n      }\n    },\n    \"relationships\": {\n      \"debitor\": {\n        \"data\": {\n          \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n          \"type\": \"memberships\"\n        }\n      },\n      \"space\": {\n        \"data\": {\n          \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n          \"type\": \"spaces\"\n        }\n      },\n      \"paymentMethods\": {\n        \"links\": {\n          \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce350ed1-b760-487e-9c91-bbd39d8683b8",
+          "name": "Payment methods",
+          "request": {
+            "name": "Payment methods",
+            "description": {
+              "content": "Lists the payment methods used to pay an invoice.\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "invoices",
+                ":id",
+                "payment_methods"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The id of the invoice."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "27730b19-9407-4ae1-baea-497d1032510c",
+              "name": "List of payment methods.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "invoices",
+                    ":id",
+                    "payment_methods"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The id of the invoice."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"2465b308-df41-5857-a474-22361acdc7b3\",\n      \"type\": \"paymentMethods\",\n      \"attributes\": {\n        \"name\": \"Credit Card\",\n        \"paymentProvider\": \"stripe\",\n        \"providerAttributes\": {\n          \"publishableKey\": \"pk_4ef3a2a7-950f-5c97-bdf3-e6606455540f\"\n        },\n        \"supportsPayLater\": true,\n        \"enabledFor\": [\n          \"externalBookings\",\n          \"dropInPasses\",\n          \"members\",\n          \"publicEventTickets\"\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4317899e-f229-4235-83cd-b372bfe59b7b",
+          "name": "Previews",
+          "request": {
+            "name": "Previews",
+            "description": {
+              "content": "List the previews of the invoices that will be generated in a space\nfor a timespan.\n\n**Access**: The current user must be an admin of the space where\nthe invoice is created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "invoice_previews"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<date>",
+                  "description": "(Required) The start of the timespan to list previews for. Must be today or in the future."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<date>",
+                  "description": "(Required) The end of the timespan to list previews for."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[dateFilterField]",
+                  "value": "<string>",
+                  "description": "What field to use for filtering the invoice previews by date.\n* When using `invoiceDate` (default), previews are filtered based on the date the\ninvoice would be generated (this respects when invoices are generated before their due date).\n* When using `dueDate`, previews are filtered based on the due date of the future invoice\n  (disregarding that invoices might be generated before their due date).\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space the invoices belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ee6b85f0-d49f-483b-b1d3-4499e8637a6a",
+              "name": "Returns a list of invoice previews. The schema is the same as for invoices.\n\nFor performance reasons, invoice previews are limited to 10 per page. In\naddition, no `totalPages` is returned in the pagination meta section and\nno `last` link is returned. Clients have to keep requesting the `next` link\nuntil it is `null`.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "invoice_previews"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[from]",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "filter[dateFilterField]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space the invoices belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"invoices\",\n      \"attributes\": {\n        \"invoiceText\": \"Thanks for your business!\",\n        \"invoiceDate\": \"2019-01-10\",\n        \"paidDate\": null,\n        \"dueDate\": \"2019-01-10\",\n        \"eInvoicingReady\": false,\n        \"remindAt\": \"2019-01-17\",\n        \"number\": \"CW-2019-100\",\n        \"senderTaxId\": \"DE753207\",\n        \"taxId\": \"DE12345\",\n        \"taxIdName\": \"UID\",\n        \"customerNumber\": \"100\",\n        \"pdf\": {\n          \"archived\": false,\n          \"eInvoiceStandard\": null,\n          \"eInvoice\": false,\n          \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n        },\n        \"recipientAddress\": {\n          \"name\": \"Jane Smith\",\n          \"company\": \"Acme Inc.\",\n          \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n          \"street\": \"2 Coworking Road\",\n          \"postCode\": \"88888\",\n          \"city\": \"Big City\",\n          \"state\": \"Coworking State\",\n          \"countryCode\": \"US\"\n        },\n        \"senderAddress\": {\n          \"name\": null,\n          \"company\": \"Coworking Ltd.\",\n          \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n          \"street\": \"1 Coworking Road\",\n          \"postCode\": \"88888\",\n          \"city\": \"Big City\",\n          \"state\": \"Coworking State\",\n          \"countryCode\": \"US\"\n        },\n        \"notes\": \"Customer will pay later.\",\n        \"billingEmails\": [\n          \"mupi@lubbuw.bh\"\n        ],\n        \"items\": [\n          {\n            \"description\": \"2h meeting room\",\n            \"quantity\": \"2.0\",\n            \"accountingCode\": \"MTR-200\",\n            \"costCenter\": {\n              \"name\": \"Bookings\",\n              \"number\": \"MTR-200\"\n            },\n            \"revenueAccount\": {\n              \"name\": \"Bookings\",\n              \"number\": \"4000\"\n            },\n            \"paid\": false,\n            \"amount\": {\n              \"net\": \"20.0\",\n              \"gross\": \"22.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"VAT\",\n                  \"rate\": \"10.0\",\n                  \"amount\": \"2.0\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"40.0\",\n              \"gross\": \"44.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"VAT\",\n                  \"rate\": \"10.0\",\n                  \"amount\": \"4.0\"\n                }\n              ]\n            }\n          }\n        ],\n        \"payableAmount\": \"44.0\",\n        \"paidAmount\": \"0.0\",\n        \"paidStatus\": \"unpaid\",\n        \"reminderStatus\": \"sent\",\n        \"sentRemindersCount\": 1,\n        \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n        \"chargeAt\": \"2019-01-02T11:00:00Z\",\n        \"canCharge\": true,\n        \"canUpdate\": true,\n        \"sentStatus\": \"unsent\",\n        \"totalAmount\": {\n          \"net\": \"40.0\",\n          \"gross\": \"44.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"VAT\",\n              \"rate\": \"10.0\",\n              \"amount\": \"4.0\"\n            }\n          ]\n        }\n      },\n      \"relationships\": {\n        \"debitor\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"space\": {\n          \"data\": {\n            \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"paymentMethods\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "51833801-4158-45d7-b2a5-82142df61533",
+          "name": "List",
+          "request": {
+            "name": "List",
+            "description": {
+              "content": "List the invoices issued by a space:\n\n* all invoices in a given time (pass `filter[to/from]`)\n* for a single membership or team (pass `filter[debitorId]`)\n* all invoices with a specific paid status (pass `filter[paidStatus]`)\n\n**Access**: The current user must be an admin of the space where\nthe invoice was created. If the space is part of a network,\nthe user must be an admin of any space in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[debitorId]",
+                  "value": "<string>",
+                  "description": "To list invoices that belong to a single debitor (membership or team), pass the id of that membership or team."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[membershipId]",
+                  "value": "<string>",
+                  "description": "Same as `filter[debitorId]`, left for backward compatibility. Will be deprecated."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[from]",
+                  "value": "<date>",
+                  "description": "List invoices for all debitors whose invoice date is within the given timespan."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[to]",
+                  "value": "<date>",
+                  "description": "List invoices for all debitors whose invoice date is within the given timespan."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[dateFilterField]",
+                  "value": "<string>",
+                  "description": "What field to use for filtering the invoices by date.\n* When using `invoiceDate` (default), invoices are filtered based on the date the\n  invoice was generated (this respects when invoices are generated before their due date).\n* When using `dueDate`, invoices are filtered based on their due date\n  (disregarding that invoices might be generated before their due date).\n* When using `remindAt`, invoices are filtered based on the date the invoice's reminder is due. Only unpaid invoices are included.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[paidStatus]",
+                  "value": "<string>",
+                  "description": "Filter the invoices by their paid status. Can not be combined with any of the other filters.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[paidStatus]",
+                  "value": "<string>",
+                  "description": "Filter the invoices by their paid status. Can not be combined with any of the other filters.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space the invoices belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f9687c68-7727-4eb9-ba78-3c12fe0fb639",
+              "name": "Returns a list of invoice for the given space or a debitor (membership or team) in the space. When a space\nis part of a network, its members can have invoices in other spaces of the network.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[debitorId]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[membershipId]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[from]",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "filter[to]",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "filter[dateFilterField]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[paidStatus]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[paidStatus]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space the invoices belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"invoices\",\n      \"attributes\": {\n        \"invoiceText\": \"Thanks for your business!\",\n        \"invoiceDate\": \"2019-01-10\",\n        \"paidDate\": null,\n        \"dueDate\": \"2019-01-10\",\n        \"eInvoicingReady\": false,\n        \"remindAt\": \"2019-01-17\",\n        \"number\": \"CW-2019-100\",\n        \"senderTaxId\": \"DE753207\",\n        \"taxId\": \"DE12345\",\n        \"taxIdName\": \"UID\",\n        \"customerNumber\": \"100\",\n        \"pdf\": {\n          \"archived\": false,\n          \"eInvoiceStandard\": null,\n          \"eInvoice\": false,\n          \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n        },\n        \"recipientAddress\": {\n          \"name\": \"Jane Smith\",\n          \"company\": \"Acme Inc.\",\n          \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n          \"street\": \"2 Coworking Road\",\n          \"postCode\": \"88888\",\n          \"city\": \"Big City\",\n          \"state\": \"Coworking State\",\n          \"countryCode\": \"US\"\n        },\n        \"senderAddress\": {\n          \"name\": null,\n          \"company\": \"Coworking Ltd.\",\n          \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n          \"street\": \"1 Coworking Road\",\n          \"postCode\": \"88888\",\n          \"city\": \"Big City\",\n          \"state\": \"Coworking State\",\n          \"countryCode\": \"US\"\n        },\n        \"notes\": \"Customer will pay later.\",\n        \"billingEmails\": [\n          \"mupi@lubbuw.bh\"\n        ],\n        \"items\": [\n          {\n            \"description\": \"2h meeting room\",\n            \"quantity\": \"2.0\",\n            \"accountingCode\": \"MTR-200\",\n            \"costCenter\": {\n              \"name\": \"Bookings\",\n              \"number\": \"MTR-200\"\n            },\n            \"revenueAccount\": {\n              \"name\": \"Bookings\",\n              \"number\": \"4000\"\n            },\n            \"paid\": false,\n            \"amount\": {\n              \"net\": \"20.0\",\n              \"gross\": \"22.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"VAT\",\n                  \"rate\": \"10.0\",\n                  \"amount\": \"2.0\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"40.0\",\n              \"gross\": \"44.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"VAT\",\n                  \"rate\": \"10.0\",\n                  \"amount\": \"4.0\"\n                }\n              ]\n            }\n          }\n        ],\n        \"payableAmount\": \"44.0\",\n        \"paidAmount\": \"0.0\",\n        \"paidStatus\": \"unpaid\",\n        \"reminderStatus\": \"sent\",\n        \"sentRemindersCount\": 1,\n        \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n        \"chargeAt\": \"2019-01-02T11:00:00Z\",\n        \"canCharge\": true,\n        \"canUpdate\": true,\n        \"sentStatus\": \"unsent\",\n        \"totalAmount\": {\n          \"net\": \"40.0\",\n          \"gross\": \"44.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"VAT\",\n              \"rate\": \"10.0\",\n              \"amount\": \"4.0\"\n            }\n          ]\n        }\n      },\n      \"relationships\": {\n        \"debitor\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"space\": {\n          \"data\": {\n            \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"paymentMethods\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9390aff1-f31b-46cd-a6b4-e3767b45d079",
+          "name": "Search",
+          "request": {
+            "name": "Search",
+            "description": {
+              "content": "Text query searches through invoice number, invoice items and recipient name or company.\nReturns paginated list of invoices and number of pages in total.\n\n**Access**: The current user must be an admin of the space.\nIf the space is part of a network, the user must be an admin of any space in the network.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "spaces",
+                ":spaceId",
+                "invoices",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter[query]",
+                  "value": "<string>",
+                  "description": "(Required) The text query to search for."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[paidStatus]",
+                  "value": "<string>",
+                  "description": "Provide a comma separated list. Default: all.\npaidStatus=late returns unpaid invoices with remind_at date in the past.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[paidStatus]",
+                  "value": "<string>",
+                  "description": "Provide a comma separated list. Default: all.\npaidStatus=late returns unpaid invoices with remind_at date in the past.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[sentStatus]",
+                  "value": "<string>",
+                  "description": "Provide a comma separated list. Default: all.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[sentStatus]",
+                  "value": "<string>",
+                  "description": "Provide a comma separated list. Default: all.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[sortBy]",
+                  "value": "<string>",
+                  "description": "One from the list, default: invoiceDate.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter[sortOrder]",
+                  "value": "<string>",
+                  "description": "Default: desc.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "spaceId",
+                  "description": "(Required) The id of the space the invoices belong to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://www.cobot.me/oauth/access_token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://www.cobot.me/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "65be7838-09ff-4bdb-87b4-b19ef2e68825",
+              "name": "Returns the list of invoices matching the query.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "spaces",
+                    ":spaceId",
+                    "invoices",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter[query]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[paidStatus]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[paidStatus]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[sentStatus]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[sentStatus]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[sortBy]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter[sortOrder]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "spaceId",
+                      "description": "(Required) The id of the space the invoices belong to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"14c12f62ac8df98d29de357180d673e1\",\n      \"type\": \"invoices\",\n      \"attributes\": {\n        \"invoiceText\": \"Thanks for your business!\",\n        \"invoiceDate\": \"2019-01-10\",\n        \"paidDate\": null,\n        \"dueDate\": \"2019-01-10\",\n        \"eInvoicingReady\": false,\n        \"remindAt\": \"2019-01-17\",\n        \"number\": \"CW-2019-100\",\n        \"senderTaxId\": \"DE753207\",\n        \"taxId\": \"DE12345\",\n        \"taxIdName\": \"UID\",\n        \"customerNumber\": \"100\",\n        \"pdf\": {\n          \"archived\": false,\n          \"eInvoiceStandard\": null,\n          \"eInvoice\": false,\n          \"url\": \"https://api.cobot.me/invoices/14c12f62ac8df98d29de357180d673e1.pdf?token=34976\"\n        },\n        \"recipientAddress\": {\n          \"name\": \"Jane Smith\",\n          \"company\": \"Acme Inc.\",\n          \"fullAddress\": \"2 Coworking Road, Big City 88888, Coworking State\",\n          \"street\": \"2 Coworking Road\",\n          \"postCode\": \"88888\",\n          \"city\": \"Big City\",\n          \"state\": \"Coworking State\",\n          \"countryCode\": \"US\"\n        },\n        \"senderAddress\": {\n          \"name\": null,\n          \"company\": \"Coworking Ltd.\",\n          \"fullAddress\": \"1 Coworking Road, Big City 88888, Coworking State\",\n          \"street\": \"1 Coworking Road\",\n          \"postCode\": \"88888\",\n          \"city\": \"Big City\",\n          \"state\": \"Coworking State\",\n          \"countryCode\": \"US\"\n        },\n        \"notes\": \"Customer will pay later.\",\n        \"billingEmails\": [\n          \"mupi@lubbuw.bh\"\n        ],\n        \"items\": [\n          {\n            \"description\": \"2h meeting room\",\n            \"quantity\": \"2.0\",\n            \"accountingCode\": \"MTR-200\",\n            \"costCenter\": {\n              \"name\": \"Bookings\",\n              \"number\": \"MTR-200\"\n            },\n            \"revenueAccount\": {\n              \"name\": \"Bookings\",\n              \"number\": \"4000\"\n            },\n            \"paid\": false,\n            \"amount\": {\n              \"net\": \"20.0\",\n              \"gross\": \"22.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"VAT\",\n                  \"rate\": \"10.0\",\n                  \"amount\": \"2.0\"\n                }\n              ]\n            },\n            \"totalAmount\": {\n              \"net\": \"40.0\",\n              \"gross\": \"44.0\",\n              \"currency\": \"EUR\",\n              \"taxes\": [\n                {\n                  \"name\": \"VAT\",\n                  \"rate\": \"10.0\",\n                  \"amount\": \"4.0\"\n                }\n              ]\n            }\n          }\n        ],\n        \"payableAmount\": \"44.0\",\n        \"paidAmount\": \"0.0\",\n        \"paidStatus\": \"unpaid\",\n        \"reminderStatus\": \"sent\",\n        \"sentRemindersCount\": 1,\n        \"lastReminderSentAt\": \"2019-01-17T00:00:00Z\",\n        \"chargeAt\": \"2019-01-02T11:00:00Z\",\n        \"canCharge\": true,\n        \"canUpdate\": true,\n        \"sentStatus\": \"unsent\",\n        \"totalAmount\": {\n          \"net\": \"40.0\",\n          \"gross\": \"44.0\",\n          \"currency\": \"EUR\",\n          \"taxes\": [\n            {\n              \"name\": \"VAT\",\n              \"rate\": \"10.0\",\n              \"amount\": \"4.0\"\n            }\n          ]\n        }\n      },\n      \"relationships\": {\n        \"debitor\": {\n          \"data\": {\n            \"id\": \"c9a99a71ac8df98d29de357180d273d3\",\n            \"type\": \"memberships\"\n          }\n        },\n        \"space\": {\n          \"data\": {\n            \"id\": \"e0c19a71ac8df98d29de357180d27339\",\n            \"type\": \"spaces\"\n          }\n        },\n        \"paymentMethods\": {\n          \"links\": {\n            \"related\": \"https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cobot.me",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) The id of the invoice.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "id"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read_articles read_allocations read_booking_credits read_bookings read_built_in_email_customizations read_calendar_blockers read_check_ins read_contacts read_drop_in_passes read_drop_in_pass_templates read_discount_codes read_event_attendances read_event_messages read_events read_external_bookings read_external_resources read_invoices read_memberships read_teams read_membership_profiles read_navigation_links read_payment_methods read_published_membership_profiles read_networks read_products read_resource_categories read_resources read_single_page_apps read_space_profiles read_spaces read_space_billing_details read_space_payment_method read_space_subscriptions read_terms_approvals read_urls read_user write_bookings write_check_ins write_customers write_drop_in_pass_purchases write_drop_in_passes write_event_ticket_purchases write_event_attendances write_event_messages write_events write_external_bookings write_external_resources write_resources write_invoices write_invoice_reminders write_membership_profiles write_navigation_links write_payments write_single_page_apps write_space_billing_details write_space_payment_method write_space_subscriptions write_terms_approvals"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://www.cobot.me/oauth/access_token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://www.cobot.me/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "77eb9ee6-acd8-425f-af43-3da94c0dc5f5",
+    "name": "Cobot Invoice API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n\n\nContact Support:\n Name: Cobot Support\n Email: support@cobot.me",
+      "type": "text/plain"
+    }
+  }
+}

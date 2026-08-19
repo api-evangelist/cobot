@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Membership Plan API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Membership Plan",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "For space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/membership_plans",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the space."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2020-04-20",
+                "type": "query",
+                "description": "Only return membership plans that have been active from the given date on."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2020-04-20",
+                "type": "query",
+                "description": "Only return membership plans that have been active until the given date."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get the plan history for the given time\nand for each membership that was active during the given time.\n\nData is returned as a flat list of membership plans.\nEach plan has a relationship pointing to the membership it belongs to\nand startsAt/canceledAt attributes to determine the time it was active.\n\n**Access**: The current user must be an admin of the space or any\nspace in the network.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

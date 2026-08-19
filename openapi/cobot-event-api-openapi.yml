@@ -1,0 +1,3815 @@
+openapi: 3.2.0
+info:
+  title: Cobot Event API
+  termsOfService: https://www.cobot.me/terms
+  x-logo:
+    url: /api2_logo.webp
+    backgroundColor: '#FFFFFF'
+    altText: Cobot logo
+  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  version: '2.0'
+  contact:
+    name: Cobot Support
+    url: https://dev.cobot.me/
+    email: support@cobot.me
+servers:
+- url: https://api.cobot.me
+security:
+- OAuth2: []
+tags:
+- name: Event
+  description: 'Spaces can run events for their members or the public.
+
+    Events are created and later published by admins, at which point members are able to see and attend them.
+
+    Admins can also create messages for events, which are sent to attendees based on triggers such as someone having
+
+    just attended an event.
+
+    '
+paths:
+  /events:
+    post:
+      summary: Create event
+      description: 'Create events as an admin. To become visible to members, events
+
+        have to be published after being created.
+
+        Events can be associated with resources, in which cases the
+
+        resources will be booked for the duration of the event.
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: create-admin-event
+      security:
+      - OAuth2:
+        - write_events
+        - write_bookings
+      tags:
+      - Event
+      responses:
+        '201':
+          description: New event
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        expectedRevenue:
+                        - net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        audience: membersOnly
+                        color: '#FF0000'
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorCostCenter: null
+                        visitorRevenueAccount: null
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        publishedState: draft
+                        publicPage: false
+                        publicUrl: null
+                        canDepublish: false
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+      requestBody:
+        description: Event to be created for a space.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-event'
+            examples:
+              default:
+                value:
+                  data:
+                    type: events
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      title: launch party
+                      price:
+                        net: '10.0'
+                        currency: EUR
+                      accountingCode: EVT
+                      costCenter:
+                        name: Events
+                        number: 2018-1
+                      visitorCostCenter:
+                        name: Visitor Events
+                        number: 2018-1
+                      revenueAccount:
+                        name: Events
+                        number: '4000'
+                      visitorRevenueAccount:
+                        name: Visitor Events
+                        number: '4001'
+                      audience: membersOnly
+                      image:
+                        data: data:image/png;base64,...
+                      description: We are relaunching our coworking space!
+                      location: Lobby
+                      tags:
+                      - party
+                      videoUrl: null
+                      capacity: 85
+                    relationships:
+                      space:
+                        data:
+                          id: 99da6cb66b5e6b39007690854fd66df9
+                          type: spaces
+                      resources:
+                        data:
+                        - id: 89da3cb66b5e6b39007690854kd66da4
+                          type: resources
+                          meta:
+                            units: 3
+  /events/{id}:
+    get:
+      summary: Single event
+      description: 'Show a single event.
+
+
+        **Access**: The current user must either be an admin or a member of a space or the space''s network unless the event is public.
+
+        Including `attendances` or `attendances.attendee` requires the current user to be an admin or member of the space or the space''s network.
+
+        '
+      operationId: get-event
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event.
+        schema:
+          type: string
+      - name: include
+        in: query
+        required: false
+        description: 'List of related resources to include in response as comma separated string.
+
+
+          Including `attendances.attendee` will also return `attendances`.
+
+          A maximum of 5 attendances per event is returned. If the current user is attending,
+
+          their attendance will be included in the 5. The full count is returned in the meta section.
+
+
+          Including `attendances` requires the `read_event_attendances` scope.
+
+          Including `attendances.attendee` requires the `read_event_attendances`, `read_memberships` and `read_contacts` scopes.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - attendances
+            - attendances.attendee
+      security:
+      - OAuth2:
+        - read_events
+      tags:
+      - Event
+      responses:
+        '200':
+          description: A single event
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        expectedRevenue:
+                        - net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        audience: membersOnly
+                        color: '#FF0000'
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorCostCenter: null
+                        visitorRevenueAccount: null
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        publishedState: draft
+                        publicPage: false
+                        publicUrl: null
+                        canDepublish: false
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+    patch:
+      summary: Update event
+      description: 'Update the details of an event. Note that the `publishedStatus` attribute can only be
+
+        changed via the publish/depublish endpoints.
+
+
+        **Access**: The current user must be an admin of the space the event belongs to.
+
+        '
+      operationId: update-event
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_events
+      tags:
+      - Event
+      responses:
+        '200':
+          description: The updated event.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        expectedRevenue:
+                        - net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        audience: membersOnly
+                        color: '#FF0000'
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorCostCenter: null
+                        visitorRevenueAccount: null
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        publishedState: draft
+                        publicPage: false
+                        publicUrl: null
+                        canDepublish: false
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+      requestBody:
+        description: Event to be updated.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/update-event'
+            examples:
+              default:
+                value:
+                  data:
+                    id: b8f21a71ac8df98d29de357180d27358
+                    type: events
+                    attributes:
+                      from: '2018-01-01T12:00:00Z'
+                      to: '2018-01-01T14:00:00Z'
+                      title: launch party
+                      price:
+                        net: '10.0'
+                        currency: EUR
+                      audience: membersOnly
+                      accountingCode: EVT
+                      costCenter:
+                        name: Events
+                        number: 2018-1
+                      visitorCostCenter:
+                        name: Visitor Events
+                        number: 2018-1
+                      revenueAccount:
+                        name: Events
+                        number: '4000'
+                      visitorRevenueAccount:
+                        name: Visitor Events
+                        number: '4001'
+                      image:
+                        data: data:image/png;base64,...
+                      description: We are relaunching our coworking space!
+                      location: Lobby
+                      tags:
+                      - party
+                      videoUrl: null
+                      capacity: 85
+                    relationships:
+                      resources:
+                        data:
+                        - id: 89da3cb66b5e6b39007690854kd66da4
+                          type: resources
+                          meta:
+                            units: all
+    delete:
+      summary: Delete event
+      description: 'Deleting an event will notify all attendees and refund their tickets if applicable.
+
+        **Access**: The current user must be an admin of the space the event belongs to.
+
+        '
+      operationId: delete-event
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_events
+      tags:
+      - Event
+      responses:
+        '204':
+          description: Empty response
+  /event_attendances:
+    post:
+      summary: Attend event
+      description: 'Attend an event as member. Automatically creates a `Charge`
+
+        on the membership if the event has a price.
+
+
+        **Access**: The current user must be a member of the space.
+
+        '
+      operationId: attend-event
+      security:
+      - OAuth2:
+        - write_event_attendances
+      tags:
+      - Event
+      requestBody:
+        description: The membership that wants to attend and the event to attend.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-event-attendance'
+            examples:
+              default:
+                value:
+                  data:
+                    type: eventAttendances
+                    attributes:
+                      visibility: public
+                    relationships:
+                      event:
+                        data:
+                          id: b8f21a71ac8df98d29de357180d27358
+                          type: events
+                      attendee:
+                        data:
+                          id: 99da6cb66b5e6b39007690854fd66df9
+                          type: memberships
+      responses:
+        '201':
+          description: Attendance
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-attendance'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 3130b02817a5aab19255fb8f2c9d1ee3
+                      type: eventAttendances
+                      attributes:
+                        createdAt: '2024-10-27T11:48:24+01:00'
+                        numberOfAttendees: 1
+                        name: Earl McBride
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - amount: '2.0'
+                            name: VAT
+                            rate: '20.0'
+                        accountingCode: EVT
+                        visibility: public
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+                        attendee:
+                          data:
+                            id: a8c12f62ac8df98d29de357180d673e1
+                            type: memberships
+        '409':
+          description: In case the member is already attending or the event capacity is reached.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Already attending event.
+                      source:
+                        pointer: /data/relationships/attendee
+  /event_attendances/{id}:
+    get:
+      summary: Single event attendance
+      description: 'Get details of a single event attendance.
+
+
+        **Access**: The current user must be an admin of the space the event belongs to,
+
+        or the event attendee, or a member of the space if the attendance visibility is ''members'',
+
+        or anyone if the attendance has ''public'' visibility.
+
+        '
+      operationId: get-event-attendance
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event attendance to get.
+        schema:
+          type: string
+      - name: include
+        in: query
+        style: form
+        explode: false
+        required: false
+        description: Include attendee. Requires `read_memberships` and `read_contacts` scope.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - attendee
+      security:
+      - OAuth2:
+        - read_event_attendances
+      tags:
+      - Event
+      responses:
+        '200':
+          description: The event attendance.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-attendance'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 3130b02817a5aab19255fb8f2c9d1ee3
+                      type: eventAttendances
+                      attributes:
+                        accountingCode: EVT
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - amount: '2.0'
+                            name: VAT
+                            rate: '20.0'
+                        visibility: public
+                        numberOfAttendees: 1
+                        name: Earl McBride
+                        createdAt: '2024-10-27T11:48:24+01:00'
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+                        attendee:
+                          data:
+                            id: a8c12f62ac8df98d29de357180d673e1
+                            type: memberships
+                    included:
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: memberships
+                      attributes:
+                        name: Jane Fonda
+                        email: foksol@di.es
+                        phone: (746) 760-3432
+                        company: null
+                        confirmedAt: '2020-02-01'
+                        canceledAt: null
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                      relationships:
+                        space:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        team:
+                          data:
+                            id: 4db23e1a-62a6-5115-8034-fc18b13bffac
+                            type: teams
+    delete:
+      summary: Unattend event
+      description: 'Unattend an event as member. This refunds the ticket price
+
+        if applicable.
+
+
+        **Access**: The current user must be connected to the
+
+        membership the attendance belongs to.
+
+        '
+      operationId: unattend-event
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event attendance to delete.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_event_attendances
+      tags:
+      - Event
+      responses:
+        '204':
+          description: Attendance deleted.
+        '409':
+          description: In case event was not attended or has already started.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: You are not attending the event / Event has already started.
+  /events/{id}/attendances:
+    get:
+      summary: List attendances
+      description: 'List all the attendances for an event. Attendances connect an
+
+        event with a membership or contact and can have an optional price.
+
+
+        **Access**: The current user must be an admin or member of the space the event belongs to.
+
+        '
+      operationId: list-event-attendances
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event.
+        schema:
+          type: string
+      - name: include
+        in: query
+        style: form
+        explode: false
+        required: false
+        description: Include attendees. Requires `read_memberships` scope.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - attendee
+      security:
+      - OAuth2:
+        - read_event_attendances
+      tags:
+      - Event
+      responses:
+        '200':
+          description: The list of attendances with included attendees (memberships or contacts).
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-attendances'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 3130b02817a5aab19255fb8f2c9d1ee3
+                      type: eventAttendances
+                      attributes:
+                        accountingCode: EVT
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - amount: '2.0'
+                            name: VAT
+                            rate: '20.0'
+                        visibility: public
+                        numberOfAttendees: 1
+                        name: Earl McBride
+                        createdAt: '2024-10-27T11:48:24+01:00'
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+                        attendee:
+                          data:
+                            id: a8c12f62ac8df98d29de357180d673e1
+                            type: memberships
+                    - id: abcdb02817a5aab19255fb8f2c9d1ee3
+                      type: eventAttendances
+                      attributes:
+                        accountingCode: EVT
+                        price:
+                          net: '20.0'
+                          gross: '24.0'
+                          currency: EUR
+                          taxes:
+                          - amount: '4.0'
+                            name: VAT
+                            rate: '20.0'
+                        visibility: public
+                        numberOfAttendees: 2
+                        name: Earl McBride
+                        createdAt: '2024-10-27T11:48:24+01:00'
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+                        attendee:
+                          data:
+                            id: 24c12f62ac8df98d29de357180d673e1
+                            type: contacts
+                    included:
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: memberships
+                      attributes:
+                        name: Jane Fonda
+                        email: foksol@di.es
+                        phone: (746) 760-3432
+                        company: null
+                        confirmedAt: '2020-02-01'
+                        canceledAt: null
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                      relationships:
+                        space:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        team:
+                          data:
+                            id: 4db23e1a-62a6-5115-8034-fc18b13bffac
+                            type: teams
+                    - id: 24c12f62ac8df98d29de357180d673e1
+                      type: contacts
+                      attributes:
+                        email: jane@example.com
+                        phone: 555-55-355
+                        address:
+                          name: Jane Smitherson
+                          company: ACME Inc.
+                          fullAddress: 3 Coworking Road
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                      relationships:
+                        space:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        membership:
+                          data:
+                            id: e0c19a71ac8df98d29de357180d27339
+                            type: memberships
+  /event_messages:
+    post:
+      summary: Create message
+      description: 'Create a message for an event.
+
+        Messages are sent by email based on triggers such as someone attending an event.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: create-event-messages
+      security:
+      - OAuth2:
+        - write_event_messages
+      tags:
+      - Event
+      requestBody:
+        description: Message to be created for an event.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-event-message'
+            examples:
+              default:
+                value:
+                  data:
+                    type: eventMessages
+                    attributes:
+                      trigger: attended
+                      body: This is what you need to know.
+                    relationships:
+                      event:
+                        data:
+                          id: b8f21a71ac8df98d29de357180d27358
+                          type: events
+      responses:
+        '201':
+          description: The created message.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-message'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 3910b02817a5aab19255fb8f2c9d1ea3
+                      type: eventMessages
+                      attributes:
+                        trigger: attended
+                        body: This is what you need to know.
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+  /event_messages/{id}:
+    get:
+      summary: Single message
+      description: 'Returns a message for an event.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: get-event-message
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the message.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_event_messages
+      tags:
+      - Event
+      responses:
+        '200':
+          description: The message.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-message'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 3910b02817a5aab19255fb8f2c9d1ea3
+                      type: eventMessages
+                      attributes:
+                        trigger: attended
+                        body: This is what you need to know.
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+    patch:
+      summary: Update message
+      description: 'Updates a message.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: update-event-message
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the message.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_event_messages
+      tags:
+      - Event
+      requestBody:
+        description: The message content to update.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/update-event-message'
+            examples:
+              default:
+                value:
+                  data:
+                    id: 3910b02817a5aab19255fb8f2c9d1ea3
+                    type: eventMessages
+                    attributes:
+                      body: This is what you also need to know.
+      responses:
+        '200':
+          description: The updated message.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-message'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: 3910b02817a5aab19255fb8f2c9d1ea3
+                      type: eventMessages
+                      attributes:
+                        trigger: attended
+                        body: This is what you also need to know.
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+    delete:
+      summary: Delete message
+      description: 'Delete a message.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: delete-event-message
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the message.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_event_messages
+      tags:
+      - Event
+      responses:
+        '204':
+          description: The message was deleted.
+  /events/{id}/messages:
+    get:
+      summary: List messages
+      description: 'Returns the messages for an event.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: get-event-event-messages
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - read_event_messages
+      tags:
+      - Event
+      responses:
+        '200':
+          description: The messages associated with the event.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-messages'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 3910b02817a5aab19255fb8f2c9d1ea3
+                      type: eventMessages
+                      attributes:
+                        trigger: attended
+                        body: This is what you need to know.
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+  /events/{id}/publication:
+    post:
+      summary: Publish as admin
+      description: 'Publish an event as an admin. To become visible to members, events
+
+        have to be published. This changes the `publishedState` of the event
+
+        from `draft` to `published`.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: publish-admin-event
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event to publish.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_events
+      tags:
+      - Event
+      responses:
+        '201':
+          description: Published event
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        visitorCostCenter: null
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorRevenueAccount: null
+                        audience: membersOnly
+                        color: '#FF0000'
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        canDepublish: true
+                        publishedState: published
+                        publicPage: true
+                        publicUrl: https://demo.cobot.me/event/2018-01-01-12-00-launch-party
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+        '409':
+          description: In case event was already published.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Event is already published.
+                      source:
+                        pointer: /data/attributes/publishedState
+    delete:
+      summary: Depublish as admin
+      description: 'Depublish an event as an admin. This changes the `publishedState` of the event
+
+        from `published` to `draft` and members cannot see the event anymore.
+
+
+        **Access**: The current user must be an admin of the space.
+
+        '
+      operationId: depublish-admin-event
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id of the event to depublish.
+        schema:
+          type: string
+      security:
+      - OAuth2:
+        - write_events
+      tags:
+      - Event
+      responses:
+        '200':
+          description: Depublished event
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        expectedRevenue:
+                        - net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        audience: membersOnly
+                        color: '#FF0000'
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorCostCenter: null
+                        visitorRevenueAccount: null
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        publishedState: draft
+                        publicPage: false
+                        publicUrl: null
+                        canDepublish: false
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+        '409':
+          description: In case event was already not published.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Event is already not published.
+                      source:
+                        pointer: /data/attributes/publishedState
+  /event_ticket_purchases:
+    post:
+      summary: Create an event ticket purchase
+      description: 'A purchase of event tickets, currently only supports buying one ticket at a time.
+
+        This is for visitors / non-members attending events.
+
+
+        **Access**: Any user can create an event ticket purchase.
+
+        '
+      operationId: create-event-ticket-purchase
+      security:
+      - OAuth2:
+        - write_event_ticket_purchases
+      tags:
+      - Event
+      responses:
+        '201':
+          description: The created event ticket purchase.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-ticket-purchase'
+              examples:
+                default:
+                  value:
+                    data:
+                      id: b8f21a71ac8df98d29de357180d27358
+                      type: eventTicketPurchases
+                      attributes:
+                        acceptedTerms: true
+                        comments: Looking forward to seeing your space!
+                        name: Earl McBride
+                        company: ACME Inc.
+                        email: hello@example.com
+                        phone: (959) 645-9532
+                        taxId: 12345678A
+                        billingAddress: 123 Main St\nSpringfield, IL, 12345
+                        structuredBillingAddress:
+                          name: Earl McBride
+                          company: ACME Inc.
+                          fullAddress: 123 Main St\nSpringfield, IL, 12345
+                          street: 123 Main St
+                          postCode: '12345'
+                          city: Springfield
+                          state: IL
+                          countryCode: US
+                        price:
+                          net: '986.0'
+                          gross: '1089.53'
+                          currency: EUR
+                          taxes:
+                          - name: Main Tax
+                            rate: '10.5'
+                            amount: '103.53'
+                      relationships:
+                        attendances:
+                          data:
+                          - id: b8f21a71ac8df98d29de357180d27358
+                            type: attendances
+                        paymentMethod:
+                          data:
+                            id: 25fc37c06c4a183ea17ada5306725705
+                            type: paymentMethods
+                        invoices:
+                          data:
+                          - id: a07fed27-b35b-5c67-8367-3e52c397c528
+                            type: invoices
+                        space:
+                          data:
+                            id: 99a12ca68b5e6bc9007890854kd368f2
+                            type: spaces
+        '422':
+          description: 'When sending a payment and capturing the payment fails, an error is returned.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/failure'
+              examples:
+                default:
+                  value:
+                    errors:
+                    - detail: Payment could not be captured.
+      requestBody:
+        description: Data needed to create an event ticket purchase.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/create-event-ticket-purchase'
+            examples:
+              default:
+                value:
+                  data:
+                    type: eventTicketPurchases
+                    attributes:
+                      eventTickets:
+                      - type: eventTickets
+                        attributes:
+                          numberOfTickets: 1
+                        relationships:
+                          event:
+                            data:
+                              id: aeb19e5a78cc64be5056f6ef9a44f7d5
+                              type: events
+                      acceptedTerms: true
+                      name: Earl McBride
+                      company: ACME Inc
+                      billingAddress:
+                        name: Earl McBride
+                        company: ACME Inc.
+                        street: 123 Main St
+                        postCode: '12345'
+                        city: Springfield
+                        state: IL
+                        countryCode: US
+                      phone: (959) 645-9532
+                      taxId: 123456789A
+                      email: fe@haos.eg
+                      comments: we need catering
+                    relationships:
+                      payment:
+                        data:
+                          id: jd73gf5a78cc64be5056f6ef9a44fuzt
+                          type: payments
+  /spaces/{spaceId}/events:
+    get:
+      summary: List events
+      description: 'List/filter events for a time range.
+
+        **Access**: Any user can see the list of events. Only admins of the space can see draft events.
+
+        '
+      operationId: list-events
+      security:
+      - OAuth2:
+        - read_events
+      tags:
+      - Event
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space to get the events for.
+        schema:
+          type: string
+      - name: include
+        in: query
+        required: false
+        description: 'List of related resources to include in response as comma separated string.
+
+
+          Including `attendances.attendee` will also return `attendances`.
+
+          A maximum of 5 attendances per event is returned. If the current user is attending,
+
+          their attendance will be included in the 5. The full count is returned in the meta section.
+
+
+          Including `attendances` requires the `read_event_attendances` scope.
+
+          Including `attendances.attendee` requires the `read_event_attendances` and `read_memberships` scopes.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - attendances
+            - attendances.attendee
+      - name: filter[from]
+        in: query
+        required: true
+        description: The start of the time range.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-04-12T10:00:00Z'
+      - name: filter[to]
+        in: query
+        required: true
+        description: The end of the time range.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-04-30T23:59:59Z'
+      - name: filter[publishedState]
+        in: query
+        example: draft,published
+        required: true
+        style: form
+        explode: false
+        description: 'Return draft/published events. Pass a comma separated list of states.
+
+          Only admins can request draft events.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - draft
+            - published
+      - name: filter[tags]
+        in: query
+        required: false
+        description: 'Comma separated list of tags to filter events by.
+
+          To include events with no tags pass an empty
+
+          tag (alone: `filter[tags]=`, with other tags: `filter[tags]=tag1,,tag2`).
+
+          When this parameter is left out, events with any or no tags are returned.
+
+          '
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+        example: party,free
+      - name: filter[resourceIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: 'Filter events by the resources they use (list of resource ids separated by commas).
+
+          To include events with no resources pass an empty resource id
+
+          (alone: `filter[resourceIds]=`, with other ids: `filter[resourceIds]=r1,,r2`).
+
+          When this parameter is left out, events with any or no resources are returned.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+        example: a4a99a71ac8df98d29de357180d273d3,13b73f71ac8df98129de357180d219a6
+      - name: filter[attendeeIds]
+        in: query
+        required: false
+        style: form
+        explode: false
+        description: Filter events by who is attending. Pass a comma separated list of ids (for now only membership ids).
+        schema:
+          type: array
+          items:
+            type: string
+        example: c2a99a71ac8df98d29de357180d273d2,9a673f71ac8df98129de357180d219a8
+      - name: filter[sortOrder]
+        in: query
+        required: false
+        description: Whether to sort events by date ascending or descending.
+        schema:
+          type: string
+          default: asc
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Event list according to search filter.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/events'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        expectedRevenue:
+                        - net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        audience: membersOnly
+                        color: '#FF0000'
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorCostCenter: null
+                        visitorRevenueAccount: null
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        publishedState: draft
+                        publicPage: false
+                        publicUrl: null
+                        canDepublish: false
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                with_attendees_included:
+                  value:
+                    data:
+                    - id: b8f21a71ac8df98d29de357180d27358
+                      type: events
+                      attributes:
+                        from: '2018-01-01T12:00:00Z'
+                        to: '2018-01-01T14:00:00Z'
+                        title: launch party
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        visitorPrice: null
+                        expectedRevenue:
+                        - net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - rate: '20.0'
+                            name: Tax
+                        audience: membersOnly
+                        color: '#FF0000'
+                        accountingCode: EVT
+                        visitorAccountingCode: null
+                        costCenter:
+                          name: Events Revenue
+                          number: E17
+                        revenueAccount:
+                          name: Events Revenue
+                          number: '4000'
+                        visitorCostCenter: null
+                        visitorRevenueAccount: null
+                        image:
+                          icon:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/icon_photo.png
+                            width: 120
+                            height: 120
+                          default:
+                            url: https://cdn.com/event/image/a4a99a71ac8df98d29de357180d273d3/default_photo.png
+                            width: 800
+                            height: 600
+                        description: We are relaunching our coworking space!
+                        location: Lobby
+                        tags:
+                        - party
+                        videoUrl: null
+                        capacity: 85
+                        publishedState: draft
+                        publicPage: false
+                        publicUrl: null
+                        canDepublish: false
+                      relationships:
+                        attendances:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/attendances
+                          data:
+                          - id: 3130b02817a5aab19255fb8f2c9d1ee3
+                            type: eventAttendances
+                          meta:
+                            count: 1
+                        bookings:
+                          data:
+                          - id: 419cabc7547473ea91762671f4641701
+                            type: bookings
+                        messages:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/messages
+                        publication:
+                          links:
+                            related: https://api.cobot.me/events/b8f21a71ac8df98d29de357180d27358/publication
+                        resources:
+                          data:
+                          - id: a4a99a71ac8df98d29de357180d273d3
+                            type: resources
+                        space:
+                          data:
+                            id: f9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                    included:
+                    - id: 3130b02817a5aab19255fb8f2c9d1ee3
+                      type: eventAttendances
+                      attributes:
+                        accountingCode: EVT
+                        price:
+                          net: '10.0'
+                          gross: '12.0'
+                          currency: EUR
+                          taxes:
+                          - amount: '2.0'
+                            name: VAT
+                            rate: '20.0'
+                        visibility: public
+                        numberOfAttendees: 1
+                        name: Earl McBride
+                        createdAt: '2024-10-27T11:48:24+01:00'
+                      relationships:
+                        event:
+                          data:
+                            id: b8f21a71ac8df98d29de357180d27358
+                            type: events
+                        attendee:
+                          data:
+                            id: a8c12f62ac8df98d29de357180d673e1
+                            type: memberships
+                    - id: a8c12f62ac8df98d29de357180d673e1
+                      type: memberships
+                      attributes:
+                        name: Jane Fonda
+                        email: foksol@di.es
+                        phone: (746) 760-3432
+                        company: null
+                        confirmedAt: '2020-02-01'
+                        canceledAt: null
+                        photo:
+                          thumb:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/thumb_photo.png
+                            width: 50
+                            height: 50
+                          small:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/small_photo.png
+                            width: 120
+                            height: 120
+                          large:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/large_photo.png
+                            width: 285
+                            height: 285
+                          xlarge:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/xlarge_photo.png
+                            width: 600
+                            height: 600
+                          hd:
+                            url: https://cdn.com/24a99a71ac8df98d29de357180d273d3/hd_photo.png
+                            width: 1200
+                            height: 1200
+                      relationships:
+                        space:
+                          data:
+                            id: c9a99a71ac8df98d29de357180d273d3
+                            type: spaces
+                        team:
+                          data:
+                            id: 4db23e1a-62a6-5115-8034-fc18b13bffac
+                            type: teams
+  /spaces/{spaceId}/events/tags:
+    get:
+      summary: List Tags
+      description: 'List the most popular tags used when creating events. Returns tags for events
+
+        with the start or end date within specified time range (last 365 days by default).
+
+        **Access**: The current user must be an admin or member of the space. If the
+
+        space is part of a network, the user must be an admin or member of any
+
+        space in the network.
+
+        '
+      operationId: list-event-tags
+      security:
+      - OAuth2:
+        - read_events
+      tags:
+      - Event
+      parameters:
+      - name: spaceId
+        in: path
+        required: true
+        description: The id of the space to get the event tags for.
+        schema:
+          type: string
+      - name: filter[from]
+        in: query
+        required: false
+        description: The start of the time range. If omitted, 12 months ago.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-01-01T00:00:00Z'
+      - name: filter[to]
+        in: query
+        required: false
+        description: The end of the time range. If omitted, now.
+        schema:
+          type: string
+          format: date-time
+        example: '2012-06-30T23:59:59Z'
+      responses:
+        '200':
+          description: A list of the 20 most popular tags used for events in the space.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/event-tags'
+              examples:
+                default:
+                  value:
+                    data:
+                    - id: 28ef9e2617065920faa4b39892645121
+                      type: eventTags
+                      attributes:
+                        name: Party
+components:
+  schemas:
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    update-event:
+      id: update-event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - events
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  type: string
+                audience:
+                  type: string
+                  enum:
+                  - membersOnly
+                  - public
+                description:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                color:
+                  oneOf:
+                  - $ref: '#/components/schemas/color'
+                  - type: 'null'
+                videoUrl:
+                  description: Video stream/call URL for online events.
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                publicPage:
+                  type: boolean
+                  description: Whether to provide a publicly accessible event page.
+                image:
+                  oneOf:
+                  - type: 'null'
+                  - type: object
+                    required:
+                    - data
+                    additionalProperties: false
+                    properties:
+                      data:
+                        description: The image as data uri (content type + base64 encoded data)
+                        type: string
+                        pattern: ^data:image/\w+;base64,\S+$
+                location:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                capacity:
+                  description: How many people can attend/tickets will be sold.
+                  oneOf:
+                  - type: integer
+                    minimum: 1
+                  - type: 'null'
+                tags:
+                  type: array
+                  items:
+                    type: string
+                price:
+                  description: Price for one ticket. Can be passed either as net or gross value.
+                  oneOf:
+                  - $ref: '#/components/schemas/net-amount-with-currency'
+                  - $ref: '#/components/schemas/gross-amount-with-currency'
+                  - type: 'null'
+                visitorPrice:
+                  description: Price for one ticket for a visitor, if visitors should pay a different price than members. Can be passed either as net or gross value.
+                  oneOf:
+                  - $ref: '#/components/schemas/net-amount-with-currency'
+                  - $ref: '#/components/schemas/gross-amount-with-currency'
+                  - type: 'null'
+                accountingCode:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                visitorAccountingCode:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                costCenter:
+                  oneOf:
+                  - $ref: '#/components/schemas/cost-center'
+                  - type: 'null'
+                revenueAccount:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/revenue-account'
+                visitorCostCenter:
+                  oneOf:
+                  - $ref: '#/components/schemas/cost-center'
+                  - type: 'null'
+                visitorRevenueAccount:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/revenue-account'
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                resources:
+                  $ref: '#/components/schemas/event-resources'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    -event-message-data:
+      id: -event-message-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - eventMessages
+        attributes:
+          type: object
+          required:
+          - trigger
+          - body
+          additionalProperties: false
+          properties:
+            trigger:
+              type: string
+              enum:
+              - attended
+              - published
+            body:
+              type: string
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - event
+          properties:
+            event:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - events
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    color:
+      description: 'Color hex code, e.g. #FF0000'
+      type: string
+      pattern: ^#[a-fA-F0-9]{6}$
+    create-event-attendance:
+      id: create-event-attendance.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - eventAttendances
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                visibility:
+                  description: Who can see the attendance/attendee data. Default is admins.
+                  type: string
+                  enum:
+                  - admins
+                  - members
+                  - public
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - event
+              - attendee
+              properties:
+                attendee:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                event:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - events
+    -event-attendance-data:
+      id: -event-attendance-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - eventAttendances
+        attributes:
+          type: object
+          required:
+          - price
+          - accountingCode
+          - visibility
+          - createdAt
+          - numberOfAttendees
+          - name
+          additionalProperties: false
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            price:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/price'
+            accountingCode:
+              oneOf:
+              - type: string
+              - type: 'null'
+            numberOfAttendees:
+              type: integer
+              minimum: 1
+            visibility:
+              description: Who can see the attendance/attendee data. Default is admins.
+              type: string
+              enum:
+              - admins
+              - members
+              - public
+            name:
+              oneOf:
+              - type: string
+              - type: 'null'
+        relationships:
+          type: object
+          required:
+          - attendee
+          - event
+          additionalProperties: false
+          properties:
+            event:
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - events
+            attendee:
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - memberships
+                      - contacts
+    event:
+      id: event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-data'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-event-attendance-data'
+    address:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+          description: Only admins can see it.
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    -event-ticket-purchase-data:
+      id: -event-ticket-purchase-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - eventTicketPurchases
+        attributes:
+          type: object
+          required:
+          - acceptedTerms
+          - name
+          - billingAddress
+          - price
+          - company
+          - email
+          - comments
+          - phone
+          - taxId
+          additionalProperties: false
+          properties:
+            price:
+              $ref: '#/components/schemas/price'
+            acceptedTerms:
+              type: boolean
+              enum:
+              - true
+            name:
+              type: string
+            company:
+              type:
+              - string
+              - 'null'
+            billingAddress:
+              type: string
+            structuredBillingAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            email:
+              $ref: '#/components/schemas/email'
+            comments:
+              type:
+              - string
+              - 'null'
+            phone:
+              type:
+              - string
+              - 'null'
+            taxId:
+              type:
+              - string
+              - 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - attendances
+          - space
+          - invoices
+          - paymentMethod
+          properties:
+            attendances:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            invoices:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            paymentMethod:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    -membership-data:
+      id: -membership-data.json#
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - memberships
+        attributes:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              oneOf:
+              - type: string
+              - type: 'null'
+            email:
+              oneOf:
+              - type: string
+              - type: 'null'
+            phone:
+              oneOf:
+              - type: string
+              - type: 'null'
+            company:
+              oneOf:
+              - type: string
+              - type: 'null'
+            confirmedAt:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            canceledAt:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            photo:
+              oneOf:
+              - $ref: '#/components/schemas/avatar-photo'
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            bookingCredits:
+              $ref: '#/components/schemas/related-link'
+            space:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  $ref: '#/components/schemas/linkage'
+            team:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  $ref: '#/components/schemas/linkage'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    event-message:
+      id: event-message.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-message-data'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    event-message-trigger:
+      type: string
+      enum:
+      - attended
+      - published
+      description: What triggers the message to be sent. The 'published' trigger will send a message to all members when an event is published. If no `published` message is created, no message is sent to members. The 'attended' trigger will send a message to an attendee right after they attended an event. If no `attended` message is created, a generic message is sent to new attendees. More triggers will be available in the future.
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    update-event-message:
+      id: update-event-message.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - eventMessages
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                trigger:
+                  $ref: '#/components/schemas/event-message-trigger'
+                body:
+                  $ref: '#/components/schemas/event-message-body'
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    event-attendances:
+      id: event-attendances.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-event-attendance-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-contact-data'
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    event-attendance:
+      id: event-attendance.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-attendance-data'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-contact-data'
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    event-ticket-purchase:
+      id: event-ticket-purchase.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-ticket-purchase-data'
+    event-message-body:
+      type: string
+      description: A custom, plain-text message added to the auto-generated email.
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    create-event:
+      id: create-event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - events
+            attributes:
+              type: object
+              required:
+              - title
+              - from
+              - to
+              - audience
+              additionalProperties: false
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  type: string
+                audience:
+                  type: string
+                  enum:
+                  - membersOnly
+                  - public
+                description:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                color:
+                  oneOf:
+                  - $ref: '#/components/schemas/color'
+                  - type: 'null'
+                videoUrl:
+                  description: Video stream/call URL for online events.
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                publicPage:
+                  type: boolean
+                  description: Whether to provide a publicly accessible event page.
+                image:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/image-upload'
+                location:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                capacity:
+                  description: How many people can attend/tickets will be sold.
+                  oneOf:
+                  - type: integer
+                    minimum: 1
+                  - type: 'null'
+                tags:
+                  type: array
+                  items:
+                    type: string
+                price:
+                  description: Price for one ticket. Can be passed either as net or gross value.
+                  oneOf:
+                  - $ref: '#/components/schemas/net-amount-with-currency'
+                  - $ref: '#/components/schemas/gross-amount-with-currency'
+                  - type: 'null'
+                visitorPrice:
+                  description: Price for one ticket for a visitor, if visitors should pay a different price than members. Can be passed either as net or gross value.
+                  oneOf:
+                  - $ref: '#/components/schemas/net-amount-with-currency'
+                  - $ref: '#/components/schemas/gross-amount-with-currency'
+                  - type: 'null'
+                accountingCode:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                visitorAccountingCode:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                costCenter:
+                  oneOf:
+                  - $ref: '#/components/schemas/cost-center'
+                  - type: 'null'
+                revenueAccount:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/revenue-account'
+                visitorCostCenter:
+                  oneOf:
+                  - $ref: '#/components/schemas/cost-center'
+                  - type: 'null'
+                visitorRevenueAccount:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/revenue-account'
+            relationships:
+              type: object
+              required:
+              - space
+              additionalProperties: false
+              properties:
+                resources:
+                  $ref: '#/components/schemas/event-resources'
+                space:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - spaces
+                        id:
+                          type: string
+    gross-amount-with-currency:
+      type: object
+      required:
+      - gross
+      - currency
+      additionalProperties: false
+      properties:
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    event-resources:
+      description: The booking calendar resources to be booked for the event.
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - type
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+                enum:
+                - resources
+              id:
+                type: string
+              meta:
+                additionalProperties: false
+                required:
+                - units
+                properties:
+                  units:
+                    description: How many units of the resource shoud be booked. Default is all. After the event has been created, the no. of units can be queried by loading the bookings associated with the event.
+                    oneOf:
+                    - type: integer
+                      minimum: 1
+                      description: Book the given number of units.
+                    - type: string
+                      enum:
+                      - all
+                      description: Book all units of the resource.
+    -event-data:
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - events
+        attributes:
+          type: object
+          required:
+          - title
+          - color
+          - from
+          - to
+          - audience
+          - description
+          - location
+          - tags
+          - image
+          - videoUrl
+          - capacity
+          - price
+          - visitorPrice
+          - publishedState
+          - publicPage
+          - publicUrl
+          - canDepublish
+          - accountingCode
+          - visitorAccountingCode
+          - costCenter
+          - visitorCostCenter
+          - revenueAccount
+          - visitorRevenueAccount
+          additionalProperties: false
+          properties:
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+            title:
+              type: string
+            canDepublish:
+              type: boolean
+              description: Indicates whether this event can still be depublished by an admin. Only events with no attendees can be depublished.
+            color:
+              oneOf:
+              - $ref: '#/components/schemas/color'
+              - type: 'null'
+            audience:
+              type: string
+              enum:
+              - membersOnly
+              - public
+            expectedRevenue:
+              type: array
+              items:
+                $ref: '#/components/schemas/price'
+              description: The sum of all sold tickets. One per currency.
+            publishedState:
+              type: string
+              enum:
+              - draft
+              - published
+            publicPage:
+              type: boolean
+              description: Whether to provide a publicly accessible event page (see publicUrl).
+            publicUrl:
+              oneOf:
+              - type: string
+                format: uri-reference
+              - type: 'null'
+              description: URL of a publicly accessible HTML page for the event. Null if the public page is disabled.
+            description:
+              oneOf:
+              - type: string
+              - type: 'null'
+            videoUrl:
+              description: Video stream/call URL for online events.
+              oneOf:
+              - type: string
+              - type: 'null'
+            image:
+              oneOf:
+              - type: 'null'
+              - type: object
+                properties:
+                  icon:
+                    $ref: '#/components/schemas/photo'
+                  default:
+                    $ref: '#/components/schemas/photo'
+                  small:
+                    $ref: '#/components/schemas/photo'
+                  medium:
+                    $ref: '#/components/schemas/photo'
+                  large:
+                    $ref: '#/components/schemas/photo'
+                additionalProperties: false
+            location:
+              oneOf:
+              - type: string
+              - type: 'null'
+            capacity:
+              description: How many people can attend/tickets will be sold.
+              oneOf:
+              - type: integer
+                minimum: 1
+              - type: 'null'
+            tags:
+              type: array
+              items:
+                type: string
+            price:
+              description: Price for one ticket.
+              oneOf:
+              - $ref: '#/components/schemas/price'
+              - type: 'null'
+            visitorPrice:
+              description: Price for one ticket for visitors. If not set, the regular price is used.
+              oneOf:
+              - $ref: '#/components/schemas/price'
+              - type: 'null'
+            accountingCode:
+              oneOf:
+              - type: string
+              - type: 'null'
+            visitorAccountingCode:
+              oneOf:
+              - type: string
+              - type: 'null'
+            costCenter:
+              oneOf:
+              - $ref: '#/components/schemas/cost-center'
+              - type: 'null'
+            revenueAccount:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/revenue-account'
+            visitorCostCenter:
+              oneOf:
+              - $ref: '#/components/schemas/cost-center'
+              - type: 'null'
+            visitorRevenueAccount:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/revenue-account'
+        relationships:
+          type: object
+          required:
+          - space
+          - resources
+          - bookings
+          - messages
+          - attendances
+          - publication
+          additionalProperties: false
+          properties:
+            resources:
+              description: The booking calendar resources to be booked for the event.
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - resources
+                      id:
+                        type: string
+            bookings:
+              description: The bookings that have been made automatically for the event.
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - bookings
+                      id:
+                        type: string
+            messages:
+              description: Messages that will be sent to attendees of the event.
+              type: object
+              additionalProperties: false
+              properties:
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      format: uri-reference
+                  additionalProperties: false
+            space:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - spaces
+                    id:
+                      type: string
+            publication:
+              type: object
+              properties:
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      format: uri-reference
+                  additionalProperties: false
+              additionalProperties: false
+            attendances:
+              description: Returns a maximum of 5 attendances and only those where the attendee has consented into showing their attendance (to either admins only, members or the public.)
+              type: object
+              required:
+              - links
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - eventAttendances
+                      id:
+                        type: string
+                meta:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    count:
+                      description: The total number of attendances, including those not shown due to consent not given.
+                      type: integer
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      format: uri-reference
+                  additionalProperties: false
+              additionalProperties: false
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    address-2:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        fullAddress:
+          type: string
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    net-amount-with-currency:
+      type: object
+      required:
+      - net
+      - currency
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+    -contact-data:
+      id: -contact-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - contacts
+        attributes:
+          type: object
+          required:
+          - email
+          - address
+          - phone
+          - photo
+          additionalProperties: false
+          properties:
+            email:
+              oneOf:
+              - type: string
+              - type: 'null'
+            address:
+              $ref: '#/components/schemas/address'
+            phone:
+              oneOf:
+              - type: string
+              - type: 'null'
+            photo:
+              oneOf:
+              - $ref: '#/components/schemas/avatar-photo'
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          properties:
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            membership:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    create-event-message:
+      id: create-event-message.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - eventMessages
+            attributes:
+              type: object
+              required:
+              - trigger
+              - body
+              additionalProperties: false
+              properties:
+                trigger:
+                  $ref: '#/components/schemas/event-message-trigger'
+                body:
+                  $ref: '#/components/schemas/event-message-body'
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - event
+              properties:
+                event:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - events
+    event-messages:
+      id: event-messages.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-event-message-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+    create-event-ticket-purchase:
+      id: create-event-ticket-purchase.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - eventTicketPurchases
+            attributes:
+              type: object
+              required:
+              - eventTickets
+              - acceptedTerms
+              - name
+              - billingAddress
+              - email
+              additionalProperties: false
+              properties:
+                eventTickets:
+                  type: array
+                  items:
+                    description: An Array of event tickets to pay for. At the moment, only paying for one ticket at a time is supported. The payment needs to be created before creating the ticket.
+                    type: object
+                    required:
+                    - type
+                    - attributes
+                    - relationships
+                    additionalProperties: false
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - eventTickets
+                      attributes:
+                        type: object
+                        required:
+                        - numberOfTickets
+                        additionalProperties: false
+                        properties:
+                          numberOfTickets:
+                            description: Not yet fully supported, currently always buying 1 ticket
+                            type: integer
+                            minimum: 1
+                      relationships:
+                        type: object
+                        required:
+                        - event
+                        additionalProperties: false
+                        properties:
+                          event:
+                            type: object
+                            required:
+                            - data
+                            additionalProperties: false
+                            properties:
+                              data:
+                                properties:
+                                  id:
+                                    type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                    - events
+                acceptedTerms:
+                  type: boolean
+                  enum:
+                  - true
+                  description: Terms need to be accepted.
+                name:
+                  type: string
+                company:
+                  type:
+                  - string
+                  - 'null'
+                billingAddress:
+                  description: If the object is passed here, its name and company will be used
+                  oneOf:
+                  - $ref: '#/components/schemas/structuredAddress'
+                  - $ref: '#/components/schemas/address-2'
+                  - type: string
+                phone:
+                  type:
+                  - string
+                  - 'null'
+                email:
+                  $ref: '#/components/schemas/email'
+                taxId:
+                  type:
+                  - string
+                  - 'null'
+                comments:
+                  type:
+                  - string
+                  - 'null'
+            relationships:
+              oneOf:
+              - type: object
+                additionalProperties: false
+                required:
+                - payment
+                properties:
+                  payment:
+                    description: Pass a previously created payment to pay for the event ticket
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - payments
+                          id:
+                            type: string
+              - type: object
+                additionalProperties: false
+                required:
+                - paymentMethod
+                properties:
+                  paymentMethod:
+                    description: Instead of passing a payment for automated payment processing, you can pass a payment method that does not do automatic processing. Doing so will result in the payment method's instructions being added to the purchase confirmation email.
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - paymentMethods
+                          id:
+                            type: string
+              - type: object
+                additionalProperties: false
+                description: If paying manually, neither provide a payment nor a payment method
+                properties: {}
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    image-upload:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          description: The image as data uri (content type + base64 encoded data)
+          type: string
+          pattern: ^data:image/\w+;base64,\S+$
+    events:
+      id: event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-event-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-contact-data'
+            - $ref: '#/components/schemas/-event-attendance-data'
+    relationship-linkage-array:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/linkage'
+    event-tags:
+      id: event-tags.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - type
+            additionalProperties: false
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+                enum:
+                - eventTags
+              attributes:
+                type: object
+                additionalProperties: false
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+  securitySchemes:
+    OpenId:
+      type: openIdConnect
+      openIdConnectUrl: https://www.cobot.me/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      description: "OAuth is \"an open protocol to allow secure API authorization in a simple and\nstandard method from desktop and web applications.\". \"OAuth 2.0 is the\nnext evolution of the OAuth protocol [..]. OAuth 2.0 focuses on client\ndeveloper simplicity [...]. It is supported by many popular sites such as\nFacebook and there are client libraries available for many programming\nlanguages.\n\nFor information about OAuth2 see the [oauth website](http://oauth.net/2/).\n\n**For OAuth2 you need a client id and secret. In order to get those you have\nto [register your application](/oauth2_clients).**\n\nAPI authorization works by passing a bearer token via the HTTP Authorization header:\n\n    Authorization: bearer <token>\n\n## Permissions (Scope)\n\nOAuth2 [defines scopes](https://tools.ietf.org/html/rfc6749#section-3.3) to\nrestrict access to certain resources.\n\nThe required scope for each resource can be found within the documentation\nfor each endpoint.\n\nPlease note that a user's scope can be limited when they access the API as\nan admin of a space and some of their admin permissions have been revoked.\n"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.cobot.me/oauth/authorize
+          tokenUrl: https://www.cobot.me/oauth/access_token
+          scopes:
+            read_articles: Read help desk articles.
+            read_allocations: Read resource allocation data.
+            read_booking_credits: Read information about a membership's booking credits.
+            read_bookings: Read booking data.
+            read_built_in_email_customizations: Read built in email customizations.
+            read_calendar_blockers: Read calendar blockers.
+            read_check_ins: Read memberships' check-in data.
+            read_contacts: Read contacts.
+            read_drop_in_passes: Read drop-in passes.
+            read_drop_in_pass_templates: Read drop-in pass templates.
+            read_discount_codes: Read discount codes.
+            read_event_attendances: Read who is attending an event.
+            read_event_messages: Read messages sent about events.
+            read_events: Read events of a space.
+            read_external_bookings: Read external booking data.
+            read_external_resources: Read resources enabled for external booking.
+            read_invoices: Read invoices created for a membership in a space.
+            read_memberships: Read information about memberships in a space.
+            read_teams: Read information about teams in a space.
+            read_membership_profiles: Read members' profile data.
+            read_navigation_links: Read/list navigation links for a space.
+            read_payment_methods: Read payment methods in order to process payments.
+            read_published_membership_profiles: Read published members' profile data.
+            read_networks: Read information about a network.
+            read_products: Read information about products.
+            read_resource_categories: Read information about booking calendar categories.
+            read_resources: Read information about booking calendar resources.
+            read_single_page_apps: Read information about single page apps.
+            read_space_profiles: Read space profile information.
+            read_spaces: Read basic space information.
+            read_space_billing_details: Read information relevant to billing the space.
+            read_space_payment_method: Read a space's payment method used to pay for the space's Cobot subscription.
+            read_space_subscriptions: Read a space's subscription.
+            read_terms_approvals: Shows missing approvals for the current member.
+            read_urls: Read the URLs to the Cobot web interface.
+            read_user: Read the current user's information.
+            write_bookings: Write booking data.
+            write_check_ins: Check a member in at a space.
+            write_customers: Convert a space to a customer.
+            write_drop_in_pass_purchases: Create drop-in pass purchases.
+            write_drop_in_passes: Cancel drop-in passes.
+            write_event_ticket_purchases: Create event ticket purchases.
+            write_event_attendances: Attend/unattend events.
+            write_event_messages: Create/update messages sent about events.
+            write_events: Write to events of a space.
+            write_external_bookings: Create/update bookings as a non-member.
+            write_external_resources: Create/update/delete resources enabled for non-memberss
+            write_resources: Create/update/delete booking calendar resources.
+            write_invoices: Create invoices for members in a space.
+            write_invoice_reminders: Send invoice reminder emails.
+            write_membership_profiles: Manage the social profiles of members.
+            write_navigation_links: Create/update/delete navigation links for a space.
+            write_payments: Initiate payments for external bookings.
+            write_single_page_apps: Create and update single page apps to be embedded on Cobot.
+            write_space_billing_details: Update a space's billing details.
+            write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
+            write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
+            write_terms_approvals: Approve different kinds of terms as a member.

@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Discount Code API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Discount Code",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/discount_codes/find",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the discount code belongs to."
+              },
+              {
+                "name": "filter[code]",
+                "value": "",
+                "type": "query",
+                "description": "The discount code to look up."
+              },
+              {
+                "name": "filter[discounted_id]",
+                "value": "",
+                "type": "query",
+                "description": "The id of the discounted object (e.g. a plan id, external resource id, etc.)"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Look up a discount code by its code string and discounted object id.\n\nReturns the code details if the code exists and is valid (not expired,\nredemption limit not reached, and is valid for the object given via the discounted_id parameter).\n\n**Access**: Any user can look up discount codes for any space.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

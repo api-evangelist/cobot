@@ -1,0 +1,259 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot External Booking API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "External Booking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/external_bookings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create an external booking.\n\n**Access**: Any user can create external bookings.\n"
+        },
+        {
+          "info": {
+            "name": "Single booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/external_bookings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response as comma separated string.\n\nIncluding `invoices` requires the `read_invoices` scope.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Show an external booking.\n\n**Access**: Any user can see external bookings.\n"
+        },
+        {
+          "info": {
+            "name": "Update booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.cobot.me/external_bookings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update an external booking.\n\n**Access**: The current user must be an admin of the space the booking belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Cancel as admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/external_bookings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancel an external booking as an admin of a space.\nThe external booking is marked as canceled\nand removed from the booking calendar (i.e. from any `/bookings` endpoints).\n\nPast bookings can only be canceled while they are still pending.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Request cancellation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/external_bookings/:id/cancellation",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Request to cancel an external booking as a visitor. This will not\ncancel the booking but send an email with a cancellation link\nto the email address used to make the booking.\n\n**Access**: Any user can request to cancel a booking.\n"
+        },
+        {
+          "info": {
+            "name": "Preview",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/external_bookings_preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Preview creating an external booking.\nDepending on the resource pricing, returned attributes will contain either `appliedFixedRates` array, or `appliedDiscounts` and `appliedPriceCap`.\n\n**Access**: Any user can preview external bookings.\n"
+        },
+        {
+          "info": {
+            "name": "List for space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/external_bookings",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space to get the bookings for."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-04-12T10:00:00Z",
+                "type": "query",
+                "description": "The start of the time range to return external bookings for."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-04-14T20:00:00Z",
+                "type": "query",
+                "description": "The end of the time range to return external bookings for."
+              },
+              {
+                "name": "filter[sortOrder]",
+                "value": "",
+                "type": "query",
+                "description": "Whether to sort external bookings by date ascending or descending date."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response. Provide a comma separated list of relationship names.\n`invoices` requires the `read_invoices` scope.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List a space's external bookings for a given timespan.\nThe bookings are filtered by their `from` attribute, not by testing for overlap.\n\n**Access**: The current user must be an admin of the space.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

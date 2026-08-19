@@ -1,0 +1,350 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Booking API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Booking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Book as admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/bookings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create booking as an admin. Optionally a booking can be assigned to a membership.\n\n**Access**: The current user must be an admin of the space. If the\nspace is part of a network, the user must be an admin of any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "List recurring",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/recurring_bookings/:recurringId",
+            "params": [
+              {
+                "name": "recurringId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the recurrence."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all the recurring bookings belonging to a booking with recurrence.\n\nThe data returned by this endpoint is only eventually consistent.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "Delete following",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/recurring_bookings/:bookingId/following",
+            "params": [
+              {
+                "name": "bookingId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking to delete."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete a recurring booking and all the following instances.\n\n**Access**: The current user must be an admin of the space or the member who made the booking.\n"
+        },
+        {
+          "info": {
+            "name": "Bookings preview",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/bookings_preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Return all booking previews for given resources for a membership in the given time range.\n\n**Access**: The current user must be the owner of the membership the booking belongs to or an admin of the space or network.\n"
+        },
+        {
+          "info": {
+            "name": "Single booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/bookings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**Access**: The current user must be an admin or member of the space\nthe booking belongs to. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "Update booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.cobot.me/bookings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking to be updated."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**Access**: The current user must either be an admin or a member of a space or the space's network. A member can only update their own bookings and additionally only those that are not in the past.\n"
+        },
+        {
+          "info": {
+            "name": "Delete booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cobot.me/bookings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the booking to be deleted."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**Access**: The current user must either be an admin or a member of a space or the space's network. A member can only delete their own bookings and additionally only those that are not in the past.\n"
+        },
+        {
+          "info": {
+            "name": "For membership/time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/memberships/:membershipId/bookings",
+            "params": [
+              {
+                "name": "membershipId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the membership the bookings belong to."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-04-12T10:00:00Z",
+                "type": "query",
+                "description": "Start of the time range."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-04-12T18:00:00Z",
+                "type": "query",
+                "description": "End of the time range."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all bookings of the membership in the given time range.\nIf the membership's space belongs to a network, this\nincludes bookings from all spaces in the network.\n\n**Access**: The current user must be the owner of the membership or an admin\nin the space the membership belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "Book as member",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cobot.me/memberships/:membershipId/bookings",
+            "params": [
+              {
+                "name": "membershipId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the membership the bookings belong to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create booking for the membership.\n**Access**: The current user must be a member of the space. If the\nspace is part of a network, the user must be a member of any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "List space bookings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/bookings",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the space the bookings belong to."
+              },
+              {
+                "name": "filter[from]",
+                "value": "2012-04-12T10:00:00Z",
+                "type": "query",
+                "description": "Start of the time range."
+              },
+              {
+                "name": "filter[to]",
+                "value": "2012-04-12T18:00:00Z",
+                "type": "query",
+                "description": "End of the time range."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "List of related resources to include in response. \nProvide a comma separated list of relationship names. When requesting \nevents, the access token needs the read_events scope. When requesting\nexternal bookings, the access token needs the read_external_bookings\nscope.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all the bookings for a space in the given time.\n\n**Access**: The current user must be an admin or member of the space. If the\nspace is part of a network, the user must be an admin or member of any\nspace in the network.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

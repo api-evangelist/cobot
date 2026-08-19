@@ -1,0 +1,226 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cobot Membership Profile API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+      "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Membership Profile",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Single profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/membership_profiles/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the membership profile."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a single membership profile by its id.\n\n**Access**: The current user must be an admin or member of the space the\nmembership profile belongs to. If the space is part of a network, the user\nmust be an admin or member of any space in the network.\n"
+        },
+        {
+          "info": {
+            "name": "Update profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.cobot.me/membership_profiles/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the membership profile."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Lets members update their profile.\n\n**Access**: The current user must be the owner of the membership that\nthe profile belongs to.\n"
+        },
+        {
+          "info": {
+            "name": "For network",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/networks/:networkId/membership_profiles",
+            "params": [
+              {
+                "name": "networkId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the network."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a list of membership profiles for a network.\n\n**Access**: The current user must be an admin of the space or any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "Search network",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/networks/:networkId/membership_profiles/search",
+            "params": [
+              {
+                "name": "networkId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the network."
+              },
+              {
+                "name": "filter[query]",
+                "value": "",
+                "type": "query",
+                "description": "The search query. All profile fields are searched."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Search the list of membership profiles for a network.\n\n**Access**: The current user must be an admin of the space or any\nspace in the network.\n"
+        },
+        {
+          "info": {
+            "name": "For space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/membership_profiles",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the space."
+              },
+              {
+                "name": "filter[membershipIds]",
+                "value": "c2a99a71ac8df98d29de357180d273d2,9a673f71ac8df98129de357180d219a8",
+                "type": "query",
+                "description": "Only return profiles for the given memberships ids."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a list of membership profiles for a space.\n\n**Access**: The current user must be an admin of the space.\n"
+        },
+        {
+          "info": {
+            "name": "Published for space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cobot.me/spaces/:spaceId/membership_profiles/published",
+            "params": [
+              {
+                "name": "spaceId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the space."
+              },
+              {
+                "name": "filter[membershipIds]",
+                "value": "c2a99a71ac8df98d29de357180d273d2,9a673f71ac8df98129de357180d219a8",
+                "type": "query",
+                "description": "Only return profiles for the given memberships ids."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://www.cobot.me/oauth/authorize",
+              "accessTokenUrl": "https://www.cobot.me/oauth/access_token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a list of published membership profiles for a space.\n\n**Access**: The current user must be an admin or member of the space.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
