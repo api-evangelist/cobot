@@ -24,7 +24,7 @@ x-disambiguation: >-
   DIFFERENT company, already profiled in the network as all/collaborative-robotics. This repo
   profiles Cobot the coworking management software company (cobot.me, Upstream - Agile GmbH,
   Berlin), which owns the cobot.me domain and ships the API surface described here.
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-09'
 modified: '2026-08-09'
 tags:
