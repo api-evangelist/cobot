@@ -2,10 +2,24 @@
   "repo": "cobot",
   "feeds": [
     {
+      "source": "https://helpcenter.cobot.me/en/feed.xml",
+      "feed_url": "https://helpcenter.cobot.me/en/feed.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://blog.cobot.me/rss/",
+      "feed_url": "https://blog.cobot.me/rss/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://helpcenter.cobot.me/en/",
       "feed_url": "https://helpcenter.cobot.me/en/feed.xml",
       "title": "",
-      "saved": 8,
+      "saved": 0,
       "method": "discovered"
     },
     {
@@ -16,6 +30,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 8,
-  "fetched": "2026-08-15T12:22:01Z"
+  "post_count": 40,
+  "fetched": "2026-08-22T20:20:02Z"
 }
