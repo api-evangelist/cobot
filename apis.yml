@@ -1,5 +1,17 @@
 aid: cobot
 name: Cobot
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://dev.cobot.me/api2_logo.webp
 description: >-
   Cobot is coworking and flexible-workspace management software, built and operated by
