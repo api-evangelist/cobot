@@ -3,7 +3,7 @@ provider: Cobot
 generated_by: planning/capability-mapping/scripts/classify_capabilities.py
 model: claude-opus-5
 frame:
-- Software & Technology
+- Real Estate
 min_confidence: 0.7
 capability_model:
   source: https://github.com/vincentmakes/turbo-ea-capabilities
@@ -13,43 +13,44 @@ capability_model:
   notice: NOTICE
 edge_count: 4
 edges:
+- tag: Invoice
+  spec_file: cobot-invoice-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: POST /invoice_charges  Charge invoices; POST /invoices  Create custom; GET /invoices/{id}.pdf  Single
+    invoice PDF; POST /invoices/{id}/e_invoice
+  reason: Operations generate, charge, lock and deliver customer invoices with tax and revenue-account
+    data — customer invoicing, i.e. accounts receivable. Could alternatively be property-level tenant
+    billing, hence 0.8 not 0.95.
+- tag: Invoice Reminder
+  spec_file: cobot-invoice-reminder-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.75
+  evidence: POST /invoice_reminders  create-invoice-reminder  Create invoice reminder
+  reason: Sending payment reminders on outstanding invoices is collections activity within accounts receivable.
+    Single thin operation limits confidence.
+- tag: Subscription
+  spec_file: cobot-subscription-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.75
+  evidence: 'GET /spaces/{spaceId}/subscription  get-current-subscription  Current; PUT /spaces/{spaceId}/subscription  change-subscription  Change;
+    POST /spaces/{spaceId}/subscription_preview  Preview; schemas: cycleDuration, discount, price, maximumNumberOfMemberships,
+    nextInvoiceDate'
+  reason: 'The space''s own plan subscription to the platform: current plan retrieval, plan change with
+    preview of price/discount/cycle, and plan list — subscription lifecycle management. L1 only because
+    operations span retrieval, plan catalogue and in-life change rather than one L2.'
 - tag: Discount Code
   spec_file: cobot-discount-code-api-openapi.yml
   capability_id: BC-440.30
   capability_id_l1: BC-440
   capability_name: Discount & Promotion Management
   confidence: 0.7
-  evidence: GET /spaces/{spaceId}/discount_codes/find find-space-discount-code "Find"; schema discount-code
-  reason: Lookup of a space's discount codes is promotional discounting; schema name 'discount-code' grounds
-    the reading. Thin (single find operation), hence 0.7.
-- tag: Invoice
-  spec_file: cobot-invoice-api-openapi.yml
-  capability_id: BC-200.30
-  capability_id_l1: BC-200
-  capability_name: Accounts Receivable Management
-  confidence: 0.7
-  evidence: POST /invoices post-invoices Create custom; GET /invoices/{id}.pdf get-invoice-pdf Single
-    invoice PDF; POST /invoices/{id}/e_invoice Create an e-invoice for invoice
-  reason: Operations create, lock, render and search customer invoices for a space, i.e. customer invoicing
-    / receivables. Cross-industry Accounts Receivable Management is the honest match; the SaaS subscription-invoicing
-    capability is a plausible alternative reading, hence 0.7.
-- tag: Space Payment Method
-  spec_file: cobot-space-payment-method-api-openapi.yml
-  capability_id: BC-4250.40
-  capability_id_l1: BC-4250
-  capability_name: Payment Collection & Dunning
-  confidence: 0.7
-  evidence: PUT /spaces/{spaceId}/space_payment_method  update-space-payment-method  Space payment method
-  reason: Retrieval and update of the payment method used to collect the space's subscription charges
-    — payment-method management under payment collection.
-- tag: Subscription
-  spec_file: cobot-subscription-api-openapi.yml
-  capability_id: BC-4240.40
-  capability_id_l1: BC-4240
-  capability_name: Subscription Modification
-  confidence: 0.7
-  evidence: 'PUT /spaces/{spaceId}/subscription  change-subscription  Change; POST /spaces/{spaceId}/subscription_preview  preview-subscription;
-    schemas: cycleDuration, nextInvoiceDate, maximumNumberOfMemberships, discount'
-  reason: 'Manages the space''s own SaaS subscription: current plan retrieval, preview of a change, and
-    executing a plan change with cycle duration and limits — in-life subscription modification. Some ambiguity
-    between modification and plan/entitlement design, so 0.7.'
+  evidence: 'GET /spaces/{spaceId}/discount_codes/find find-space-discount-code ''Find''; schemas: discount-code'
+  reason: Lookup/validation of promotional discount codes for a space, which realises Discount & Promotion
+    Management. Single endpoint limits confidence.
