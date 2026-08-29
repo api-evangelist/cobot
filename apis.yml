@@ -1220,6 +1220,9 @@ apis:
   - type: Conventions
     url: conventions/cobot-conventions.yml
 common:
+- type: CapabilityMap
+  url: capabilities/cobot-capability-edges.yml
+  name: Cobot Business Capability Map
 - type: Overlay
   url: overlays/cobot-api2-overlay.yaml
 - type: Website
