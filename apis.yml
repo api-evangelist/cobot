@@ -131,7 +131,7 @@ apis:
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
-  - Allocation
+  - Allocations
   tags_raw:
   - Allocation
   properties:
@@ -946,7 +946,7 @@ apis:
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
-  - Single page app
+  - Single Page App
   tags_raw:
   - Single page app
   properties:
@@ -1149,7 +1149,7 @@ apis:
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
-  - Url
+  - URLs
   tags_raw:
   - Url
   properties:
