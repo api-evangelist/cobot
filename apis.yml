@@ -12,6 +12,20 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  - scopes
+  - security
+  generated: '2026-09-02'
+  method: derived
 image: https://dev.cobot.me/api2_logo.webp
 description: >-
   Cobot is coworking and flexible-workspace management software, built and operated by
