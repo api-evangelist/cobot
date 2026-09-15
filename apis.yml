@@ -27,29 +27,25 @@ accessModel:
   generated: '2026-09-02'
   method: derived
 image: https://dev.cobot.me/api2_logo.webp
-description: >-
-  Cobot is coworking and flexible-workspace management software, built and operated by
-  Upstream - Agile GmbH in Berlin, Germany. It runs the day-to-day of a coworking space or
-  space network from one platform: memberships and plans, resource and meeting-room bookings,
-  drop-in passes, events and ticketing, check-ins, automated invoicing and online payments,
-  a white-label member portal and mobile app, analytics, and door access-control integrations
-  (Kisi, Salto KS, Tapkey, Sensorberg, dormakaba Exivo). Cobot publishes a genuinely open
-  developer surface: a 134-operation OpenAPI 3.1 contract for API 2 that follows the JSON:API
-  standard, a legacy v1 REST API with a documented webhook event catalog, OAuth 2.0 with
-  authorization-code + PKCE and dynamic client registration, OpenID Connect, an RFC 9727
-  api-catalog document, RFC 9728 protected-resource metadata, an llms.txt, and an
-  OAuth-protected hosted MCP server at api.cobot.me/mcp.
+description: 'Cobot is coworking and flexible-workspace management software, built and operated by Upstream
+  - Agile GmbH in Berlin, Germany. It runs the day-to-day of a coworking space or space network from one
+  platform: memberships and plans, resource and meeting-room bookings, drop-in passes, events and ticketing,
+  check-ins, automated invoicing and online payments, a white-label member portal and mobile app, analytics,
+  and door access-control integrations (Kisi, Salto KS, Tapkey, Sensorberg, dormakaba Exivo). Cobot publishes
+  a genuinely open developer surface: a 134-operation OpenAPI 3.1 contract for API 2 that follows the
+  JSON:API standard, a legacy v1 REST API with a documented webhook event catalog, OAuth 2.0 with authorization-code
+  + PKCE and dynamic client registration, OpenID Connect, an RFC 9727 api-catalog document, RFC 9728 protected-resource
+  metadata, an llms.txt, and an OAuth-protected hosted MCP server at api.cobot.me/mcp.'
 url: https://raw.githubusercontent.com/api-evangelist/cobot/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
 x-tier: profiled
 x-tier-reason: enrichment
-x-disambiguation: >-
-  The harvest backlog reached this slug via https://forgeglobal.com/cobot_stock/, which is a
-  secondary-market listing for Collaborative Robotics, Inc. ("Cobot") of Santa Clara, CA — a
-  DIFFERENT company, already profiled in the network as all/collaborative-robotics. This repo
-  profiles Cobot the coworking management software company (cobot.me, Upstream - Agile GmbH,
-  Berlin), which owns the cobot.me domain and ships the API surface described here.
+x-disambiguation: The harvest backlog reached this slug via https://forgeglobal.com/cobot_stock/, which
+  is a secondary-market listing for Collaborative Robotics, Inc. ("Cobot") of Santa Clara, CA — a DIFFERENT
+  company, already profiled in the network as all/collaborative-robotics. This repo profiles Cobot the
+  coworking management software company (cobot.me, Upstream - Agile GmbH, Berlin), which owns the cobot.me
+  domain and ships the API surface described here.
 specificationVersion: '0.23'
 created: '2026-08-09'
 modified: '2026-08-09'
@@ -93,12 +89,11 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: cobot-api-v1
+- aid: cobot:cobot-api-v1
   name: Cobot API v1 (legacy)
-  description: >-
-    The original Cobot REST API, still available and still the only surface that carries the webhook subscription
-    API. Documented per-resource on dev.cobot.me/api-docs; Cobot directs new integrations to API 2. No
-    machine-readable specification is published for v1.
+  description: The original Cobot REST API, still available and still the only surface that carries the
+    webhook subscription API. Documented per-resource on dev.cobot.me/api-docs; Cobot directs new integrations
+    to API 2. No machine-readable specification is published for v1.
   humanURL: https://dev.cobot.me/api-docs
   baseURL: https://www.cobot.me/api
   tags:
@@ -116,14 +111,13 @@ apis:
     url: asyncapi/cobot-webhooks.yml
   - type: ChangeLog
     url: https://www.cobot.me/pages/api_changes
-- aid: cobot-mcp
+- aid: cobot:cobot-mcp
   name: Cobot MCP Server
-  description: >-
-    A hosted, remote Model Context Protocol server operated by Cobot at api.cobot.me/mcp. It is live and
-    OAuth 2.0 protected — an anonymous tools/list returns 401 with an RFC 9728 WWW-Authenticate challenge
-    pointing at its own protected-resource metadata, which advertises a 14-scope read/write capability
-    surface over spaces, memberships, bookings, check-ins, invoices, resources, products, contacts and
-    teams.
+  description: A hosted, remote Model Context Protocol server operated by Cobot at api.cobot.me/mcp. It
+    is live and OAuth 2.0 protected — an anonymous tools/list returns 401 with an RFC 9728 WWW-Authenticate
+    challenge pointing at its own protected-resource metadata, which advertises a 14-scope read/write
+    capability surface over spaces, memberships, bookings, check-ins, invoices, resources, products, contacts
+    and teams.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me/mcp
   tags:
@@ -239,9 +233,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-booking-credit-api
   name: Cobot Booking Credit API
-  description: >-
-    Booking credits are added to plans and give memberships free booking time or a fixed amount of free
-    bookings. The hourly rate of a resource can also be customized.
+  description: Booking credits are added to plans and give memberships free booking time or a fixed amount
+    of free bookings. The hourly rate of a resource can also be customized.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -361,14 +354,13 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-cost-center-api
   name: Cobot Cost Center API
-  description: >-
-    Cost centers are used to categorize invoice items. Anything
+  description: 'Cost centers are used to categorize invoice items. Anything
 
     that can be invoiced can be assigned a cost center.
 
     When a service/charge is added to an invoice, its cost center will be
 
-    assigned to the respective invoice item.
+    assigned to the respective invoice item.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -514,8 +506,7 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-event-api
   name: Cobot Event API
-  description: >-
-    Spaces can run events for their members or the public.
+  description: 'Spaces can run events for their members or the public.
 
     Events are created and later published by admins, at which point members are able to see and attend
     them.
@@ -523,7 +514,7 @@ apis:
     Admins can also create messages for events, which are sent to attendees based on triggers such as
     someone having
 
-    just attended an event.
+    just attended an event.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -547,12 +538,12 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-external-booking-api
   name: Cobot External Booking API
-  description: >-
-    After a resource has been enabled for external booking (see _External Resource_) it can be
+  description: 'After a resource has been enabled for external booking (see _External Resource_) it can
+    be
 
     booked by visitors (non-members) using external booking endpoints.
 
-    Making an external booking also results in a Booking to be created.
+    Making an external booking also results in a Booking to be created.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -576,12 +567,11 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-external-resource-api
   name: Cobot External Resource API
-  description: >-
-    A space's resources can be enabled for external booking, which means they can be booked
+  description: 'A space''s resources can be enabled for external booking, which means they can be booked
 
     by guests without a Cobot account or space membership. All resources enabled for external booking
 
-    appear under external resources.
+    appear under external resources.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -605,9 +595,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-invoice-api
   name: Cobot Invoice API
-  description: >-
-    Invoices are automatically generated once a month, based on members' activity. In addition, manual
-    invoices can be generated at any time.
+  description: Invoices are automatically generated once a month, based on members' activity. In addition,
+    manual invoices can be generated at any time.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -679,14 +668,13 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-membership-plan-api
   name: Cobot Membership Plan API
-  description: >-
-    The plans belonging to a membership. When a membership is signed up one of the
+  description: 'The plans belonging to a membership. When a membership is signed up one of the
 
-    space's plans is selected and a copy is created for the membership.
+    space''s plans is selected and a copy is created for the membership.
 
-    A membership's plan can be customized or changed over time, creating a new
+    A membership''s plan can be customized or changed over time, creating a new
 
-    membership plan object every time.
+    membership plan object every time.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -734,9 +722,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-navigation-link-api
   name: Cobot Navigation Link API
-  description: >-
-    Navigation links allow you to embed 3rd party apps on a space's Cobot UI. See also the single page
-    app endpoints.
+  description: Navigation links allow you to embed 3rd party apps on a space's Cobot UI. See also the
+    single page app endpoints.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -760,9 +747,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-network-api
   name: Cobot Network API
-  description: >-
-    Multiple spaces can form a network. This allows their members to access multiple spaces, for example
-    to book resources.
+  description: Multiple spaces can form a network. This allows their members to access multiple spaces,
+    for example to book resources.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -786,15 +772,14 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-payment-api
   name: Cobot Payment API
-  description: >-
-    *The payment API is in development. Endpoints may be missing or not working yet.*
+  description: '*The payment API is in development. Endpoints may be missing or not working yet.*
 
 
     Payments allow any user (i.e. non-members) to pay for items on Cobot via the payment
 
     methods a space has set up.
 
-    For now this only covers external bookings, but more could be added in the future.
+    For now this only covers external bookings, but more could be added in the future.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -818,11 +803,10 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-payment-method-api
   name: Cobot Payment Method API
-  description: >-
-    Spaces can set up payment methods that members can use to make payments to the space.
+  description: 'Spaces can set up payment methods that members can use to make payments to the space.
 
     Payment methods can be automated via a payment provider such as Stripe or manual (e.g. cash, bank
-    transfer).
+    transfer).'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -846,10 +830,10 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-product-api
   name: Cobot Product API
-  description: >-
-    Products can be set up by a space and then used as booking extras or to create charges from.
+  description: 'Products can be set up by a space and then used as booking extras or to create charges
+    from.
 
-    Examples are coffee, projectors, additional cleaning services etc.
+    Examples are coffee, projectors, additional cleaning services etc.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -897,9 +881,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-resource-api
   name: Cobot Resource API
-  description: >-
-    A resource can be booked on an hourly basis using the booking calendar. Examples are conference rooms,
-    presentation equipment, bikes etc.
+  description: A resource can be booked on an hourly basis using the booking calendar. Examples are conference
+    rooms, presentation equipment, bikes etc.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -923,14 +906,13 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-revenue-account-api
   name: Cobot Revenue Account API
-  description: >-
-    Revenue accounts are used to categorize invoice items. Anything
+  description: 'Revenue accounts are used to categorize invoice items. Anything
 
     that can be invoiced can be assigned a revenue account.
 
     When a service/charge is added to an invoice, its revenue account will be
 
-    assigned to the respective invoice item.
+    assigned to the respective invoice item.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -954,9 +936,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-single-page-app-api
   name: Cobot Single page app API
-  description: >-
-    A single page app consists of HTML, CSS and JavaScript code. It can be embedded into the Cobot UI
-    via navigation links.
+  description: A single page app consists of HTML, CSS and JavaScript code. It can be embedded into the
+    Cobot UI via navigation links.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -1102,8 +1083,7 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-subscription-api
   name: Cobot Subscription API
-  description: >-
-    How much a space pays Cobot, how many members they can have and the extras they have booked.
+  description: How much a space pays Cobot, how many members they can have and the extras they have booked.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -1151,15 +1131,14 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-url-api
   name: Cobot URL API
-  description: >-
-    These  URLs/URL templates enable API clients to provide
+  description: 'These  URLs/URL templates enable API clients to provide
 
     links to the Cobot web interface without having to hard-code them.
 
 
     Each Url includes a unique, never changing `identifier` and either a `url`
 
-    or `urlTemplate`. Templates must be expanded according to RFC 6570.
+    or `urlTemplate`. Templates must be expanded according to RFC 6570.'
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
@@ -1185,9 +1164,8 @@ apis:
     url: conventions/cobot-conventions.yml
 - aid: cobot:cobot-user-api
   name: Cobot User API
-  description: >-
-    A user is used to log in to Cobot via email/password. Users can be admins/members (see Membership)
-    in multiple spaces.
+  description: A user is used to log in to Cobot via email/password. Users can be admins/members (see
+    Membership) in multiple spaces.
   humanURL: https://dev.cobot.me/api2
   baseURL: https://api.cobot.me
   tags:
