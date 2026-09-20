@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 4
+edge_count: 5
 edges:
 - tag: Invoice
   spec_file: cobot-invoice-api-openapi.yml
@@ -54,3 +54,13 @@ edges:
   evidence: 'GET /spaces/{spaceId}/discount_codes/find find-space-discount-code ''Find''; schemas: discount-code'
   reason: Lookup/validation of promotional discount codes for a space, which realises Discount & Promotion
     Management. Single endpoint limits confidence.
+- tag: Space Payment Method
+  spec_file: cobot-space-payment-method-api-openapi.yml
+  capability_id: BC-4250.40
+  capability_id_l1: BC-4250
+  capability_name: Payment Collection & Dunning
+  confidence: 0.7
+  evidence: PUT /spaces/{spaceId}/space_payment_method  update-space-payment-method  Space payment method
+  reason: Retrieval and update of the payment method used to collect the space's subscription charges
+    — payment-method management under payment collection.
+  recovered_from: sweep-20260829T005356Z-edges.json
