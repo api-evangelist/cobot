@@ -6,7 +6,7 @@ info:
     url: /api2_logo.webp
     backgroundColor: '#FFFFFF'
     altText: Cobot logo
-  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  description: This is the 2.0 version of the Cobot API.
   version: '2.0'
   contact:
     name: Cobot Support
@@ -26,9 +26,7 @@ paths:
       description: 'Get a space''s payment method.
 
 
-        **Access**: Only admins of a space can get its payment method.
-
-        '
+        **Access**: Only admins of a space can get its payment method.'
       operationId: get-space-payment-method
       parameters:
       - name: spaceId
@@ -86,9 +84,7 @@ paths:
       description: 'Update a space''s payment method. Currently only Stripe is supported.
 
 
-        **Access**: Only admins of a space can update its payment method.
-
-        '
+        **Access**: Only admins of a space can update its payment method.'
       operationId: update-space-payment-method
       parameters:
       - name: spaceId
@@ -137,22 +133,6 @@ paths:
                       stripe_payment_method_id: pm_sfcterzredz
 components:
   schemas:
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
     error:
       type: object
       properties:
@@ -185,50 +165,6 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    update-space-payment-method:
-      id: update-space-payment-method.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - stripeSpacePaymentMethodRequests
-            attributes:
-              type: object
-              additionalProperties: false
-              required:
-              - stripe_payment_method_id
-              properties:
-                stripe_payment_method_id:
-                  description: The id of the Stripe payment method to attach, see https://stripe.com/docs/api/payment_methods/object
-                  type: string
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
     space-payment-method:
       id: space-payment-method.json#
       type: object
@@ -309,6 +245,49 @@ components:
                 type: string
                 enum:
                 - gocardlessSpacePaymentMethods
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    update-space-payment-method:
+      id: update-space-payment-method.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - stripeSpacePaymentMethodRequests
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - stripe_payment_method_id
+              properties:
+                stripe_payment_method_id:
+                  description: The id of the Stripe payment method to attach, see https://stripe.com/docs/api/payment_methods/object
+                  type: string
     failure:
       type: object
       required:
@@ -326,6 +305,23 @@ components:
         links:
           $ref: '#/components/schemas/links'
       additionalProperties: false
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
   securitySchemes:
     OpenId:
       type: openIdConnect

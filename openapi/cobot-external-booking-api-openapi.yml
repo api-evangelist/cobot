@@ -6,7 +6,7 @@ info:
     url: /api2_logo.webp
     backgroundColor: '#FFFFFF'
     altText: Cobot logo
-  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  description: This is the 2.0 version of the Cobot API.
   version: '2.0'
   contact:
     name: Cobot Support
@@ -22,9 +22,7 @@ tags:
 
     booked by visitors (non-members) using external booking endpoints.
 
-    Making an external booking also results in a Booking to be created.
-
-    '
+    Making an external booking also results in a Booking to be created.'
 paths:
   /external_bookings:
     post:
@@ -32,9 +30,7 @@ paths:
       description: 'Create an external booking.
 
 
-        **Access**: Any user can create external bookings.
-
-        '
+        **Access**: Any user can create external bookings.'
       operationId: create-external-booking
       security:
       - OAuth2:
@@ -248,9 +244,7 @@ paths:
       description: 'Show an external booking.
 
 
-        **Access**: Any user can see external bookings.
-
-        '
+        **Access**: Any user can see external bookings.'
       operationId: show-external-booking
       parameters:
       - name: id
@@ -422,9 +416,7 @@ paths:
         Past bookings can only be canceled while they are still pending.
 
 
-        **Access**: The current user must be an admin of the space.
-
-        '
+        **Access**: The current user must be an admin of the space.'
       operationId: delete-external-booking
       parameters:
       - name: id
@@ -557,9 +549,7 @@ paths:
       description: 'Update an external booking.
 
 
-        **Access**: The current user must be an admin of the space the booking belongs to.
-
-        '
+        **Access**: The current user must be an admin of the space the booking belongs to.'
       operationId: update-external-booking
       parameters:
       - name: id
@@ -733,9 +723,7 @@ paths:
         to the email address used to make the booking.
 
 
-        **Access**: Any user can request to cancel a booking.
-
-        '
+        **Access**: Any user can request to cancel a booking.'
       operationId: external-booking-cancellation
       parameters:
       - name: id
@@ -789,9 +777,7 @@ paths:
         Depending on the resource pricing, returned attributes will contain either `appliedFixedRates` array, or `appliedDiscounts` and `appliedPriceCap`.
 
 
-        **Access**: Any user can preview external bookings.
-
-        '
+        **Access**: Any user can preview external bookings.'
       operationId: preview-external-booking
       security:
       - OAuth2:
@@ -959,9 +945,7 @@ paths:
         The bookings are filtered by their `from` attribute, not by testing for overlap.
 
 
-        **Access**: The current user must be an admin of the space.
-
-        '
+        **Access**: The current user must be an admin of the space.'
       operationId: get-space-external-bookings
       parameters:
       - name: spaceId
@@ -1132,46 +1116,371 @@ paths:
                             type: contacts
 components:
   schemas:
-    price:
-      description: Price including net/gross value and all taxes.
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    error:
       type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
       properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-    discount-relationship:
-      description: An optional discount to apply to the booking.
-      type: object
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
       additionalProperties: false
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    external-bookings:
+      id: external-bookings.json#
+      type: object
       required:
       - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-external-booking-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            $ref: '#/components/schemas/-invoice-data'
+    external-booking:
+      id: external-booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-external-booking-data'
+        included:
+          type: array
+          items:
+            $ref: '#/components/schemas/-invoice-data'
+    relationship-linkage-array:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/linkage'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    hours-minutes-object:
+      type: object
+      required:
+      - hours
+      - minutes
+      additionalProperties: false
+      properties:
+        hours:
+          type: integer
+          minimum: 0
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 59
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    create-external-booking:
+      id: create-external-booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
       properties:
         data:
           type: object
           required:
           - type
-          - id
+          - attributes
+          - relationships
           additionalProperties: false
           properties:
             type:
               type: string
-              enum:
-              - discountCodes
-            id:
+              pattern: externalBookings
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - from
+              - to
+              - numberOfVisitors
+              - acceptedTerms
+              - name
+              - billingAddress
+              - email
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                numberOfVisitors:
+                  type: integer
+                  minimum: 1
+                acceptedTerms:
+                  type: boolean
+                  enum:
+                  - true
+                  description: Terms need to be accepted.
+                title:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                name:
+                  type: string
+                company:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                billingAddress:
+                  description: If the object is passed here, its name and company will be used
+                  oneOf:
+                  - $ref: '#/components/schemas/structuredAddress'
+                  - $ref: '#/components/schemas/address-2'
+                  - type: string
+                email:
+                  $ref: '#/components/schemas/email'
+                comments:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                adminComments:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                phone:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                taxId:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                bookingExtras:
+                  description: Extras to be booked with this booking. They have to be linked with the associated external resource.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/booking-extra'
+            relationships:
+              oneOf:
+              - type: object
+                additionalProperties: false
+                required:
+                - resource
+                - payment
+                properties:
+                  payment:
+                    description: Pass a previously created payment to pay for the booking. The payment must not yet be captured. Capturing happens as part of the booking process. If capturing the payment fails, the booking is still made, but the accompanying invoice is not marked as paid.
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - payments
+                          id:
+                            type: string
+                  resource:
+                    $ref: '#/components/schemas/external-resource-relationship'
+                  discount:
+                    $ref: '#/components/schemas/discount-relationship'
+              - type: object
+                additionalProperties: false
+                required:
+                - resource
+                - paymentMethod
+                properties:
+                  paymentMethod:
+                    description: Instead of passing a payment for automated payment processing, you can pass a payment method that does not do automatic processing. Doing so will result in the payment method's instructions being added to the booking confirmation email.
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - paymentMethods
+                          id:
+                            type: string
+                  resource:
+                    $ref: '#/components/schemas/external-resource-relationship'
+                  discount:
+                    $ref: '#/components/schemas/discount-relationship'
+              - type: object
+                additionalProperties: false
+                required:
+                - resource
+                properties:
+                  resource:
+                    $ref: '#/components/schemas/external-resource-relationship'
+                  discount:
+                    $ref: '#/components/schemas/discount-relationship'
+    -booking-extra-data:
+      id: -booking-extra-data.json
+      type: object
+      required:
+      - name
+      - pricing
+      - accountingCode
+      - description
+      - id
+      - productId
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        accountingCode:
+          type:
+          - string
+          - 'null'
+        id:
+          type: string
+          description: Unique ID for this booking extra. Use this to update the extra.
+        productId:
+          type: string
+          description: ID of the product this extra was created from.
+        pricing:
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/price'
+            totalAmount:
+              $ref: '#/components/schemas/price'
+            unit:
               type: string
+              enum:
+              - fixed
+              - minute
+              - person
+              - item
+            quantity:
+              $ref: '#/components/schemas/decimal'
+          additionalProperties: false
+    resource-paid-time-cap:
+      type: object
+      required:
+      - maximumDuration
+      properties:
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+      additionalProperties: false
     external-booking-preview:
       id: external-booking-preview.json#
       type: object
@@ -1254,6 +1563,146 @@ components:
                   $ref: '#/components/schemas/relationship-linkage'
                 space:
                   $ref: '#/components/schemas/relationship-linkage'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    update-external-booking:
+      id: update-external-booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              pattern: externalBookings
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                adminComments:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                customPrice:
+                  description: When set by an admin it overwrites price calculation and uses the set price
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/money'
+                numberOfVisitors:
+                  type: integer
+                  minimum: 1
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    money:
+      type: object
+      required:
+      - net
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+    external-resource-relationship:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - id
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - externalResources
+            id:
+              type: string
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+    address-2:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        fullAddress:
+          type: string
+    applied-discount-code:
+      description: The applied discount code, if any.
+      type: object
+      required:
+      - code
+      - name
+      - value
+      - unit
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+        unit:
+          type: string
+          enum:
+          - percentage
+          - amount
+        amounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/price'
     preview-external-booking:
       id: preview-external-booking.json#
       type: object
@@ -1311,6 +1760,30 @@ components:
                           type: string
                 discount:
                   $ref: '#/components/schemas/discount-relationship'
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
     resource-price-cap:
       type: object
       required:
@@ -1322,10 +1795,77 @@ components:
           $ref: '#/components/schemas/price'
         maximumDuration:
           $ref: '#/components/schemas/hours-minutes-object'
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+    invoiceAddress:
       type: object
-      additionalProperties: true
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     -invoice-data:
       id: -invoice-data.json
       type: object
@@ -1662,58 +2202,37 @@ components:
                     related:
                       type: string
                       format: uri
-    invoiceAddress:
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    pagination-links:
       type: object
-      additionalProperties: false
       required:
-      - name
-      - company
-      - fullAddress
-      - city
-      - postCode
-      - state
-      - street
-      - countryCode
+      - first
+      - self
+      - next
+      additionalProperties: false
       properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
+        first:
           type: string
-        street:
+          description: Link to the first results page.
+        prev:
           oneOf:
           - type: string
           - type: 'null'
-        postCode:
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
           oneOf:
           - type: string
           - type: 'null'
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        countryCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        latitude:
-          type: number
-        longitude:
-          type: number
-      dependencies:
-        latitude:
-        - longitude
-        longitude:
-        - latitude
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
     -external-booking-data:
       id: -external-booking-data.json
       type: object
@@ -1867,302 +2386,6 @@ components:
               $ref: '#/components/schemas/relationship-linkage'
             contact:
               $ref: '#/components/schemas/optional-relationship-linkage'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    applied-discount-code:
-      description: The applied discount code, if any.
-      type: object
-      required:
-      - code
-      - name
-      - value
-      - unit
-      additionalProperties: false
-      properties:
-        code:
-          type: string
-        name:
-          type: string
-        value:
-          type: string
-        unit:
-          type: string
-          enum:
-          - percentage
-          - amount
-        amounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/price'
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    external-resource-relationship:
-      type: object
-      additionalProperties: false
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - id
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - externalResources
-            id:
-              type: string
-    resource-paid-time-cap:
-      type: object
-      required:
-      - maximumDuration
-      properties:
-        maximumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-      additionalProperties: false
-    fixed-rate-count:
-      type: object
-      required:
-      - price
-      - maximumDuration
-      - count
-      properties:
-        price:
-          type: string
-        maximumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-        count:
-          type: integer
-      additionalProperties: false
-    external-booking:
-      id: external-booking.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-external-booking-data'
-        included:
-          type: array
-          items:
-            $ref: '#/components/schemas/-invoice-data'
-    hours-minutes-object:
-      type: object
-      required:
-      - hours
-      - minutes
-      additionalProperties: false
-      properties:
-        hours:
-          type: integer
-          minimum: 0
-        minutes:
-          type: integer
-          minimum: 0
-          maximum: 59
-    resource-discount:
-      type: object
-      required:
-      - pricePerHour
-      - minimumDuration
-      additionalProperties: false
-      properties:
-        pricePerHour:
-          $ref: '#/components/schemas/price'
-        minimumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
-    email:
-      type: string
-      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    external-bookings:
-      id: external-bookings.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-external-booking-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        included:
-          type: array
-          items:
-            $ref: '#/components/schemas/-invoice-data'
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
-    update-external-booking:
-      id: update-external-booking.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              pattern: externalBookings
-            attributes:
-              type: object
-              additionalProperties: false
-              properties:
-                from:
-                  type: string
-                  format: date-time
-                to:
-                  type: string
-                  format: date-time
-                title:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                adminComments:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                customPrice:
-                  description: When set by an admin it overwrites price calculation and uses the set price
-                  oneOf:
-                  - type: 'null'
-                  - $ref: '#/components/schemas/money'
-                numberOfVisitors:
-                  type: integer
-                  minimum: 1
-    revenue-account:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    structuredAddress:
-      type: object
-      description: Either name or company is required.
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - street
-      - postCode
-      - city
-      - countryCode
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        street:
-          type: string
-        postCode:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        countryCode:
-          type: string
     booking-extra:
       oneOf:
       - title: updateExistingExtra
@@ -2189,112 +2412,47 @@ components:
             description: ID of a product to create a new booking extra from.
           quantity:
             $ref: '#/components/schemas/decimal'
-    -booking-extra-data:
-      id: -booking-extra-data.json
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    fixed-rate-count:
       type: object
       required:
-      - name
-      - pricing
-      - accountingCode
-      - description
-      - id
-      - productId
-      additionalProperties: false
+      - price
+      - maximumDuration
+      - count
       properties:
-        name:
+        price:
           type: string
-        description:
-          type:
-          - string
-          - 'null'
-        accountingCode:
-          type:
-          - string
-          - 'null'
-        id:
-          type: string
-          description: Unique ID for this booking extra. Use this to update the extra.
-        productId:
-          type: string
-          description: ID of the product this extra was created from.
-        pricing:
-          type: object
-          properties:
-            amount:
-              $ref: '#/components/schemas/price'
-            totalAmount:
-              $ref: '#/components/schemas/price'
-            unit:
-              type: string
-              enum:
-              - fixed
-              - minute
-              - person
-              - item
-            quantity:
-              $ref: '#/components/schemas/decimal'
-          additionalProperties: false
-    tax:
-      type: object
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+        count:
+          type: integer
       additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
-    error:
+    resource-discount:
       type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    address-2:
-      type: object
-      description: Either name or company is required.
-      additionalProperties: false
       required:
-      - name
-      - company
-      - fullAddress
+      - pricePerHour
+      - minimumDuration
+      additionalProperties: false
       properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        fullAddress:
-          type: string
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        minimumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
     jsonapi:
       description: An object describing the server's implementation
       type: object
@@ -2304,220 +2462,46 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
-    create-external-booking:
-      id: create-external-booking.json#
+    price:
+      description: Price including net/gross value and all taxes.
       type: object
       required:
-      - data
+      - net
+      - gross
+      - currency
+      - taxes
       additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    discount-relationship:
+      description: An optional discount to apply to the booking.
+      type: object
+      additionalProperties: false
+      required:
+      - data
       properties:
         data:
           type: object
           required:
           - type
-          - attributes
-          - relationships
+          - id
           additionalProperties: false
           properties:
             type:
               type: string
-              pattern: externalBookings
-            attributes:
-              type: object
-              additionalProperties: false
-              required:
-              - from
-              - to
-              - numberOfVisitors
-              - acceptedTerms
-              - name
-              - billingAddress
-              - email
-              properties:
-                from:
-                  type: string
-                  format: date-time
-                to:
-                  type: string
-                  format: date-time
-                numberOfVisitors:
-                  type: integer
-                  minimum: 1
-                acceptedTerms:
-                  type: boolean
-                  enum:
-                  - true
-                  description: Terms need to be accepted.
-                title:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                name:
-                  type: string
-                company:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                billingAddress:
-                  description: If the object is passed here, its name and company will be used
-                  oneOf:
-                  - $ref: '#/components/schemas/structuredAddress'
-                  - $ref: '#/components/schemas/address-2'
-                  - type: string
-                email:
-                  $ref: '#/components/schemas/email'
-                comments:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                adminComments:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                phone:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                taxId:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                bookingExtras:
-                  description: Extras to be booked with this booking. They have to be linked with the associated external resource.
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/booking-extra'
-            relationships:
-              oneOf:
-              - type: object
-                additionalProperties: false
-                required:
-                - resource
-                - payment
-                properties:
-                  payment:
-                    description: Pass a previously created payment to pay for the booking. The payment must not yet be captured. Capturing happens as part of the booking process. If capturing the payment fails, the booking is still made, but the accompanying invoice is not marked as paid.
-                    type: object
-                    additionalProperties: false
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        required:
-                        - type
-                        - id
-                        additionalProperties: false
-                        properties:
-                          type:
-                            type: string
-                            enum:
-                            - payments
-                          id:
-                            type: string
-                  resource:
-                    $ref: '#/components/schemas/external-resource-relationship'
-                  discount:
-                    $ref: '#/components/schemas/discount-relationship'
-              - type: object
-                additionalProperties: false
-                required:
-                - resource
-                - paymentMethod
-                properties:
-                  paymentMethod:
-                    description: Instead of passing a payment for automated payment processing, you can pass a payment method that does not do automatic processing. Doing so will result in the payment method's instructions being added to the booking confirmation email.
-                    type: object
-                    additionalProperties: false
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        required:
-                        - type
-                        - id
-                        additionalProperties: false
-                        properties:
-                          type:
-                            type: string
-                            enum:
-                            - paymentMethods
-                          id:
-                            type: string
-                  resource:
-                    $ref: '#/components/schemas/external-resource-relationship'
-                  discount:
-                    $ref: '#/components/schemas/discount-relationship'
-              - type: object
-                additionalProperties: false
-                required:
-                - resource
-                properties:
-                  resource:
-                    $ref: '#/components/schemas/external-resource-relationship'
-                  discount:
-                    $ref: '#/components/schemas/discount-relationship'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    cost-center:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    money:
-      type: object
-      required:
-      - net
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-    relationship-linkage-array:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/linkage'
+              enum:
+              - discountCodes
+            id:
+              type: string
   securitySchemes:
     OpenId:
       type: openIdConnect

@@ -6,7 +6,7 @@ info:
     url: /api2_logo.webp
     backgroundColor: '#FFFFFF'
     altText: Cobot logo
-  description: "This is the 2.0 version of the Cobot API. You can find version 1.0\nas well as various tutorials under [/api-docs](/api-docs).\n\n## JSON API\n\nThis API follows the [JSON API](http://jsonapi.org) standard. This means:\n\n* requests and responses are sent in JSON\n* all requests MUST send a `Accept: application/vnd.api+json` header\n* non-GET requests MUST send a `Content-Type: application/vnd.api+json` header\n* all responses send a `Content-Type: application/vnd.api+json` header\n* all JSON formats are standardized (requests, responses, errors)\n\n## Cross-Origin Resource Sharing (CORS)\n\nAll endpoints send [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nheaders so that the API can be used from within browsers.\n\n## Rate Limiting\n\nIn general, the rate limit for an endpoint is 60 requests per minute per user.\nIf applicable, alternative limits are given in the documentation for\nparticular endpoints.\n\nIf you've exceeded the limit, Cobot will return a 429 status code and a JSON\nerror message. The response will also contain a *Retry-After* header, this\ndenotes the number of seconds to wait before your client may retry.\n\n## Times and Dates\n\nTimes and Dates must be in ISO 8601 formats. e.g. date: `2021-01-07`, datetime: `2021-01-07T16:25:51Z`,  time: `16:25:51`.\nMillisecond are ommited, so `16:25:51.811` will become `16:25:51`.\nTime zone offsets must be provided by the client, e.g. `16:25:51+02:00` or '16:25:51Z' for UTC.\n\nTimes are always returned in UTC.\n## Sparse Fieldsets\n\nThis API supports [sparse fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets),\nso clients can request which attributes they are interested in.\n\nExample:\n```\nGET https://api.cobot.me/user?fields[users]=email\n```\nThis will only return the user's email.\n\n## Query params\n\nWhen passing query params, arrays of data are expected to be sent as a string of comma separated values.\n\n## Pagination\n\nAll collections are paginated. Pagination follows [JSON-API standards](https://jsonapi.org/format/#fetching-pagination).\n\nExample:\n```json\n{\n  \"meta\": {\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  },\n  \"data\": [{\n    \"id\": \"1\",\n    \"type\": \"users\",\n  }],\n  \"links\": {\n    \"self\": \"/users?page[size]=100&page[number]=1\",\n    \"first\": \"/users?page[size]=100&page[number]=1\",\n    \"prev\": null,\n    \"next\": \"/users?page[size]=100&page[number]=2\",\n    \"last\": \"/users?page[size]=100&page[number]=1\"\n  }\n}\n```\n\nDefault page size is 72 and can be changed by passing a `page[size]` parameter. Maximum page size is 200.\n\n## Errors\n\nWhen a client sends invalid data in a request, Cobot returns a\n422 status code and a JSON-API error response.\n\nExample:\n```json\n{\n  \"errors\": [\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"source\": {\n        \"pointer\": \"/data/attributes/password\"\n      },\n      \"detail\": \"is too short\"\n    }\n  ]\n}\n```\n"
+  description: This is the 2.0 version of the Cobot API.
   version: '2.0'
   contact:
     name: Cobot Support
@@ -28,9 +28,7 @@ paths:
         Send a request without extras to get the available extra/tier ids.
 
 
-        **Access**: The current user must be an admin of the space.
-
-        '
+        **Access**: The current user must be an admin of the space.'
       operationId: preview-subscription
       parameters:
       - name: spaceId
@@ -136,9 +134,7 @@ paths:
         and any extras (subscribed and unsubscribed).
 
 
-        **Access**: The current user must be an admin of the space.
-
-        '
+        **Access**: The current user must be an admin of the space.'
       operationId: get-current-subscription
       parameters:
       - name: spaceId
@@ -255,9 +251,7 @@ paths:
         `chosenSubscription`.
 
 
-        **Access**: The current user must be an admin of the space.
-
-        '
+        **Access**: The current user must be an admin of the space.'
       operationId: change-subscription
       parameters:
       - name: spaceId
@@ -376,9 +370,7 @@ paths:
         whether they are available and any extras.
 
 
-        **Access**: The current user must be an admin of the space.
-
-        '
+        **Access**: The current user must be an admin of the space.'
       operationId: get-subscriptions
       parameters:
       - name: spaceId
@@ -463,35 +455,47 @@ paths:
                             type: spaces
 components:
   schemas:
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-    subscription:
-      id: subscription.json#
+    subscription-preview:
+      id: subscription-preview.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/-subscription-data'
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - spaceSubscriptionPreviews
+            attributes:
+              $ref: '#/components/schemas/-subscriptions-attributes'
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              properties:
+                space:
+                  $ref: '#/components/schemas/relationship-linkage'
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    subscribed:
+      type: boolean
+      description: All available extras are returned. Only the ones the space has actually subscribed to have `subscribed` set to true.
     discount:
       description: When a discount is applied to the subscription, the pricePerCycle attribute shows the discounted price. The original price is shown in discount/originalPricPerCycle.
       oneOf:
@@ -506,10 +510,96 @@ components:
           percentage:
             $ref: '#/components/schemas/decimal'
       - type: 'null'
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
+    -subscriptions-attributes:
+      id: -subscriptions-attributes.json#
+      type: object
+      required:
+      - pricePerCycle
+      - totalPricePerCycle
+      - cycleDuration
+      - maximumNumberOfMemberships
+      - extras
+      - discount
+      - available
+      additionalProperties: false
+      properties:
+        available:
+          type: boolean
+          description: True if this subscription can be selecected by this space, based on how many members it has.
+        pricePerCycle:
+          $ref: '#/components/schemas/price'
+        totalPricePerCycle:
+          $ref: '#/components/schemas/price'
+        cycleDuration:
+          $ref: '#/components/schemas/cycleDuration'
+        maximumNumberOfMemberships:
+          $ref: '#/components/schemas/maximumNumberOfMemberships'
+        discount:
+          $ref: '#/components/schemas/discount'
+        nextInvoiceDate:
+          $ref: '#/components/schemas/nextInvoiceDate'
+        extras:
+          $ref: '#/components/schemas/extras'
+    nextInvoiceDate:
+      description: When the next invoice for the subscription is due.
+      oneOf:
+      - $ref: '#/components/schemas/date'
+      - type: 'null'
+    subscription:
+      id: subscription.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-subscription-data'
+    -subscription-data:
+      id: -subscription-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          pattern: subscriptions
+        attributes:
+          type: object
+          required:
+          - pricePerCycle
+          - totalPricePerCycle
+          - cycleDuration
+          - maximumNumberOfMemberships
+          - extras
+          - discount
+          additionalProperties: false
+          properties:
+            pricePerCycle:
+              $ref: '#/components/schemas/price'
+            totalPricePerCycle:
+              $ref: '#/components/schemas/price'
+            cycleDuration:
+              $ref: '#/components/schemas/cycleDuration'
+            maximumNumberOfMemberships:
+              $ref: '#/components/schemas/maximumNumberOfMemberships'
+            discount:
+              $ref: '#/components/schemas/discount'
+            nextInvoiceDate:
+              $ref: '#/components/schemas/nextInvoiceDate'
+            extras:
+              $ref: '#/components/schemas/extras'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
     linkage:
       description: The "type" and "id" of a linked entity.
       type: object
@@ -522,11 +612,6 @@ components:
         id:
           type: string
       additionalProperties: false
-    nextInvoiceDate:
-      description: When the next invoice for the subscription is due.
-      oneOf:
-      - $ref: '#/components/schemas/date'
-      - type: 'null'
     relationship-linkage:
       type: object
       required:
@@ -535,10 +620,83 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/linkage'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
+    cycleDuration:
+      description: Determines the duration of a billing cycle in months. When cycle duration is 1, a subscription is charged every month. For cycle duration 12, a subscription is charged annually.
+      type: integer
+      minimum: 1
+    create-subscription:
+      id: create-subscription.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: subscriptions
+            attributes:
+              type: object
+              required:
+              - extras
+              additionalProperties: false
+              properties:
+                extras:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - radiusSubscriptionExtras
+                          - premiumSupportSubscriptionExtras
+                    - type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - externalBookingsSubscriptionExtras
+                        tier:
+                          description: One of the tiers from the list of tiers. The tier is used to determine the monthly price of the extra and the commission. If no tier is passed, the lowest is chosen.
+                          type: object
+                          required:
+                          - id
+                          additionalProperties: false
+                          properties:
+                            id:
+                              type: string
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              - chosenSubscription
+              properties:
+                space:
+                  $ref: '#/components/schemas/relationship-linkage'
+                chosenSubscription:
+                  $ref: '#/components/schemas/relationship-linkage'
     -subscriptions-data:
       id: -subscriptions-data.json
       type: object
@@ -563,10 +721,20 @@ components:
           properties:
             space:
               $ref: '#/components/schemas/relationship-linkage'
-    cycleDuration:
-      description: Determines the duration of a billing cycle in months. When cycle duration is 1, a subscription is charged every month. For cycle duration 12, a subscription is charged annually.
-      type: integer
-      minimum: 1
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
     preview-subscription:
       id: preview-subscription.json#
       type: object
@@ -625,109 +793,6 @@ components:
                           properties:
                             name:
                               type: string
-    subscriptions:
-      id: subscription.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-subscriptions-data'
-    -subscription-data:
-      id: -subscription-data.json
-      type: object
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          pattern: subscriptions
-        attributes:
-          type: object
-          required:
-          - pricePerCycle
-          - totalPricePerCycle
-          - cycleDuration
-          - maximumNumberOfMemberships
-          - extras
-          - discount
-          additionalProperties: false
-          properties:
-            pricePerCycle:
-              $ref: '#/components/schemas/price'
-            totalPricePerCycle:
-              $ref: '#/components/schemas/price'
-            cycleDuration:
-              $ref: '#/components/schemas/cycleDuration'
-            maximumNumberOfMemberships:
-              $ref: '#/components/schemas/maximumNumberOfMemberships'
-            discount:
-              $ref: '#/components/schemas/discount'
-            nextInvoiceDate:
-              $ref: '#/components/schemas/nextInvoiceDate'
-            extras:
-              $ref: '#/components/schemas/extras'
-        relationships:
-          type: object
-          additionalProperties: false
-          required:
-          - space
-          properties:
-            space:
-              $ref: '#/components/schemas/relationship-linkage'
-    maximumNumberOfMemberships:
-      type:
-      - integer
-      - 'null'
-      minimum: 1
-      description: The maximum number of memberships this subscription allows. Only memberships with a paid plan count towards the subscription. If null, there is no member limit.
-    -subscriptions-attributes:
-      id: -subscriptions-attributes.json#
-      type: object
-      required:
-      - pricePerCycle
-      - totalPricePerCycle
-      - cycleDuration
-      - maximumNumberOfMemberships
-      - extras
-      - discount
-      - available
-      additionalProperties: false
-      properties:
-        available:
-          type: boolean
-          description: True if this subscription can be selecected by this space, based on how many members it has.
-        pricePerCycle:
-          $ref: '#/components/schemas/price'
-        totalPricePerCycle:
-          $ref: '#/components/schemas/price'
-        cycleDuration:
-          $ref: '#/components/schemas/cycleDuration'
-        maximumNumberOfMemberships:
-          $ref: '#/components/schemas/maximumNumberOfMemberships'
-        discount:
-          $ref: '#/components/schemas/discount'
-        nextInvoiceDate:
-          $ref: '#/components/schemas/nextInvoiceDate'
-        extras:
-          $ref: '#/components/schemas/extras'
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
     extras:
       description: Extras can be subscribed to in addition to a subscription. Extras can have different types. Each type has its own additional attributes.
       type: array
@@ -889,116 +954,43 @@ components:
             usedCallHoursInMonth:
               description: How many hours worth of support calls have been used in the current month.
               type: integer
-    create-subscription:
-      id: create-subscription.json#
+    subscriptions:
+      id: subscription.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          type: object
-          required:
-          - type
-          - attributes
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: subscriptions
-            attributes:
-              type: object
-              required:
-              - extras
-              additionalProperties: false
-              properties:
-                extras:
-                  type: array
-                  items:
-                    oneOf:
-                    - type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                          - radiusSubscriptionExtras
-                          - premiumSupportSubscriptionExtras
-                    - type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                          - externalBookingsSubscriptionExtras
-                        tier:
-                          description: One of the tiers from the list of tiers. The tier is used to determine the monthly price of the extra and the commission. If no tier is passed, the lowest is chosen.
-                          type: object
-                          required:
-                          - id
-                          additionalProperties: false
-                          properties:
-                            id:
-                              type: string
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - space
-              - chosenSubscription
-              properties:
-                space:
-                  $ref: '#/components/schemas/relationship-linkage'
-                chosenSubscription:
-                  $ref: '#/components/schemas/relationship-linkage'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    subscription-preview:
-      id: subscription-preview.json#
+          type: array
+          items:
+            $ref: '#/components/schemas/-subscriptions-data'
+    price:
+      description: Price including net/gross value and all taxes.
       type: object
       required:
-      - data
+      - net
+      - gross
+      - currency
+      - taxes
       additionalProperties: false
       properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              enum:
-              - spaceSubscriptionPreviews
-            attributes:
-              $ref: '#/components/schemas/-subscriptions-attributes'
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - space
-              properties:
-                space:
-                  $ref: '#/components/schemas/relationship-linkage'
-    subscribed:
-      type: boolean
-      description: All available extras are returned. Only the ones the space has actually subscribed to have `subscribed` set to true.
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    maximumNumberOfMemberships:
+      type:
+      - integer
+      - 'null'
+      minimum: 1
+      description: The maximum number of memberships this subscription allows. Only memberships with a paid plan count towards the subscription. If null, there is no member limit.
   securitySchemes:
     OpenId:
       type: openIdConnect
