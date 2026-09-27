@@ -119,6 +119,33 @@ paths:
                         - publicEventTickets
 components:
   schemas:
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
     payment-methods:
       id: payment-methods.json#
       type: object
@@ -228,33 +255,6 @@ components:
           $ref: '#/components/schemas/pagination-meta'
         links:
           $ref: '#/components/schemas/pagination-links'
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
     pagination-meta:
       type: object
       additionalProperties: false

@@ -60,6 +60,9 @@ paths:
           description: Invoice reminder was sent.
 components:
   schemas:
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
     create-invoice-reminder:
       id: create-invoice-reminder.json#
       type: object
@@ -118,9 +121,6 @@ components:
                           pattern: invoices
                         id:
                           type: string
-    email:
-      type: string
-      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
   securitySchemes:
     OpenId:
       type: openIdConnect

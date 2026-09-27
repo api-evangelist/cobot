@@ -110,6 +110,15 @@ paths:
                             type: spaces
 components:
   schemas:
+    article:
+      id: article.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-article-data'
     articles:
       id: articles.json#
       type: object
@@ -125,23 +134,6 @@ components:
           $ref: '#/components/schemas/pagination-meta'
         links:
           $ref: '#/components/schemas/pagination-links'
-    article:
-      id: article.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-article-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
     pagination-links:
       type: object
       required:
@@ -169,6 +161,14 @@ components:
         last:
           type: string
           description: Link to the last results page.
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     -article-data:
       id: -article-data.json
       type: object

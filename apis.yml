@@ -54,7 +54,7 @@ tags:
 - Co-Working
 - Workspace Management
 - Space Management
-- Real-Estate
+- Real Estate
 - Booking
 - Reservations
 - Membership
@@ -83,6 +83,7 @@ tags_raw:
 - Germany
 - JSON:API
 - OAuth
+- Real-Estate
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

@@ -189,6 +189,15 @@ paths:
                         - url: https://example.com/app.css
 components:
   schemas:
+    single-page-app:
+      id: single-page-app.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-single-page-app-data'
     -single-page-app-data:
       id: -single-page-app-data.json
       type: object
@@ -235,49 +244,6 @@ components:
                   url:
                     type: string
                     format: uri
-    -single-page-app-attributes:
-      id: -single-page-app-attributes.json#
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          description: Short name for the application.
-          type: string
-        js:
-          description: An array of URLs pointing to JavaScript files. These URLs will be added to the page on Cobot rendering the app using script tags.
-          type: array
-          items:
-            type: object
-            required:
-            - url
-            additionalProperties: false
-            properties:
-              url:
-                type: string
-                format: uri
-        css:
-          description: An array of URLs pointing to CSS files. These URLs will be added to the page on Cobot rendering the app using link tags.
-          type: array
-          items:
-            type: object
-            required:
-            - url
-            additionalProperties: false
-            properties:
-              url:
-                type: string
-                format: uri
-    single-page-apps:
-      id: single-page-apps.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-single-page-app-data'
     create-single-page-app:
       id: create-single-page-app.json#
       type: object
@@ -319,15 +285,49 @@ components:
               pattern: singlePageApps
             attributes:
               $ref: '#/components/schemas/-single-page-app-attributes'
-    single-page-app:
-      id: single-page-app.json#
+    single-page-apps:
+      id: single-page-apps.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/-single-page-app-data'
+          type: array
+          items:
+            $ref: '#/components/schemas/-single-page-app-data'
+    -single-page-app-attributes:
+      id: -single-page-app-attributes.json#
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          description: Short name for the application.
+          type: string
+        js:
+          description: An array of URLs pointing to JavaScript files. These URLs will be added to the page on Cobot rendering the app using script tags.
+          type: array
+          items:
+            type: object
+            required:
+            - url
+            additionalProperties: false
+            properties:
+              url:
+                type: string
+                format: uri
+        css:
+          description: An array of URLs pointing to CSS files. These URLs will be added to the page on Cobot rendering the app using link tags.
+          type: array
+          items:
+            type: object
+            required:
+            - url
+            additionalProperties: false
+            properties:
+              url:
+                type: string
+                format: uri
   securitySchemes:
     OpenId:
       type: openIdConnect

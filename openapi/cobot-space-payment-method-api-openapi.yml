@@ -133,6 +133,35 @@ paths:
                       stripe_payment_method_id: pm_sfcterzredz
 components:
   schemas:
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
     error:
       type: object
       properties:
@@ -164,6 +193,54 @@ components:
               type: string
         meta:
           $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    update-space-payment-method:
+      id: update-space-payment-method.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - stripeSpacePaymentMethodRequests
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - stripe_payment_method_id
+              properties:
+                stripe_payment_method_id:
+                  description: The id of the Stripe payment method to attach, see https://stripe.com/docs/api/payment_methods/object
+                  type: string
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
       additionalProperties: false
     space-payment-method:
       id: space-payment-method.json#
@@ -245,83 +322,6 @@ components:
                 type: string
                 enum:
                 - gocardlessSpacePaymentMethods
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    update-space-payment-method:
-      id: update-space-payment-method.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - stripeSpacePaymentMethodRequests
-            attributes:
-              type: object
-              additionalProperties: false
-              required:
-              - stripe_payment_method_id
-              properties:
-                stripe_payment_method_id:
-                  description: The id of the Stripe payment method to attach, see https://stripe.com/docs/api/payment_methods/object
-                  type: string
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
   securitySchemes:
     OpenId:
       type: openIdConnect

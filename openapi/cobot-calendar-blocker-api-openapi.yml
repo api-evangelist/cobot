@@ -138,6 +138,65 @@ paths:
                             type: resources
 components:
   schemas:
+    calendar-blockers:
+      id: calendar-blockers.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-calendar-blocker-data'
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    calendar-blocker:
+      id: calendar-blocker.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-calendar-blocker-data'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     -calendar-blocker-data:
       id: -calendar-blocker-data.json
       type: object
@@ -226,65 +285,6 @@ components:
                         type: string
                         enum:
                         - resources
-    calendar-blocker:
-      id: calendar-blocker.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-calendar-blocker-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    calendar-blockers:
-      id: calendar-blockers.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-calendar-blocker-data'
   securitySchemes:
     OpenId:
       type: openIdConnect

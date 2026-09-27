@@ -133,78 +133,6 @@ paths:
                           type: memberships
 components:
   schemas:
-    terms-approval:
-      id: terms-approval.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              pattern: approvals
-            attributes:
-              type: object
-              required:
-              - ipAddress
-              - types
-              additionalProperties: false
-              properties:
-                types:
-                  type: array
-                  minItems: 1
-                  items:
-                    type: string
-                ipAddress:
-                  $ref: '#/components/schemas/ip-address'
-            relationships:
-              type: object
-              additionalProperties: false
-              properties:
-                membership:
-                  type: object
-                space:
-                  type: object
-    missing-terms-approvals:
-      id: missing-terms-approvals.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              pattern: approvals
-            attributes:
-              type: object
-              required:
-              - types
-              additionalProperties: false
-              properties:
-                types:
-                  type: array
-                  items:
-                    type: string
-            relationships:
-              type: object
-              additionalProperties: false
-              properties:
-                membership:
-                  type: object
-                space:
-                  type: object
     ip-address:
       description: An IPV4 address, e.g. 127.0.0.1.
       type: string
@@ -287,6 +215,78 @@ components:
                           - memberships
                         id:
                           type: string
+    missing-terms-approvals:
+      id: missing-terms-approvals.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              pattern: approvals
+            attributes:
+              type: object
+              required:
+              - types
+              additionalProperties: false
+              properties:
+                types:
+                  type: array
+                  items:
+                    type: string
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                membership:
+                  type: object
+                space:
+                  type: object
+    terms-approval:
+      id: terms-approval.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              pattern: approvals
+            attributes:
+              type: object
+              required:
+              - ipAddress
+              - types
+              additionalProperties: false
+              properties:
+                types:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                ipAddress:
+                  $ref: '#/components/schemas/ip-address'
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                membership:
+                  type: object
+                space:
+                  type: object
   securitySchemes:
     OpenId:
       type: openIdConnect

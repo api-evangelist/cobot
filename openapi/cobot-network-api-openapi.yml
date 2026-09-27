@@ -199,73 +199,6 @@ components:
         id:
           type: string
       additionalProperties: false
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    network:
-      id: network.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-            relationships:
-              type: object
-              additionalProperties: false
-              properties:
-                memberSpaces:
-                  type: object
-                memberships:
-                  type: object
-                membershipProfiles:
-                  type: object
-        included:
-          type: array
-          items:
-            type: object
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    resource-availabilities:
-      id: resource-availabilities.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        included:
-          type: array
-          items:
-            type: object
     pagination-links:
       type: object
       required:
@@ -333,6 +266,73 @@ components:
           properties:
             resource:
               $ref: '#/components/schemas/relationship-linkage'
+    network:
+      id: network.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                memberSpaces:
+                  type: object
+                memberships:
+                  type: object
+                membershipProfiles:
+                  type: object
+        included:
+          type: array
+          items:
+            type: object
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    resource-availabilities:
+      id: resource-availabilities.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            type: object
   securitySchemes:
     OpenId:
       type: openIdConnect

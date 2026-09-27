@@ -1902,445 +1902,9 @@ paths:
                         name: Party
 components:
   schemas:
-    decimal:
-      description: A decimal number.
+    event-message-body:
       type: string
-      pattern: ^-?\d+(\.\d+)?$
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
-    error:
-      type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    event-message:
-      id: event-message.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-event-message-data'
-    -event-ticket-purchase-data:
-      id: -event-ticket-purchase-data.json
-      type: object
-      required:
-      - id
-      - type
-      - attributes
-      - relationships
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - eventTicketPurchases
-        attributes:
-          type: object
-          required:
-          - acceptedTerms
-          - name
-          - billingAddress
-          - price
-          - company
-          - email
-          - comments
-          - phone
-          - taxId
-          additionalProperties: false
-          properties:
-            price:
-              $ref: '#/components/schemas/price'
-            acceptedTerms:
-              type: boolean
-              enum:
-              - true
-            name:
-              type: string
-            company:
-              type:
-              - string
-              - 'null'
-            billingAddress:
-              type: string
-            structuredBillingAddress:
-              $ref: '#/components/schemas/invoiceAddress'
-            email:
-              $ref: '#/components/schemas/email'
-            comments:
-              type:
-              - string
-              - 'null'
-            phone:
-              type:
-              - string
-              - 'null'
-            taxId:
-              type:
-              - string
-              - 'null'
-        relationships:
-          type: object
-          additionalProperties: false
-          required:
-          - attendances
-          - space
-          - invoices
-          - paymentMethod
-          properties:
-            attendances:
-              $ref: '#/components/schemas/relationship-linkage-array'
-            invoices:
-              $ref: '#/components/schemas/relationship-linkage-array'
-            paymentMethod:
-              $ref: '#/components/schemas/optional-relationship-linkage'
-            space:
-              $ref: '#/components/schemas/relationship-linkage'
-    gross-amount-with-currency:
-      type: object
-      required:
-      - gross
-      - currency
-      additionalProperties: false
-      properties:
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-    related-link:
-      type: object
-      required:
-      - links
-      additionalProperties: false
-      properties:
-        links:
-          type: object
-          required:
-          - related
-          additionalProperties: false
-          properties:
-            related:
-              type: string
-              format: uri-reference
-    event-attendances:
-      id: event-attendances.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-event-attendance-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        included:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/-membership-data'
-            - $ref: '#/components/schemas/-contact-data'
-    relationship-linkage-array:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/linkage'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    structuredAddress:
-      type: object
-      description: Either name or company is required.
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - street
-      - postCode
-      - city
-      - countryCode
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        street:
-          type: string
-        postCode:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        countryCode:
-          type: string
-    net-amount-with-currency:
-      type: object
-      required:
-      - net
-      - currency
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-    revenue-account:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    -membership-data:
-      id: -membership-data.json#
-      type: object
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - memberships
-        attributes:
-          type: object
-          additionalProperties: false
-          properties:
-            name:
-              oneOf:
-              - type: string
-              - type: 'null'
-            email:
-              oneOf:
-              - type: string
-              - type: 'null'
-            phone:
-              oneOf:
-              - type: string
-              - type: 'null'
-            company:
-              oneOf:
-              - type: string
-              - type: 'null'
-            confirmedAt:
-              oneOf:
-              - $ref: '#/components/schemas/date'
-              - type: 'null'
-            canceledAt:
-              oneOf:
-              - $ref: '#/components/schemas/date'
-              - type: 'null'
-            photo:
-              oneOf:
-              - $ref: '#/components/schemas/avatar-photo'
-              - type: 'null'
-        relationships:
-          type: object
-          additionalProperties: false
-          required:
-          - space
-          properties:
-            bookingCredits:
-              $ref: '#/components/schemas/related-link'
-            space:
-              type: object
-              additionalProperties: false
-              properties:
-                data:
-                  $ref: '#/components/schemas/linkage'
-            team:
-              type: object
-              additionalProperties: false
-              properties:
-                data:
-                  $ref: '#/components/schemas/linkage'
-    color:
-      description: 'Color hex code, e.g. #FF0000'
-      type: string
-      pattern: ^#[a-fA-F0-9]{6}$
-    address:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
-          type: string
-          description: Only admins can see it.
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    -contact-data:
-      id: -contact-data.json
-      type: object
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - contacts
-        attributes:
-          type: object
-          required:
-          - email
-          - address
-          - phone
-          - photo
-          additionalProperties: false
-          properties:
-            email:
-              oneOf:
-              - type: string
-              - type: 'null'
-            address:
-              $ref: '#/components/schemas/address'
-            phone:
-              oneOf:
-              - type: string
-              - type: 'null'
-            photo:
-              oneOf:
-              - $ref: '#/components/schemas/avatar-photo'
-              - type: 'null'
-        relationships:
-          type: object
-          additionalProperties: false
-          properties:
-            space:
-              $ref: '#/components/schemas/relationship-linkage'
-            membership:
-              $ref: '#/components/schemas/optional-relationship-linkage'
-    event-messages:
-      id: event-messages.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-event-message-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-    event:
-      id: event.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-event-data'
-        included:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/-membership-data'
-            - $ref: '#/components/schemas/-event-attendance-data'
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    email:
-      type: string
-      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+      description: A custom, plain-text message added to the auto-generated email.
     event-tags:
       id: event-tags.json#
       type: object
@@ -2371,6 +1935,33 @@ components:
                 properties:
                   name:
                     type: string
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
     address-2:
       type: object
       description: Either name or company is required.
@@ -2390,6 +1981,28 @@ components:
           - 'null'
         fullAddress:
           type: string
+    events:
+      id: event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-event-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-contact-data'
+            - $ref: '#/components/schemas/-event-attendance-data'
     create-event-attendance:
       id: create-event-attendance.json#
       type: object
@@ -2464,35 +2077,37 @@ components:
                           type: string
                           enum:
                           - events
-    update-event-message:
-      id: update-event-message.json#
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    price:
+      description: Price including net/gross value and all taxes.
       type: object
       required:
-      - data
+      - net
+      - gross
+      - currency
+      - taxes
       additionalProperties: false
       properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              enum:
-              - eventMessages
-            attributes:
-              type: object
-              additionalProperties: false
-              properties:
-                trigger:
-                  $ref: '#/components/schemas/event-message-trigger'
-                body:
-                  $ref: '#/components/schemas/event-message-body'
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
     -event-message-data:
       id: -event-message-data.json
       type: object
@@ -2548,6 +2163,742 @@ components:
                       type: string
                       enum:
                       - events
+    image-upload:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          description: The image as data uri (content type + base64 encoded data)
+          type: string
+          pattern: ^data:image/\w+;base64,\S+$
+    event-message:
+      id: event-message.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-message-data'
+    event:
+      id: event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-data'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-event-attendance-data'
+    -event-attendance-data:
+      id: -event-attendance-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - eventAttendances
+        attributes:
+          type: object
+          required:
+          - price
+          - accountingCode
+          - visibility
+          - createdAt
+          - numberOfAttendees
+          - name
+          additionalProperties: false
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            price:
+              oneOf:
+              - type: 'null'
+              - $ref: '#/components/schemas/price'
+            accountingCode:
+              oneOf:
+              - type: string
+              - type: 'null'
+            numberOfAttendees:
+              type: integer
+              minimum: 1
+            visibility:
+              description: Who can see the attendance/attendee data. Default is admins.
+              type: string
+              enum:
+              - admins
+              - members
+              - public
+            name:
+              oneOf:
+              - type: string
+              - type: 'null'
+        relationships:
+          type: object
+          required:
+          - attendee
+          - event
+          additionalProperties: false
+          properties:
+            event:
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - events
+            attendee:
+              type: object
+              required:
+              - data
+              additionalProperties: false
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - memberships
+                      - contacts
+    address:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+          description: Only admins can see it.
+    create-event-message:
+      id: create-event-message.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - eventMessages
+            attributes:
+              type: object
+              required:
+              - trigger
+              - body
+              additionalProperties: false
+              properties:
+                trigger:
+                  $ref: '#/components/schemas/event-message-trigger'
+                body:
+                  $ref: '#/components/schemas/event-message-body'
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - event
+              properties:
+                event:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - events
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    event-ticket-purchase:
+      id: event-ticket-purchase.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-ticket-purchase-data'
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+    color:
+      description: 'Color hex code, e.g. #FF0000'
+      type: string
+      pattern: ^#[a-fA-F0-9]{6}$
+    event-attendance:
+      id: event-attendance.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-event-attendance-data'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-contact-data'
+    -contact-data:
+      id: -contact-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - contacts
+        attributes:
+          type: object
+          required:
+          - email
+          - address
+          - phone
+          - photo
+          additionalProperties: false
+          properties:
+            email:
+              oneOf:
+              - type: string
+              - type: 'null'
+            address:
+              $ref: '#/components/schemas/address'
+            phone:
+              oneOf:
+              - type: string
+              - type: 'null'
+            photo:
+              oneOf:
+              - $ref: '#/components/schemas/avatar-photo'
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          properties:
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            membership:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    event-message-trigger:
+      type: string
+      enum:
+      - attended
+      - published
+      description: What triggers the message to be sent. The 'published' trigger will send a message to all members when an event is published. If no `published` message is created, no message is sent to members. The 'attended' trigger will send a message to an attendee right after they attended an event. If no `attended` message is created, a generic message is sent to new attendees. More triggers will be available in the future.
+    -membership-data:
+      id: -membership-data.json#
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - memberships
+        attributes:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              oneOf:
+              - type: string
+              - type: 'null'
+            email:
+              oneOf:
+              - type: string
+              - type: 'null'
+            phone:
+              oneOf:
+              - type: string
+              - type: 'null'
+            company:
+              oneOf:
+              - type: string
+              - type: 'null'
+            confirmedAt:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            canceledAt:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            photo:
+              oneOf:
+              - $ref: '#/components/schemas/avatar-photo'
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            bookingCredits:
+              $ref: '#/components/schemas/related-link'
+            space:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  $ref: '#/components/schemas/linkage'
+            team:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  $ref: '#/components/schemas/linkage'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    event-attendances:
+      id: event-attendances.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-event-attendance-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/-membership-data'
+            - $ref: '#/components/schemas/-contact-data'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    relationship-linkage-array:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/linkage'
+    event-messages:
+      id: event-messages.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-event-message-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+    update-event:
+      id: update-event.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - events
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  type: string
+                audience:
+                  type: string
+                  enum:
+                  - membersOnly
+                  - public
+                description:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                color:
+                  oneOf:
+                  - $ref: '#/components/schemas/color'
+                  - type: 'null'
+                videoUrl:
+                  description: Video stream/call URL for online events.
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                publicPage:
+                  type: boolean
+                  description: Whether to provide a publicly accessible event page.
+                image:
+                  oneOf:
+                  - type: 'null'
+                  - type: object
+                    required:
+                    - data
+                    additionalProperties: false
+                    properties:
+                      data:
+                        description: The image as data uri (content type + base64 encoded data)
+                        type: string
+                        pattern: ^data:image/\w+;base64,\S+$
+                location:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                capacity:
+                  description: How many people can attend/tickets will be sold.
+                  oneOf:
+                  - type: integer
+                    minimum: 1
+                  - type: 'null'
+                tags:
+                  type: array
+                  items:
+                    type: string
+                price:
+                  description: Price for one ticket. Can be passed either as net or gross value.
+                  oneOf:
+                  - $ref: '#/components/schemas/net-amount-with-currency'
+                  - $ref: '#/components/schemas/gross-amount-with-currency'
+                  - type: 'null'
+                visitorPrice:
+                  description: Price for one ticket for a visitor, if visitors should pay a different price than members. Can be passed either as net or gross value.
+                  oneOf:
+                  - $ref: '#/components/schemas/net-amount-with-currency'
+                  - $ref: '#/components/schemas/gross-amount-with-currency'
+                  - type: 'null'
+                accountingCode:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                visitorAccountingCode:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                costCenter:
+                  oneOf:
+                  - $ref: '#/components/schemas/cost-center'
+                  - type: 'null'
+                revenueAccount:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/revenue-account'
+                visitorCostCenter:
+                  oneOf:
+                  - $ref: '#/components/schemas/cost-center'
+                  - type: 'null'
+                visitorRevenueAccount:
+                  oneOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/revenue-account'
+            relationships:
+              type: object
+              additionalProperties: false
+              properties:
+                resources:
+                  $ref: '#/components/schemas/event-resources'
     create-event:
       id: create-event.json#
       type: object
@@ -2685,6 +3036,17 @@ components:
                           - spaces
                         id:
                           type: string
+    net-amount-with-currency:
+      type: object
+      required:
+      - net
+      - currency
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
     tax:
       type: object
       additionalProperties: false
@@ -2695,251 +3057,6 @@ components:
           $ref: '#/components/schemas/decimal'
         amount:
           $ref: '#/components/schemas/decimal'
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
-    event-resources:
-      description: The booking calendar resources to be booked for the event.
-      type: object
-      additionalProperties: false
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            required:
-            - id
-            - type
-            additionalProperties: false
-            properties:
-              type:
-                type: string
-                enum:
-                - resources
-              id:
-                type: string
-              meta:
-                additionalProperties: false
-                required:
-                - units
-                properties:
-                  units:
-                    description: How many units of the resource shoud be booked. Default is all. After the event has been created, the no. of units can be queried by loading the bookings associated with the event.
-                    oneOf:
-                    - type: integer
-                      minimum: 1
-                      description: Book the given number of units.
-                    - type: string
-                      enum:
-                      - all
-                      description: Book all units of the resource.
-    -event-attendance-data:
-      id: -event-attendance-data.json
-      type: object
-      required:
-      - id
-      - type
-      - attributes
-      - relationships
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - eventAttendances
-        attributes:
-          type: object
-          required:
-          - price
-          - accountingCode
-          - visibility
-          - createdAt
-          - numberOfAttendees
-          - name
-          additionalProperties: false
-          properties:
-            createdAt:
-              type: string
-              format: date-time
-            price:
-              oneOf:
-              - type: 'null'
-              - $ref: '#/components/schemas/price'
-            accountingCode:
-              oneOf:
-              - type: string
-              - type: 'null'
-            numberOfAttendees:
-              type: integer
-              minimum: 1
-            visibility:
-              description: Who can see the attendance/attendee data. Default is admins.
-              type: string
-              enum:
-              - admins
-              - members
-              - public
-            name:
-              oneOf:
-              - type: string
-              - type: 'null'
-        relationships:
-          type: object
-          required:
-          - attendee
-          - event
-          additionalProperties: false
-          properties:
-            event:
-              type: object
-              required:
-              - data
-              additionalProperties: false
-              properties:
-                data:
-                  type: object
-                  required:
-                  - id
-                  - type
-                  additionalProperties: false
-                  properties:
-                    id:
-                      type: string
-                    type:
-                      type: string
-                      enum:
-                      - events
-            attendee:
-              type: object
-              required:
-              - data
-              additionalProperties: false
-              properties:
-                data:
-                  type: object
-                  required:
-                  - id
-                  - type
-                  additionalProperties: false
-                  properties:
-                    id:
-                      type: string
-                    type:
-                      type: string
-                      enum:
-                      - memberships
-                      - contacts
-    cost-center:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    invoiceAddress:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - fullAddress
-      - city
-      - postCode
-      - state
-      - street
-      - countryCode
-      properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
-          type: string
-        street:
-          oneOf:
-          - type: string
-          - type: 'null'
-        postCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        countryCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        latitude:
-          type: number
-        longitude:
-          type: number
-      dependencies:
-        latitude:
-        - longitude
-        longitude:
-        - latitude
-    events:
-      id: event.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-event-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        included:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/-membership-data'
-            - $ref: '#/components/schemas/-contact-data'
-            - $ref: '#/components/schemas/-event-attendance-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    event-message-body:
-      type: string
-      description: A custom, plain-text message added to the auto-generated email.
     -event-data:
       type: object
       required:
@@ -3228,10 +3345,6 @@ components:
                       format: uri-reference
                   additionalProperties: false
               additionalProperties: false
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
     pagination-links:
       type: object
       required:
@@ -3259,292 +3372,83 @@ components:
         last:
           type: string
           description: Link to the last results page.
-    image-upload:
+    -event-ticket-purchase-data:
+      id: -event-ticket-purchase-data.json
       type: object
       required:
-      - data
+      - id
+      - type
+      - attributes
+      - relationships
       additionalProperties: false
       properties:
-        data:
-          description: The image as data uri (content type + base64 encoded data)
+        id:
           type: string
-          pattern: ^data:image/\w+;base64,\S+$
-    create-event-message:
-      id: create-event-message.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
+        type:
+          type: string
+          enum:
+          - eventTicketPurchases
+        attributes:
           type: object
           required:
-          - type
-          - attributes
-          - relationships
+          - acceptedTerms
+          - name
+          - billingAddress
+          - price
+          - company
+          - email
+          - comments
+          - phone
+          - taxId
           additionalProperties: false
           properties:
-            type:
-              type: string
+            price:
+              $ref: '#/components/schemas/price'
+            acceptedTerms:
+              type: boolean
               enum:
-              - eventMessages
-            attributes:
-              type: object
-              required:
-              - trigger
-              - body
-              additionalProperties: false
-              properties:
-                trigger:
-                  $ref: '#/components/schemas/event-message-trigger'
-                body:
-                  $ref: '#/components/schemas/event-message-body'
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - event
-              properties:
-                event:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                          - events
-    avatar-photo:
-      type: object
-      properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
-      additionalProperties: false
-    update-event:
-      id: update-event.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
+              - true
+            name:
+              type: string
+            company:
+              type:
+              - string
+              - 'null'
+            billingAddress:
+              type: string
+            structuredBillingAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            email:
+              $ref: '#/components/schemas/email'
+            comments:
+              type:
+              - string
+              - 'null'
+            phone:
+              type:
+              - string
+              - 'null'
+            taxId:
+              type:
+              - string
+              - 'null'
+        relationships:
           type: object
-          required:
-          - id
-          - type
           additionalProperties: false
+          required:
+          - attendances
+          - space
+          - invoices
+          - paymentMethod
           properties:
-            id:
-              type: string
-            type:
-              type: string
-              enum:
-              - events
-            attributes:
-              type: object
-              additionalProperties: false
-              properties:
-                from:
-                  type: string
-                  format: date-time
-                to:
-                  type: string
-                  format: date-time
-                title:
-                  type: string
-                audience:
-                  type: string
-                  enum:
-                  - membersOnly
-                  - public
-                description:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                color:
-                  oneOf:
-                  - $ref: '#/components/schemas/color'
-                  - type: 'null'
-                videoUrl:
-                  description: Video stream/call URL for online events.
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                publicPage:
-                  type: boolean
-                  description: Whether to provide a publicly accessible event page.
-                image:
-                  oneOf:
-                  - type: 'null'
-                  - type: object
-                    required:
-                    - data
-                    additionalProperties: false
-                    properties:
-                      data:
-                        description: The image as data uri (content type + base64 encoded data)
-                        type: string
-                        pattern: ^data:image/\w+;base64,\S+$
-                location:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                capacity:
-                  description: How many people can attend/tickets will be sold.
-                  oneOf:
-                  - type: integer
-                    minimum: 1
-                  - type: 'null'
-                tags:
-                  type: array
-                  items:
-                    type: string
-                price:
-                  description: Price for one ticket. Can be passed either as net or gross value.
-                  oneOf:
-                  - $ref: '#/components/schemas/net-amount-with-currency'
-                  - $ref: '#/components/schemas/gross-amount-with-currency'
-                  - type: 'null'
-                visitorPrice:
-                  description: Price for one ticket for a visitor, if visitors should pay a different price than members. Can be passed either as net or gross value.
-                  oneOf:
-                  - $ref: '#/components/schemas/net-amount-with-currency'
-                  - $ref: '#/components/schemas/gross-amount-with-currency'
-                  - type: 'null'
-                accountingCode:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                visitorAccountingCode:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                costCenter:
-                  oneOf:
-                  - $ref: '#/components/schemas/cost-center'
-                  - type: 'null'
-                revenueAccount:
-                  oneOf:
-                  - type: 'null'
-                  - $ref: '#/components/schemas/revenue-account'
-                visitorCostCenter:
-                  oneOf:
-                  - $ref: '#/components/schemas/cost-center'
-                  - type: 'null'
-                visitorRevenueAccount:
-                  oneOf:
-                  - type: 'null'
-                  - $ref: '#/components/schemas/revenue-account'
-            relationships:
-              type: object
-              additionalProperties: false
-              properties:
-                resources:
-                  $ref: '#/components/schemas/event-resources'
-    event-message-trigger:
-      type: string
-      enum:
-      - attended
-      - published
-      description: What triggers the message to be sent. The 'published' trigger will send a message to all members when an event is published. If no `published` message is created, no message is sent to members. The 'attended' trigger will send a message to an attendee right after they attended an event. If no `attended` message is created, a generic message is sent to new attendees. More triggers will be available in the future.
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    event-ticket-purchase:
-      id: event-ticket-purchase.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-event-ticket-purchase-data'
-    event-attendance:
-      id: event-attendance.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-event-attendance-data'
-        included:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/-membership-data'
-            - $ref: '#/components/schemas/-contact-data'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
+            attendances:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            invoices:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            paymentMethod:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
     create-event-ticket-purchase:
       id: create-event-ticket-purchase.json#
       type: object
@@ -3705,6 +3609,102 @@ components:
                 additionalProperties: false
                 description: If paying manually, neither provide a payment nor a payment method
                 properties: {}
+    gross-amount-with-currency:
+      type: object
+      required:
+      - gross
+      - currency
+      additionalProperties: false
+      properties:
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    event-resources:
+      description: The booking calendar resources to be booked for the event.
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - type
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+                enum:
+                - resources
+              id:
+                type: string
+              meta:
+                additionalProperties: false
+                required:
+                - units
+                properties:
+                  units:
+                    description: How many units of the resource shoud be booked. Default is all. After the event has been created, the no. of units can be queried by loading the bookings associated with the event.
+                    oneOf:
+                    - type: integer
+                      minimum: 1
+                      description: Book the given number of units.
+                    - type: string
+                      enum:
+                      - all
+                      description: Book all units of the resource.
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    update-event-message:
+      id: update-event-message.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - eventMessages
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                trigger:
+                  $ref: '#/components/schemas/event-message-trigger'
+                body:
+                  $ref: '#/components/schemas/event-message-body'
   securitySchemes:
     OpenId:
       type: openIdConnect

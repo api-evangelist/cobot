@@ -97,38 +97,6 @@ paths:
                       detail: The code has expired..
 components:
   schemas:
-    error:
-      type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
     -discount-code-data:
       id: -discount-code-data.json
       type: object
@@ -161,6 +129,51 @@ components:
               - amount
             value:
               type: string
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
     link:
       description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
       oneOf:
@@ -177,10 +190,19 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
-    links:
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
       type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
+      additionalProperties: true
+    discount-code:
+      id: discount-code.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-discount-code-data'
     failure:
       type: object
       required:
@@ -198,28 +220,6 @@ components:
         links:
           $ref: '#/components/schemas/links'
       additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    discount-code:
-      id: discount-code.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-discount-code-data'
   securitySchemes:
     OpenId:
       type: openIdConnect

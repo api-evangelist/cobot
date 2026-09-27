@@ -69,6 +69,14 @@ paths:
                             type: spaces
 components:
   schemas:
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     linkage:
       description: The "type" and "id" of a linked entity.
       type: object
@@ -81,22 +89,6 @@ components:
         id:
           type: string
       additionalProperties: false
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
     revenue-accounts:
       id: revenue-accounts.json#
       type: object
@@ -167,6 +159,14 @@ components:
         last:
           type: string
           description: Link to the last results page.
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
   securitySchemes:
     OpenId:
       type: openIdConnect

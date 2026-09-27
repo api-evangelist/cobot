@@ -59,6 +59,19 @@ paths:
                       email: admin@example.com
 components:
   schemas:
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
     error:
       type: object
       properties:
@@ -107,6 +120,10 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
     preview-user-email:
       id: preview-user-email.json#
       type: object
@@ -149,23 +166,6 @@ components:
         links:
           $ref: '#/components/schemas/links'
       additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
   securitySchemes:
     OpenId:
       type: openIdConnect

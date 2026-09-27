@@ -140,14 +140,267 @@ paths:
                           type: payments
 components:
   schemas:
-    decimal:
-      description: A decimal number.
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    address-2:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        fullAddress:
+          type: string
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    drop-in-pass-purchase:
+      id: drop-in-pass-purchase.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-drop-in-pass-purchase-data'
+    -drop-in-pass-purchase-data:
+      id: -drop-in-pass-purchase-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      - relationships
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - dropInPassPurchases
+        attributes:
+          type: object
+          required:
+          - acceptedTerms
+          - name
+          - billingAddress
+          - price
+          - company
+          - email
+          - comments
+          - phone
+          - taxId
+          additionalProperties: false
+          properties:
+            price:
+              $ref: '#/components/schemas/price'
+            acceptedTerms:
+              type: boolean
+              enum:
+              - true
+            name:
+              type: string
+            company:
+              type:
+              - string
+              - 'null'
+            billingAddress:
+              type: string
+            structuredBillingAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            email:
+              $ref: '#/components/schemas/email'
+            comments:
+              type:
+              - string
+              - 'null'
+            phone:
+              type:
+              - string
+              - 'null'
+            taxId:
+              type:
+              - string
+              - 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - dropInPasses
+          - space
+          - invoices
+          - paymentMethod
+          properties:
+            dropInPasses:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            invoices:
+              $ref: '#/components/schemas/relationship-linkage-array'
+            paymentMethod:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    email:
       type: string
-      pattern: ^-?\d+(\.\d+)?$
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
     error:
       type: object
       properties:
@@ -180,6 +433,26 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
     relationship-linkage-array:
       type: object
       required:
@@ -190,123 +463,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/linkage'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    structuredAddress:
-      type: object
-      description: Either name or company is required.
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - street
-      - postCode
-      - city
-      - countryCode
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        street:
-          type: string
-        postCode:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        countryCode:
-          type: string
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    email:
-      type: string
-      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
-    address-2:
-      type: object
-      description: Either name or company is required.
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - fullAddress
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        fullAddress:
-          type: string
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
     create-drop-in-pass-purchase:
       id: create-drop-in-pass-purchase.json#
       type: object
@@ -466,193 +622,37 @@ components:
                             - paymentMethods
                           id:
                             type: string
-    invoiceAddress:
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    tax:
       type: object
       additionalProperties: false
-      required:
-      - name
-      - company
-      - fullAddress
-      - city
-      - postCode
-      - state
-      - street
-      - countryCode
       properties:
         name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
           type: string
-        street:
-          oneOf:
-          - type: string
-          - type: 'null'
-        postCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        countryCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        latitude:
-          type: number
-        longitude:
-          type: number
-      dependencies:
-        latitude:
-        - longitude
-        longitude:
-        - latitude
-    -drop-in-pass-purchase-data:
-      id: -drop-in-pass-purchase-data.json
-      type: object
-      required:
-      - id
-      - type
-      - attributes
-      - relationships
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - dropInPassPurchases
-        attributes:
-          type: object
-          required:
-          - acceptedTerms
-          - name
-          - billingAddress
-          - price
-          - company
-          - email
-          - comments
-          - phone
-          - taxId
-          additionalProperties: false
-          properties:
-            price:
-              $ref: '#/components/schemas/price'
-            acceptedTerms:
-              type: boolean
-              enum:
-              - true
-            name:
-              type: string
-            company:
-              type:
-              - string
-              - 'null'
-            billingAddress:
-              type: string
-            structuredBillingAddress:
-              $ref: '#/components/schemas/invoiceAddress'
-            email:
-              $ref: '#/components/schemas/email'
-            comments:
-              type:
-              - string
-              - 'null'
-            phone:
-              type:
-              - string
-              - 'null'
-            taxId:
-              type:
-              - string
-              - 'null'
-        relationships:
-          type: object
-          additionalProperties: false
-          required:
-          - dropInPasses
-          - space
-          - invoices
-          - paymentMethod
-          properties:
-            dropInPasses:
-              $ref: '#/components/schemas/relationship-linkage-array'
-            invoices:
-              $ref: '#/components/schemas/relationship-linkage-array'
-            paymentMethod:
-              $ref: '#/components/schemas/optional-relationship-linkage'
-            space:
-              $ref: '#/components/schemas/relationship-linkage'
-    drop-in-pass-purchase:
-      id: drop-in-pass-purchase.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-drop-in-pass-purchase-data'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
+        rate:
           $ref: '#/components/schemas/decimal'
-        gross:
+        amount:
           $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/tax'
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
   securitySchemes:
     OpenId:
       type: openIdConnect

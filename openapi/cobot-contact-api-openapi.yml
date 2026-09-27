@@ -165,6 +165,38 @@ paths:
                       currentPage: 1
 components:
   schemas:
+    contact:
+      id: contact.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-contact-data'
+    contacts:
+      id: contacts.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-contact-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     linkage:
       description: The "type" and "id" of a linked entity.
       type: object
@@ -177,6 +209,91 @@ components:
         id:
           type: string
       additionalProperties: false
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    address:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+          description: Only admins can see it.
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
     -contact-data:
       id: -contact-data.json
       type: object
@@ -222,123 +339,6 @@ components:
               $ref: '#/components/schemas/relationship-linkage'
             membership:
               $ref: '#/components/schemas/optional-relationship-linkage'
-    address:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
-          type: string
-          description: Only admins can see it.
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    contact:
-      id: contact.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-contact-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    contacts:
-      id: contacts.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-contact-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-    avatar-photo:
-      type: object
-      properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
-      additionalProperties: false
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
   securitySchemes:
     OpenId:
       type: openIdConnect

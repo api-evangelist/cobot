@@ -537,11 +537,35 @@ paths:
                             type: memberships
 components:
   schemas:
-    blank:
-      oneOf:
-      - type: 'null'
-      - type: string
-        pattern: ^\s*$
+    membership-profiles:
+      id: membership-profiles.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-membership-profile-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
     update-membership-profile:
       id: update-membership-profile.json#
       type: object
@@ -598,30 +622,11 @@ components:
                   type: string
                 published:
                   type: boolean
-    email:
-      type: string
-      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
-    membership-profile:
-      id: membership-profile.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-membership-profile-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
+    blank:
+      oneOf:
+      - type: 'null'
+      - type: string
+        pattern: ^\s*$
     photo:
       type: object
       properties:
@@ -633,6 +638,15 @@ components:
         height:
           type: number
       additionalProperties: false
+    membership-profile:
+      id: membership-profile.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-membership-profile-data'
     pagination-links:
       type: object
       required:
@@ -752,35 +766,21 @@ components:
           properties:
             membership:
               type: object
-    membership-profiles:
-      id: membership-profiles.json#
+    pagination-meta:
       type: object
-      required:
-      - data
       additionalProperties: false
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-membership-profile-data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-    avatar-photo:
-      type: object
-      properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
-      additionalProperties: false
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
   securitySchemes:
     OpenId:
       type: openIdConnect

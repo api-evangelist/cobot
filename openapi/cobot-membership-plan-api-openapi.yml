@@ -120,10 +120,6 @@ paths:
                             type: memberships
 components:
   schemas:
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
     membership-plans:
       id: membership-plans.json#
       type: object
@@ -139,51 +135,6 @@ components:
           type: object
         meta:
           $ref: '#/components/schemas/pagination-meta'
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
-    -membership-plan-extra-data:
-      id: -membership-plan-extra-data.json
-      type: object
-      additionalProperties: false
-      required:
-      - accountingCode
-      - cycleDuration
-      - name
-      - pricePerCycle
-      properties:
-        accountingCode:
-          oneOf:
-          - type: 'null'
-          - type: string
-        cycleDuration:
-          type: number
-          minimum: 1
-        name:
-          type: string
-        pricePerCycle:
-          $ref: '#/components/schemas/price'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
     -membership-plan-data:
       id: -membership-plan-data.json
       type: object
@@ -249,10 +200,49 @@ components:
               properties:
                 data:
                   $ref: '#/components/schemas/linkage'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    -membership-plan-extra-data:
+      id: -membership-plan-extra-data.json
+      type: object
+      additionalProperties: false
+      required:
+      - accountingCode
+      - cycleDuration
+      - name
+      - pricePerCycle
+      properties:
+        accountingCode:
+          oneOf:
+          - type: 'null'
+          - type: string
+        cycleDuration:
+          type: number
+          minimum: 1
+        name:
+          type: string
+        pricePerCycle:
+          $ref: '#/components/schemas/price'
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
     price:
       description: Price including net/gross value and all taxes.
       type: object
@@ -273,16 +263,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/tax'
-    tax:
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    pagination-meta:
       type: object
       additionalProperties: false
       properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
   securitySchemes:
     OpenId:
       type: openIdConnect

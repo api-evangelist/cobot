@@ -175,6 +175,159 @@ paths:
                             type: spaces
 components:
   schemas:
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    product:
+      id: product.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-product-data'
+    products-3:
+      id: products.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-product-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            type: object
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
     -product-data:
       id: -product-data.json
       type: object
@@ -253,159 +406,6 @@ components:
               $ref: '#/components/schemas/relationship-linkage'
             category:
               $ref: '#/components/schemas/optional-relationship-linkage'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
-    cost-center:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    product:
-      id: product.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-product-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    revenue-account:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-    products-3:
-      id: products.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-product-data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        included:
-          type: array
-          items:
-            type: object
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
   securitySchemes:
     OpenId:
       type: openIdConnect

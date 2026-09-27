@@ -285,143 +285,6 @@ paths:
                             type: teams
 components:
   schemas:
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    related-link:
-      type: object
-      required:
-      - links
-      additionalProperties: false
-      properties:
-        links:
-          type: object
-          required:
-          - related
-          additionalProperties: false
-          properties:
-            related:
-              type: string
-              format: uri-reference
-    network-memberships:
-      id: network-memberships.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-network-membership-data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-    -network-membership-data:
-      id: -network-membership-data.json#
-      type: object
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - memberships
-        attributes:
-          type: object
-          additionalProperties: false
-          required:
-          - name
-          properties:
-            name:
-              oneOf:
-              - type: string
-              - type: 'null'
-        relationships:
-          type: object
-          additionalProperties: false
-          required:
-          - space
-          properties:
-            space:
-              type: object
-              additionalProperties: false
-              properties:
-                data:
-                  $ref: '#/components/schemas/linkage'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    membership:
-      id: membership.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-membership-data'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
     -membership-data:
       id: -membership-data.json#
       type: object
@@ -488,6 +351,92 @@ components:
               properties:
                 data:
                   $ref: '#/components/schemas/linkage'
+    -network-membership-data:
+      id: -network-membership-data.json#
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - memberships
+        attributes:
+          type: object
+          additionalProperties: false
+          required:
+          - name
+          properties:
+            name:
+              oneOf:
+              - type: string
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            space:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  $ref: '#/components/schemas/linkage'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    membership:
+      id: membership.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-membership-data'
     memberships:
       id: memberships.json#
       type: object
@@ -503,20 +452,71 @@ components:
           $ref: '#/components/schemas/pagination-links'
         meta:
           $ref: '#/components/schemas/pagination-meta'
-    avatar-photo:
+    photo:
       type: object
       properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
       additionalProperties: false
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    network-memberships:
+      id: network-memberships.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-network-membership-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
   securitySchemes:
     OpenId:
       type: openIdConnect
