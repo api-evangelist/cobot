@@ -59,10 +59,47 @@ paths:
                       email: admin@example.com
 components:
   schemas:
-    links:
+    preview-user-email:
+      id: preview-user-email.json#
       type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: userEmailPreviews
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
     jsonapi:
       description: An object describing the server's implementation
       type: object
@@ -72,6 +109,14 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
     error:
       type: object
       properties:
@@ -104,51 +149,6 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    preview-user-email:
-      id: preview-user-email.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: userEmailPreviews
-            attributes:
-              type: object
-              additionalProperties: false
-              required:
-              - email
-              properties:
-                email:
-                  type: string
     failure:
       type: object
       required:

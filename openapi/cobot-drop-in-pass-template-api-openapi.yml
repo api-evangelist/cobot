@@ -154,6 +154,25 @@ paths:
                             type: dropInPassTemplates
 components:
   schemas:
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
     drop-in-pass-template:
       id: drop-in-pass_template.json#
       type: object
@@ -163,62 +182,31 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/-drop-in-pass-template-data'
-    drop-in-pass-template-availability:
-      id: drop-in-pass-template-availability.json#
+    related-link:
       type: object
       required:
-      - data
+      - links
       additionalProperties: false
       properties:
-        data:
+        links:
           type: object
           required:
-          - id
-          - type
+          - related
           additionalProperties: false
           properties:
-            id:
+            related:
               type: string
-            type:
-              type: string
-              enum:
-              - dropInPassTemplateAvailabilities
-            attributes:
-              type: object
-              required:
-              - availableDates
-              additionalProperties: false
-              properties:
-                availableDates:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - from
-                    - to
-                    - numberOfPasses
-                    additionalProperties: false
-                    properties:
-                      from:
-                        type: string
-                        format: date
-                      to:
-                        type: string
-                        format: date
-                      numberOfPasses:
-                        description: The number of passes remaining for the date range. If there is no limit configured, this will be null.
-                        oneOf:
-                        - type: 'null'
-                        - type: integer
-                          minimum: 1
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - dropInPassTemplate
-              properties:
-                dropInPassTemplate:
-                  $ref: '#/components/schemas/relationship-linkage'
+              format: uri-reference
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
     bookingTimes:
       type: array
       description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
@@ -252,46 +240,21 @@ components:
               type: integer
             minutes:
               type: integer
-    linkage:
-      description: The "type" and "id" of a linked entity.
+    color:
+      description: 'Color hex code, e.g. #FF0000'
+      type: string
+      pattern: ^#[a-fA-F0-9]{6}$
+    relationship-linkage:
       type: object
       required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    related-link:
-      type: object
-      required:
-      - links
+      - data
       additionalProperties: false
       properties:
-        links:
-          type: object
-          required:
-          - related
-          additionalProperties: false
-          properties:
-            related:
-              type: string
-              format: uri-reference
+        data:
+          $ref: '#/components/schemas/linkage'
     hours-minutes:
       type: string
       pattern: ^\d{2}:\d{2}$
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
     price:
       description: Price including net/gross value and all taxes.
       type: object
@@ -312,21 +275,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/tax'
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
     -drop-in-pass-template-data:
       id: -drop-in-pass-template-data.json
       type: object
@@ -398,22 +346,74 @@ components:
               $ref: '#/components/schemas/relationship-linkage'
             availability:
               $ref: '#/components/schemas/related-link'
-    relationship-linkage:
+    drop-in-pass-template-availability:
+      id: drop-in-pass-template-availability.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/linkage'
-    color:
-      description: 'Color hex code, e.g. #FF0000'
-      type: string
-      pattern: ^#[a-fA-F0-9]{6}$
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
+          type: object
+          required:
+          - id
+          - type
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - dropInPassTemplateAvailabilities
+            attributes:
+              type: object
+              required:
+              - availableDates
+              additionalProperties: false
+              properties:
+                availableDates:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - from
+                    - to
+                    - numberOfPasses
+                    additionalProperties: false
+                    properties:
+                      from:
+                        type: string
+                        format: date
+                      to:
+                        type: string
+                        format: date
+                      numberOfPasses:
+                        description: The number of passes remaining for the date range. If there is no limit configured, this will be null.
+                        oneOf:
+                        - type: 'null'
+                        - type: integer
+                          minimum: 1
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - dropInPassTemplate
+              properties:
+                dropInPassTemplate:
+                  $ref: '#/components/schemas/relationship-linkage'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
   securitySchemes:
     OpenId:
       type: openIdConnect

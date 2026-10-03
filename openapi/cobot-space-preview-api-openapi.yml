@@ -62,31 +62,6 @@ paths:
                       name: demo
 components:
   schemas:
-    preview-space:
-      id: preview-space.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: spacePreviews
-            attributes:
-              type: object
-              additionalProperties: false
-              required:
-              - name
-              properties:
-                name:
-                  type: string
     space-preview:
       id: space-preview.json#
       type: object
@@ -116,6 +91,31 @@ components:
                 name:
                   type: string
                 subdomain:
+                  type: string
+    preview-space:
+      id: preview-space.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: spacePreviews
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - name
+              properties:
+                name:
                   type: string
   securitySchemes:
     OpenId:

@@ -187,18 +187,25 @@ paths:
                             type: resources
 components:
   schemas:
-    linkage:
-      description: The "type" and "id" of a linked entity.
+    resource-availabilities:
+      id: resource-availabilities.json#
       type: object
       required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
+      - data
       additionalProperties: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            type: object
     pagination-links:
       type: object
       required:
@@ -266,6 +273,14 @@ components:
           properties:
             resource:
               $ref: '#/components/schemas/relationship-linkage'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
     network:
       id: network.json#
       type: object
@@ -306,33 +321,18 @@ components:
           type: number
         currentPage:
           type: number
-    relationship-linkage:
+    linkage:
+      description: The "type" and "id" of a linked entity.
       type: object
       required:
-      - data
-      additionalProperties: false
+      - type
+      - id
       properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    resource-availabilities:
-      id: resource-availabilities.json#
-      type: object
-      required:
-      - data
+        type:
+          type: string
+        id:
+          type: string
       additionalProperties: false
-      properties:
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        included:
-          type: array
-          items:
-            type: object
   securitySchemes:
     OpenId:
       type: openIdConnect

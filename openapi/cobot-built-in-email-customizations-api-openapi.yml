@@ -139,18 +139,25 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/-built-in-email-customization-data'
-    linkage:
-      description: The "type" and "id" of a linked entity.
+    built_in_email_customizations:
+      id: built_in_email_customizations.json#
       type: object
       required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
+      - data
       additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-built-in-email-customization-data'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
     -built-in-email-customization-data:
       id: -built-in-email-customization-data.json
       type: object
@@ -204,25 +211,18 @@ components:
               type: string
               format: uri-reference
           additionalProperties: false
-    relationship-linkage:
+    linkage:
+      description: The "type" and "id" of a linked entity.
       type: object
       required:
-      - data
-      additionalProperties: false
+      - type
+      - id
       properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    built_in_email_customizations:
-      id: built_in_email_customizations.json#
-      type: object
-      required:
-      - data
+        type:
+          type: string
+        id:
+          type: string
       additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-built-in-email-customization-data'
   securitySchemes:
     OpenId:
       type: openIdConnect

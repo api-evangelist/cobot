@@ -1634,44 +1634,114 @@ paths:
                             related: https://api.cobot.me/api/invoices/14c12f62ac8df98d29de357180d673e1/payment_methods
 components:
   schemas:
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    revenue-account:
+    create_e_invoice:
+      id: create_e_invoice.json#
       type: object
       additionalProperties: false
-      required:
-      - name
-      - number
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: invoices
+            id:
+              type: string
+            attributes:
+              type: object
+              additionalProperties: false
+              required:
+              - e_invoice_standard
+              - ksef_reference_number
+              - ksef_acceptance_timestamp
+              properties:
+                e_invoice_standard:
+                  type: string
+                  enum:
+                  - KSeF
+                  description: The e-invoicing standard to use
+                ksef_reference_number:
+                  type: string
+                  minLength: 1
+                  description: The reference number returned by Polish KSeF authorities
+                ksef_acceptance_timestamp:
+                  type: string
+                  minLength: 1
+                  description: The timestamp when the invoice was accepted by Polish KSeF authorities
+    tax:
+      type: object
+      additionalProperties: false
       properties:
         name:
           type: string
-        number:
-          type: string
-    positive-decimal:
-      description: A positive decimal number (>= 0).
-      type: string
-      pattern: ^\d+(\.\d+)?$
-    address-2:
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    create-invoice-charges:
+      id: create-invoice-charges.json#
       type: object
-      description: Either name or company is required.
-      additionalProperties: false
       required:
-      - name
-      - company
-      - fullAddress
+      - data
+      additionalProperties: false
       properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        fullAddress:
-          type: string
+        data:
+          type: object
+          required:
+          - type
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: invoiceCharges
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - invoices
+              properties:
+                invoices:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - type
+                        - id
+                        additionalProperties: false
+                        properties:
+                          type:
+                            type: string
+                            pattern: invoices
+                          id:
+                            type: string
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
     payment-methods:
       id: payment-methods.json#
       type: object
@@ -1781,238 +1851,21 @@ components:
           $ref: '#/components/schemas/pagination-meta'
         links:
           $ref: '#/components/schemas/pagination-links'
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-    create_e_invoice:
-      id: create_e_invoice.json#
-      type: object
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: invoices
-            id:
-              type: string
-            attributes:
-              type: object
-              additionalProperties: false
-              required:
-              - e_invoice_standard
-              - ksef_reference_number
-              - ksef_acceptance_timestamp
-              properties:
-                e_invoice_standard:
-                  type: string
-                  enum:
-                  - KSeF
-                  description: The e-invoicing standard to use
-                ksef_reference_number:
-                  type: string
-                  minLength: 1
-                  description: The reference number returned by Polish KSeF authorities
-                ksef_acceptance_timestamp:
-                  type: string
-                  minLength: 1
-                  description: The timestamp when the invoice was accepted by Polish KSeF authorities
-    create-invoice-charges:
-      id: create-invoice-charges.json#
+    invoices:
+      id: invoices.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          type: object
-          required:
-          - type
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: invoiceCharges
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - invoices
-              properties:
-                invoices:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        required:
-                        - type
-                        - id
-                        additionalProperties: false
-                        properties:
-                          type:
-                            type: string
-                            pattern: invoices
-                          id:
-                            type: string
-    taxes:
-      oneOf:
-      - type: 'null'
-      - type: array
-        items:
-          type: object
-          additionalProperties: false
-          required:
-          - rate
-          - name
-          properties:
-            rate:
-              $ref: '#/components/schemas/positive-decimal'
-            name:
-              type: string
-    structuredAddress:
-      type: object
-      description: Either name or company is required.
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - street
-      - postCode
-      - city
-      - countryCode
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        company:
-          type:
-          - string
-          - 'null'
-        street:
-          type: string
-        postCode:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        countryCode:
-          type: string
-    invoice-charges:
-      id: invoice-charges.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          - relationships
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              enum:
-              - invoiceCharges
-            relationships:
-              type: object
-              required:
-              - invoices
-              additionalProperties: false
-              properties:
-                invoices:
-                  type: object
-                  required:
-                  - data
-                  additionalProperties: false
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        required:
-                        - id
-                        - type
-                        additionalProperties: false
-                        properties:
-                          id:
-                            type: string
-                          type:
-                            type: string
-                            enum:
-                            - invoices
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
           type: array
           items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
+            $ref: '#/components/schemas/-invoice-data'
         meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
+          $ref: '#/components/schemas/pagination-meta'
         links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    attach-invoice-pdf:
-      id: attach-invoice-pdf.json#
-      type: object
-      required:
-      - pdf
-      additionalProperties: false
-      properties:
-        eInvoice:
-          type: boolean
-          description: Set to true if the PDF fulfills the e-invoicing criteria for the space.
-        eInvoiceStandard:
-          type: string
-          description: The e-invoicing standard of the uploaded PDF, e.g. 'Zugferd' in Germany.
-        pdf:
-          type: file
+          $ref: '#/components/schemas/pagination-links'
     create-custom-invoice:
       id: create-custom-invoice.json#
       type: object
@@ -2189,156 +2042,14 @@ components:
                           - invoices
                         id:
                           type: string
-    cost-center:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    invoiceAddress:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - company
-      - fullAddress
-      - city
-      - postCode
-      - state
-      - street
-      - countryCode
-      properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
-          type: string
-        street:
-          oneOf:
-          - type: string
-          - type: 'null'
-        postCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        countryCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        latitude:
-          type: number
-        longitude:
-          type: number
-      dependencies:
-        latitude:
-        - longitude
-        longitude:
-        - latitude
-    error:
-      type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    invoice:
-      id: invoice.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-invoice-data'
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
+    positive-decimal:
+      description: A positive decimal number (>= 0).
+      type: string
+      pattern: ^\d+(\.\d+)?$
     currency:
       description: ISO 4217 3 letter currency code.
       type: string
       pattern: ^[A-Z]{3}$
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
     pagination-links:
       type: object
       required:
@@ -2366,6 +2077,142 @@ components:
         last:
           type: string
           description: Link to the last results page.
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    address-2:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        fullAddress:
+          type: string
+    taxes:
+      oneOf:
+      - type: 'null'
+      - type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+          - rate
+          - name
+          properties:
+            rate:
+              $ref: '#/components/schemas/positive-decimal'
+            name:
+              type: string
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    invoice-charges:
+      id: invoice-charges.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - relationships
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - invoiceCharges
+            relationships:
+              type: object
+              required:
+              - invoices
+              additionalProperties: false
+              properties:
+                invoices:
+                  type: object
+                  required:
+                  - data
+                  additionalProperties: false
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        additionalProperties: false
+                        properties:
+                          id:
+                            type: string
+                          type:
+                            type: string
+                            enum:
+                            - invoices
     -invoice-data:
       id: -invoice-data.json
       type: object
@@ -2702,6 +2549,178 @@ components:
                     related:
                       type: string
                       format: uri
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    structuredAddress:
+      type: object
+      description: Either name or company is required.
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - street
+      - postCode
+      - city
+      - countryCode
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        company:
+          type:
+          - string
+          - 'null'
+        street:
+          type: string
+        postCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    attach-invoice-pdf:
+      id: attach-invoice-pdf.json#
+      type: object
+      required:
+      - pdf
+      additionalProperties: false
+      properties:
+        eInvoice:
+          type: boolean
+          description: Set to true if the PDF fulfills the e-invoicing criteria for the space.
+        eInvoiceStandard:
+          type: string
+          description: The e-invoicing standard of the uploaded PDF, e.g. 'Zugferd' in Germany.
+        pdf:
+          type: file
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    invoice:
+      id: invoice.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-invoice-data'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
     invoice-previews:
       id: invoice-previews.json#
       type: object
@@ -2717,25 +2736,6 @@ components:
           $ref: '#/components/schemas/pagination-meta'
         links:
           $ref: '#/components/schemas/pagination-links'
-    invoices:
-      id: invoices.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-invoice-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
   securitySchemes:
     OpenId:
       type: openIdConnect

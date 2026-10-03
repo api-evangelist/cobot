@@ -82,19 +82,49 @@ paths:
                           type: spaces
 components:
   schemas:
-    links:
+    create-customer:
+      id: create-customer.json#
       type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
+      required:
+      - data
       additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - customers
+            relationships:
+              type: object
+              required:
+              - space
+              additionalProperties: false
+              properties:
+                space:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - spaces
+                        id:
+                          type: string
     link:
       description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
       oneOf:
@@ -111,6 +141,23 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
     error:
       type: object
       properties:
@@ -142,6 +189,23 @@ components:
               type: string
         meta:
           $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
       additionalProperties: false
     customer:
       id: customer.json#
@@ -194,74 +258,10 @@ components:
                           - spaces
                         id:
                           type: string
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
     date:
       description: A date in the form YYYY-MM-DD.
       type: string
       pattern: ^\d{4}-\d{2}-\d{2}$
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    create-customer:
-      id: create-customer.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - customers
-            relationships:
-              type: object
-              required:
-              - space
-              additionalProperties: false
-              properties:
-                space:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - spaces
-                        id:
-                          type: string
   securitySchemes:
     OpenId:
       type: openIdConnect

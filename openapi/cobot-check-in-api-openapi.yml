@@ -291,72 +291,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/-check-in-data'
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    create-check-in:
-      id: create-check-in.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - checkIns
-            attributes:
-              type: object
-              required:
-              - checkInToken
-              additionalProperties: false
-              properties:
-                checkInToken:
-                  type: string
-                  description: A previously created token via the check-in token API that is associated with the membership (typically a MAC address or RFID token).
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - space
-              properties:
-                space:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                          - spaces
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
     pagination-links:
       type: object
       required:
@@ -400,38 +334,19 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
-    error:
+    jsonapi:
+      description: An object describing the server's implementation
       type: object
       properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
+        version:
           type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
     -check-in-data:
       type: object
       required:
@@ -502,25 +417,95 @@ components:
                       type: string
                       enum:
                       - memberships
-    check-ins:
-      id: check-ins.json#
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    create-check-in:
+      id: create-check-in.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-check-in-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - checkIns
+            attributes:
+              type: object
+              required:
+              - checkInToken
+              additionalProperties: false
+              properties:
+                checkInToken:
+                  type: string
+                  description: A previously created token via the check-in token API that is associated with the membership (typically a MAC address or RFID token).
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              properties:
+                space:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - spaces
     pagination-meta:
       type: object
       additionalProperties: false
@@ -546,6 +531,21 @@ components:
         links:
           $ref: '#/components/schemas/links'
       additionalProperties: false
+    check-ins:
+      id: check-ins.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-check-in-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
   securitySchemes:
     OpenId:
       type: openIdConnect

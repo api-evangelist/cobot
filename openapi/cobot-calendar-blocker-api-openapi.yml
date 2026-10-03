@@ -138,21 +138,6 @@ paths:
                             type: resources
 components:
   schemas:
-    calendar-blockers:
-      id: calendar-blockers.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-calendar-blocker-data'
     pagination-links:
       type: object
       required:
@@ -180,6 +165,21 @@ components:
         last:
           type: string
           description: Link to the last results page.
+    calendar-blockers:
+      id: calendar-blockers.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-calendar-blocker-data'
     calendar-blocker:
       id: calendar-blocker.json#
       type: object

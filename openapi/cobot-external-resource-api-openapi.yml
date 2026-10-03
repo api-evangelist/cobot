@@ -1059,174 +1059,44 @@ paths:
                         '
 components:
   schemas:
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    create-external-resource:
-      id: create-external-resource.json#
-      type: object
+    pricing:
+      description: A pricing object, containing all pricing information for a given resource.
       required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: externalResources
-            attributes:
-              $ref: '#/components/schemas/createUpdateAttributes'
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - resource
-              properties:
-                resource:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - type
-                      - id
-                      additionalProperties: false
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - resources
-                        id:
-                          type: string
-                products:
-                  $ref: '#/components/schemas/products'
-    discounts:
-      type: array
-      items:
-        type: object
-        additionalProperties: false
-        required:
-        - pricePerHour
-        - minimumDuration
-        properties:
-          pricePerHour:
-            $ref: '#/components/schemas/positive-money'
-          minimumDuration:
-            $ref: '#/components/schemas/hours-minutes-object'
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    positive-decimal:
-      description: A positive decimal number (>= 0).
-      type: string
-      pattern: ^\d+(\.\d+)?$
-    external-resources:
-      id: external-resources.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-external-resource-data'
-        included:
-          type: array
-          items:
-            type: object
-        links:
-          $ref: '#/components/schemas/pagination-links'
-    related-link:
-      type: object
-      required:
-      - links
-      additionalProperties: false
-      properties:
-        links:
-          type: object
-          required:
-          - related
-          additionalProperties: false
-          properties:
-            related:
-              type: string
-              format: uri-reference
-    revenue-account:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
       - currency
+      - pricePerHour
+      - discounts
+      - priceCap
+      - priceCaps
       - taxes
-      additionalProperties: false
+      type: object
       properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
         currency:
           $ref: '#/components/schemas/currency'
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/resource-discount'
+        priceCaps:
+          type: array
+          items:
+            $ref: '#/components/schemas/resource-price-cap'
+        priceCap:
+          description: Only charges for the booking up to the given duration.
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/resource-paid-time-cap'
         taxes:
           type: array
           items:
             $ref: '#/components/schemas/tax'
-    external-resource:
-      id: external-resource.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-external-resource-data'
-        included:
+        fixedRates:
+          description: When set, regular price, discounts, price caps etc are ignored.
           type: array
           items:
-            type: object
+            $ref: '#/components/schemas/fixed-rate'
+      additionalProperties: false
     -external-resource-data:
       id: -external-resource-data.json
       type: object
@@ -1400,96 +1270,42 @@ components:
               $ref: '#/components/schemas/relationship-linkage'
             products:
               $ref: '#/components/schemas/relationship-linkage-array'
-    hours-minutes-object:
-      type: object
-      required:
-      - hours
-      - minutes
-      additionalProperties: false
-      properties:
-        hours:
-          type: integer
-          minimum: 0
-        minutes:
-          type: integer
-          minimum: 0
-          maximum: 59
-    pricing:
-      description: A pricing object, containing all pricing information for a given resource.
-      required:
-      - currency
-      - pricePerHour
-      - discounts
-      - priceCap
-      - priceCaps
-      - taxes
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        pricePerHour:
-          $ref: '#/components/schemas/price'
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/resource-discount'
-        priceCaps:
-          type: array
-          items:
-            $ref: '#/components/schemas/resource-price-cap'
-        priceCap:
-          description: Only charges for the booking up to the given duration.
-          oneOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/resource-paid-time-cap'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-        fixedRates:
-          description: When set, regular price, discounts, price caps etc are ignored.
-          type: array
-          items:
-            $ref: '#/components/schemas/fixed-rate'
-      additionalProperties: false
-    fixed-rate:
+    tax:
       type: object
       additionalProperties: false
-      required:
-      - price
-      - maximumDuration
       properties:
-        price:
-          $ref: '#/components/schemas/positive-money'
-        maximumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-    positive-money:
-      type: object
-      required:
-      - net
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/positive-decimal'
-    taxes:
-      oneOf:
-      - type: 'null'
-      - type: array
-        items:
-          type: object
-          additionalProperties: false
-          required:
-          - rate
-          - name
-          properties:
-            rate:
-              $ref: '#/components/schemas/positive-decimal'
-            name:
-              type: string
-    color:
-      description: 'Color hex code, e.g. #FF0000'
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    priceCaps:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+        - price
+        - maximumDuration
+        properties:
+          price:
+            $ref: '#/components/schemas/positive-money'
+          maximumDuration:
+            $ref: '#/components/schemas/hours-minutes-object'
+    hours-minutes:
       type: string
-      pattern: ^#[a-fA-F0-9]{6}$
+      pattern: ^\d{2}:\d{2}$
+    relationship-linkage-array:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/linkage'
     createUpdateAttributes:
       type: object
       additionalProperties: false
@@ -1575,46 +1391,87 @@ components:
           type: boolean
           default: false
           description: If true, visitor payment details will be collected to be charged manually later.
-    resourceType:
-      oneOf:
-      - type: 'null'
-      - type: string
-        enum:
-        - room
-        - desk
-        - other
-    priceCaps:
-      type: array
-      items:
-        type: object
-        additionalProperties: false
-        required:
-        - price
-        - maximumDuration
-        properties:
-          price:
-            $ref: '#/components/schemas/positive-money'
-          maximumDuration:
-            $ref: '#/components/schemas/hours-minutes-object'
-    failure:
+    resource-price-cap:
       type: object
       required:
-      - errors
+      - price
+      - maximumDuration
+      additionalProperties: false
       properties:
-        errors:
+        price:
+          $ref: '#/components/schemas/price'
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    fixedRates:
+      type: array
+      description: When set, regular price, discounts, price caps etc are ignored.
+      items:
+        $ref: '#/components/schemas/fixed-rate'
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
           type: array
           items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
+            $ref: '#/components/schemas/tax'
+    positive-decimal:
+      description: A positive decimal number (>= 0).
+      type: string
+      pattern: ^\d+(\.\d+)?$
+    products:
+      description: Additional products bookable as booking extras with this external resource.
+      type: object
       additionalProperties: false
-    update-external-resource:
-      id: update-external-resource.json#
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - type
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+                enum:
+                - products
+              id:
+                description: Id of a product (products endpoint) to add as bookable with this external resource
+                type: string
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
+    create-external-resource:
+      id: create-external-resource.json#
       type: object
       required:
       - data
@@ -1624,133 +1481,90 @@ components:
           type: object
           required:
           - type
-          - id
-          - attributes
+          - relationships
           additionalProperties: false
           properties:
             type:
               type: string
               pattern: externalResources
-            id:
-              type: string
             attributes:
               $ref: '#/components/schemas/createUpdateAttributes'
             relationships:
               type: object
               additionalProperties: false
               required:
-              - products
+              - resource
               properties:
+                resource:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - type
+                      - id
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - resources
+                        id:
+                          type: string
                 products:
                   $ref: '#/components/schemas/products'
-    resource-discount:
+    positive-money:
       type: object
       required:
-      - pricePerHour
-      - minimumDuration
+      - net
       additionalProperties: false
       properties:
-        pricePerHour:
-          $ref: '#/components/schemas/price'
-        minimumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-    jsonapi:
-      description: An object describing the server's implementation
+        net:
+          $ref: '#/components/schemas/positive-decimal'
+    pagination-links:
       type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    bookingTimes:
-      type: array
-      description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
-      items:
-        oneOf:
-        - type: object
-          additionalProperties: false
-          required:
-          - from
-          - to
-          - weekdays
-          properties:
-            from:
-              $ref: '#/components/schemas/hours-minutes'
-            to:
-              $ref: '#/components/schemas/hours-minutes'
-            weekdays:
-              description: If empty, times are valid on any weekday. 1 = monday, 7 = sunday (see ISO 8601).
-              type: array
-              items:
-                type: number
-                minimum: 1
-                maximum: 7
-        - type: object
-          additionalProperties: false
-          required:
-          - hours
-          - minutes
-          properties:
-            hours:
-              type: integer
-            minutes:
-              type: integer
-    priceCap:
-      description: Only charges for the booking up to the given duration.
-      oneOf:
-      - type: object
-        properties:
-          maximumDuration:
-            $ref: '#/components/schemas/hours-minutes-object'
-        additionalProperties: false
-      - type: 'null'
-    hours-minutes:
-      type: string
-      pattern: ^\d{2}:\d{2}$
-    cost-center:
-      type: object
-      additionalProperties: false
       required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    error:
-      type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
+      - first
+      - self
+      - next
       additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    hours-minutes-object:
+      type: object
+      required:
+      - hours
+      - minutes
+      additionalProperties: false
+      properties:
+        hours:
+          type: integer
+          minimum: 0
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 59
     link:
       description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
       oneOf:
@@ -1767,10 +1581,132 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
+    color:
+      description: 'Color hex code, e.g. #FF0000'
+      type: string
+      pattern: ^#[a-fA-F0-9]{6}$
+    revenue-account:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    resourceType:
+      oneOf:
+      - type: 'null'
+      - type: string
+        enum:
+        - room
+        - desk
+        - other
+    positive-net-amount-with-currency-and-taxes:
+      description: Positive amount with currency and taxes. Not setting any taxes will result in the space's default taxes being used.
+      type: object
+      required:
+      - net
+      - currency
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/positive-decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          $ref: '#/components/schemas/taxes'
+    fixed-rate:
+      type: object
+      additionalProperties: false
+      required:
+      - price
+      - maximumDuration
+      properties:
+        price:
+          $ref: '#/components/schemas/positive-money'
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    cost-center:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    taxes:
+      oneOf:
+      - type: 'null'
+      - type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+          - rate
+          - name
+          properties:
+            rate:
+              $ref: '#/components/schemas/positive-decimal'
+            name:
+              type: string
+    external-resource:
+      id: external-resource.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-external-resource-data'
+        included:
+          type: array
+          items:
+            type: object
     meta:
       description: Non-standard meta-information that can not be represented as an attribute or relationship.
       type: object
       additionalProperties: true
+    priceCap:
+      description: Only charges for the booking up to the given duration.
+      oneOf:
+      - type: object
+        properties:
+          maximumDuration:
+            $ref: '#/components/schemas/hours-minutes-object'
+        additionalProperties: false
+      - type: 'null'
+    resource-discount:
+      type: object
+      required:
+      - pricePerHour
+      - minimumDuration
+      additionalProperties: false
+      properties:
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        minimumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
     pagination-meta:
       type: object
       additionalProperties: false
@@ -1779,28 +1715,25 @@ components:
           type: number
         currentPage:
           type: number
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
-    relationship-linkage:
+    external-resources:
+      id: external-resources.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    relationship-linkage-array:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
         data:
           type: array
           items:
-            $ref: '#/components/schemas/linkage'
+            $ref: '#/components/schemas/-external-resource-data'
+        included:
+          type: array
+          items:
+            type: object
+        links:
+          $ref: '#/components/schemas/pagination-links'
     resource-availability:
       id: resource-availability.json#
       type: object
@@ -1848,77 +1781,84 @@ components:
               properties:
                 resource:
                   $ref: '#/components/schemas/relationship-linkage'
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
-    pagination-links:
+    update-external-resource:
+      id: update-external-resource.json#
       type: object
       required:
-      - first
-      - self
-      - next
+      - data
       additionalProperties: false
       properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    positive-net-amount-with-currency-and-taxes:
-      description: Positive amount with currency and taxes. Not setting any taxes will result in the space's default taxes being used.
-      type: object
-      required:
-      - net
-      - currency
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/positive-decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          $ref: '#/components/schemas/taxes'
-    fixedRates:
+        data:
+          type: object
+          required:
+          - type
+          - id
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: externalResources
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/createUpdateAttributes'
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - products
+              properties:
+                products:
+                  $ref: '#/components/schemas/products'
+    bookingTimes:
       type: array
-      description: When set, regular price, discounts, price caps etc are ignored.
+      description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
       items:
-        $ref: '#/components/schemas/fixed-rate'
-    resource-price-cap:
+        oneOf:
+        - type: object
+          additionalProperties: false
+          required:
+          - from
+          - to
+          - weekdays
+          properties:
+            from:
+              $ref: '#/components/schemas/hours-minutes'
+            to:
+              $ref: '#/components/schemas/hours-minutes'
+            weekdays:
+              description: If empty, times are valid on any weekday. 1 = monday, 7 = sunday (see ISO 8601).
+              type: array
+              items:
+                type: number
+                minimum: 1
+                maximum: 7
+        - type: object
+          additionalProperties: false
+          required:
+          - hours
+          - minutes
+          properties:
+            hours:
+              type: integer
+            minutes:
+              type: integer
+    related-link:
       type: object
       required:
-      - price
-      - maximumDuration
+      - links
       additionalProperties: false
       properties:
-        price:
-          $ref: '#/components/schemas/price'
-        maximumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
     resource-paid-time-cap:
       type: object
       required:
@@ -1927,29 +1867,89 @@ components:
         maximumDuration:
           $ref: '#/components/schemas/hours-minutes-object'
       additionalProperties: false
-    products:
-      description: Additional products bookable as booking extras with this external resource.
+    relationship-linkage:
       type: object
-      additionalProperties: false
       required:
       - data
+      additionalProperties: false
       properties:
         data:
+          $ref: '#/components/schemas/linkage'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    discounts:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+        - pricePerHour
+        - minimumDuration
+        properties:
+          pricePerHour:
+            $ref: '#/components/schemas/positive-money'
+          minimumDuration:
+            $ref: '#/components/schemas/hours-minutes-object'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
           type: array
           items:
-            type: object
-            required:
-            - id
-            - type
-            additionalProperties: false
-            properties:
-              type:
-                type: string
-                enum:
-                - products
-              id:
-                description: Id of a product (products endpoint) to add as bookable with this external resource
-                type: string
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
   securitySchemes:
     OpenId:
       type: openIdConnect

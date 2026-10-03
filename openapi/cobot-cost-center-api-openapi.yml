@@ -69,26 +69,6 @@ paths:
                             type: spaces
 components:
   schemas:
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
     pagination-links:
       type: object
       required:
@@ -167,6 +147,26 @@ components:
           $ref: '#/components/schemas/pagination-meta'
         links:
           $ref: '#/components/schemas/pagination-links'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
   securitySchemes:
     OpenId:
       type: openIdConnect

@@ -189,6 +189,39 @@ paths:
                         - url: https://example.com/app.css
 components:
   schemas:
+    single-page-apps:
+      id: single-page-apps.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-single-page-app-data'
+    update-single-page-app:
+      id: update-single-page-app.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              pattern: singlePageApps
+            attributes:
+              $ref: '#/components/schemas/-single-page-app-attributes'
     single-page-app:
       id: single-page-app.json#
       type: object
@@ -244,58 +277,6 @@ components:
                   url:
                     type: string
                     format: uri
-    create-single-page-app:
-      id: create-single-page-app.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: singlePageApps
-            attributes:
-              $ref: '#/components/schemas/-single-page-app-attributes'
-    update-single-page-app:
-      id: update-single-page-app.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              pattern: singlePageApps
-            attributes:
-              $ref: '#/components/schemas/-single-page-app-attributes'
-    single-page-apps:
-      id: single-page-apps.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-single-page-app-data'
     -single-page-app-attributes:
       id: -single-page-app-attributes.json#
       type: object
@@ -328,6 +309,25 @@ components:
               url:
                 type: string
                 format: uri
+    create-single-page-app:
+      id: create-single-page-app.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: singlePageApps
+            attributes:
+              $ref: '#/components/schemas/-single-page-app-attributes'
   securitySchemes:
     OpenId:
       type: openIdConnect
