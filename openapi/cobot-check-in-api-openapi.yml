@@ -282,6 +282,10 @@ paths:
                             type: memberships
 components:
   schemas:
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
     check-in:
       id: check-in.json#
       type: object
@@ -318,6 +322,59 @@ components:
         last:
           type: string
           description: Link to the last results page.
+    create-check-in:
+      id: create-check-in.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - checkIns
+            attributes:
+              type: object
+              required:
+              - checkInToken
+              additionalProperties: false
+              properties:
+                checkInToken:
+                  type: string
+                  description: A previously created token via the check-in token API that is associated with the membership (typically a MAC address or RFID token).
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - space
+              properties:
+                space:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - spaces
     link:
       description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
       oneOf:
@@ -343,10 +400,6 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
     -check-in-data:
       type: object
       required:
@@ -421,6 +474,31 @@ components:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/link'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
     error:
       type: object
       properties:
@@ -452,84 +530,6 @@ components:
               type: string
         meta:
           $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    create-check-in:
-      id: create-check-in.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - checkIns
-            attributes:
-              type: object
-              required:
-              - checkInToken
-              additionalProperties: false
-              properties:
-                checkInToken:
-                  type: string
-                  description: A previously created token via the check-in token API that is associated with the membership (typically a MAC address or RFID token).
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - space
-              properties:
-                space:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        id:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                          - spaces
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
       additionalProperties: false
     check-ins:
       id: check-ins.json#

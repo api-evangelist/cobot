@@ -130,15 +130,6 @@ paths:
                         self: https://api.cobot.me/spaces/a927aa71ac8df98d29de357180d275a2/built_in_email_customizations/membership_confirmation_email
 components:
   schemas:
-    built_in_email_customization:
-      id: built_in_email_customization.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-built-in-email-customization-data'
     built_in_email_customizations:
       id: built_in_email_customizations.json#
       type: object
@@ -150,6 +141,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/-built-in-email-customization-data'
+    built_in_email_customization:
+      id: built_in_email_customization.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-built-in-email-customization-data'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
     relationship-linkage:
       type: object
       required:
@@ -211,18 +223,6 @@ components:
               type: string
               format: uri-reference
           additionalProperties: false
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
   securitySchemes:
     OpenId:
       type: openIdConnect

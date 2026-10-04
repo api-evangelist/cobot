@@ -120,10 +120,92 @@ paths:
                             type: memberships
 components:
   schemas:
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
     currency:
       description: ISO 4217 3 letter currency code.
       type: string
       pattern: ^[A-Z]{3}$
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    -membership-plan-extra-data:
+      id: -membership-plan-extra-data.json
+      type: object
+      additionalProperties: false
+      required:
+      - accountingCode
+      - cycleDuration
+      - name
+      - pricePerCycle
+      properties:
+        accountingCode:
+          oneOf:
+          - type: 'null'
+          - type: string
+        cycleDuration:
+          type: number
+          minimum: 1
+        name:
+          type: string
+        pricePerCycle:
+          $ref: '#/components/schemas/price'
+    membership-plans:
+      id: membership-plans.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-membership-plan-data'
+        links:
+          type: object
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
     -membership-plan-data:
       id: -membership-plan-data.json
       type: object
@@ -189,59 +271,6 @@ components:
               properties:
                 data:
                   $ref: '#/components/schemas/linkage'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
-    membership-plans:
-      id: membership-plans.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-membership-plan-data'
-        links:
-          type: object
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
     pagination-meta:
       type: object
       additionalProperties: false
@@ -250,39 +279,10 @@ components:
           type: number
         currentPage:
           type: number
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    -membership-plan-extra-data:
-      id: -membership-plan-extra-data.json
-      type: object
-      additionalProperties: false
-      required:
-      - accountingCode
-      - cycleDuration
-      - name
-      - pricePerCycle
-      properties:
-        accountingCode:
-          oneOf:
-          - type: 'null'
-          - type: string
-        cycleDuration:
-          type: number
-          minimum: 1
-        name:
-          type: string
-        pricePerCycle:
-          $ref: '#/components/schemas/price'
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
   securitySchemes:
     OpenId:
       type: openIdConnect

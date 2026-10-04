@@ -118,51 +118,6 @@ paths:
                       billingEmail: billing@acme.com
 components:
   schemas:
-    update-space-billing-details:
-      id: update-space-billing-details.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - id
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - billingDetailsRequests
-            id:
-              description: The ID of the space to update the billing details for.
-              type: string
-            attributes:
-              type: object
-              required:
-              - company
-              - address
-              additionalProperties: false
-              properties:
-                company:
-                  type: string
-                name:
-                  type:
-                  - 'null'
-                  - string
-                address:
-                  type: string
-                vatIdentificationNumber:
-                  type:
-                  - 'null'
-                  - string
-                billingEmail:
-                  oneOf:
-                  - $ref: '#/components/schemas/email'
-                  - type: 'null'
     email:
       type: string
       pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
@@ -221,6 +176,51 @@ components:
                 billingEmail:
                   oneOf:
                   - type: string
+                  - type: 'null'
+    update-space-billing-details:
+      id: update-space-billing-details.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - id
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - billingDetailsRequests
+            id:
+              description: The ID of the space to update the billing details for.
+              type: string
+            attributes:
+              type: object
+              required:
+              - company
+              - address
+              additionalProperties: false
+              properties:
+                company:
+                  type: string
+                name:
+                  type:
+                  - 'null'
+                  - string
+                address:
+                  type: string
+                vatIdentificationNumber:
+                  type:
+                  - 'null'
+                  - string
+                billingEmail:
+                  oneOf:
+                  - $ref: '#/components/schemas/email'
                   - type: 'null'
   securitySchemes:
     OpenId:

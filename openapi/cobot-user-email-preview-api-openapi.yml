@@ -59,6 +59,10 @@ paths:
                       email: admin@example.com
 components:
   schemas:
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
     preview-user-email:
       id: preview-user-email.json#
       type: object
@@ -113,10 +117,23 @@ components:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/link'
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+    failure:
       type: object
-      additionalProperties: true
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
     error:
       type: object
       properties:
@@ -148,23 +165,6 @@ components:
               type: string
         meta:
           $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
       additionalProperties: false
   securitySchemes:
     OpenId:

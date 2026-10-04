@@ -537,55 +537,6 @@ paths:
                             type: memberships
 components:
   schemas:
-    avatar-photo:
-      type: object
-      properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
-      additionalProperties: false
-    membership-profiles:
-      id: membership-profiles.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-membership-profile-data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-    membership-profile:
-      id: membership-profile.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-membership-profile-data'
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
     pagination-links:
       type: object
       required:
@@ -613,6 +564,51 @@ components:
         last:
           type: string
           description: Link to the last results page.
+    membership-profiles:
+      id: membership-profiles.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-membership-profile-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+    blank:
+      oneOf:
+      - type: 'null'
+      - type: string
+        pattern: ^\s*$
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    email:
+      type: string
+      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
     -membership-profile-data:
       id: -membership-profile-data.json#
       type: object
@@ -705,6 +701,26 @@ components:
           properties:
             membership:
               type: object
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    membership-profile:
+      id: membership-profile.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-membership-profile-data'
     update-membership-profile:
       id: update-membership-profile.json#
       type: object
@@ -761,22 +777,6 @@ components:
                   type: string
                 published:
                   type: boolean
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    email:
-      type: string
-      pattern: ^[^@]+@([\w-]+\.)+[a-zA-Z]+$
-    blank:
-      oneOf:
-      - type: 'null'
-      - type: string
-        pattern: ^\s*$
     date:
       description: A date in the form YYYY-MM-DD.
       type: string

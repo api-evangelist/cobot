@@ -180,6 +180,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/-calendar-blocker-data'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     calendar-blocker:
       id: calendar-blocker.json#
       type: object
@@ -189,14 +197,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/-calendar-blocker-data'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
     -calendar-blocker-data:
       id: -calendar-blocker-data.json
       type: object

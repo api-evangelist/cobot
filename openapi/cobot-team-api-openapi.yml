@@ -189,96 +189,6 @@ paths:
                             type: spaces
 components:
   schemas:
-    avatar-photo:
-      type: object
-      properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
-      additionalProperties: false
-    -team-data:
-      id: -team-data.json#
-      type: object
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - teams
-        attributes:
-          type: object
-          additionalProperties: false
-          required:
-          - name
-          - taxId
-          - customerNumber
-          - photo
-          - billingAddress
-          - billingEmails
-          properties:
-            billingAddress:
-              $ref: '#/components/schemas/invoiceAddress'
-            billingEmails:
-              type:
-              - array
-              items:
-                type: string
-                format: email
-            name:
-              type: string
-            taxId:
-              oneOf:
-              - type: string
-              - type: 'null'
-            customerNumber:
-              type: string
-            photo:
-              oneOf:
-              - $ref: '#/components/schemas/avatar-photo'
-              - type: 'null'
-        relationships:
-          type: object
-          additionalProperties: false
-          required:
-          - space
-          properties:
-            space:
-              type: object
-              additionalProperties: false
-              properties:
-                data:
-                  $ref: '#/components/schemas/linkage'
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    photo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
-      additionalProperties: false
     pagination-links:
       type: object
       required:
@@ -358,21 +268,77 @@ components:
         - longitude
         longitude:
         - latitude
-    teams:
-      id: teams.json#
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    -team-data:
+      id: -team-data.json#
       type: object
       required:
-      - data
+      - id
+      - type
       additionalProperties: false
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-team-data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - teams
+        attributes:
+          type: object
+          additionalProperties: false
+          required:
+          - name
+          - taxId
+          - customerNumber
+          - photo
+          - billingAddress
+          - billingEmails
+          properties:
+            billingAddress:
+              $ref: '#/components/schemas/invoiceAddress'
+            billingEmails:
+              type:
+              - array
+              items:
+                type: string
+                format: email
+            name:
+              type: string
+            taxId:
+              oneOf:
+              - type: string
+              - type: 'null'
+            customerNumber:
+              type: string
+            photo:
+              oneOf:
+              - $ref: '#/components/schemas/avatar-photo'
+              - type: 'null'
+        relationships:
+          type: object
+          additionalProperties: false
+          required:
+          - space
+          properties:
+            space:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  $ref: '#/components/schemas/linkage'
     team:
       id: team.json#
       type: object
@@ -393,6 +359,40 @@ components:
           type: string
         id:
           type: string
+      additionalProperties: false
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+    teams:
+      id: teams.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-team-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
       additionalProperties: false
   securitySchemes:
     OpenId:

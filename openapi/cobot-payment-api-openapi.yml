@@ -238,10 +238,267 @@ paths:
                           type: spaces
 components:
   schemas:
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
+    amount-with-currency:
+      description: An amount with a currency, no taxes.
+      type: object
+      required:
+      - value
+      - currency
+      additionalProperties: false
+      properties:
+        value:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
     currency:
       description: ISO 4217 3 letter currency code.
       type: string
       pattern: ^[A-Z]{3}$
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    payment:
+      id: payment.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+              - payments
+            attributes:
+              type: object
+              required:
+              - paymentProvider
+              - providerAttributes
+              - amount
+              additionalProperties: false
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount-with-currency'
+                paymentProvider:
+                  type: string
+                  enum:
+                  - stripe
+                  - paypal
+                providerAttributes:
+                  oneOf:
+                  - description: The client secret is returned by Stripe when creating a payment intent.
+                    type: object
+                    required:
+                    - paymentIntentClientSecret
+                    - paymentIntentId
+                    additionalProperties: false
+                    properties:
+                      paymentIntentClientSecret:
+                        type: string
+                      paymentIntentId:
+                        type: string
+                  - description: The client secret is returned by Stripe when creating a setup intent.
+                    type: object
+                    required:
+                    - setupIntentClientSecret
+                    - setupIntentId
+                    additionalProperties: false
+                    properties:
+                      setupIntentClientSecret:
+                        type: string
+                      setupIntentId:
+                        type: string
+                  - description: The order id is returned by PayPal when creating an Order.
+                    type: object
+                    required:
+                    - orderId
+                    additionalProperties: false
+                    properties:
+                      orderId:
+                        type: string
+            relationships:
+              type: object
+              required:
+              - paymentMethod
+              - space
+              additionalProperties: false
+              properties:
+                paymentMethod:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - paymentMethods
+                        id:
+                          type: string
+                space:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - spaces
+                        id:
+                          type: string
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    booking-extra:
+      oneOf:
+      - title: updateExistingExtra
+        type: object
+        additionalProperties: false
+        required:
+        - id
+        - quantity
+        properties:
+          id:
+            type: string
+            description: ID of an existing booking extra to update. Only quantity can be changed.
+          quantity:
+            $ref: '#/components/schemas/decimal'
+      - title: createNewExtra
+        type: object
+        additionalProperties: false
+        required:
+        - productId
+        - quantity
+        properties:
+          productId:
+            type: string
+            description: ID of a product to create a new booking extra from.
+          quantity:
+            $ref: '#/components/schemas/decimal'
+    discount-relationship:
+      description: An optional discount to apply to the booking.
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - id
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - discountCodes
+            id:
+              type: string
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
     create-payment:
       id: create-payment.json#
       type: object
@@ -449,263 +706,6 @@ components:
                           - paymentMethods
                         id:
                           type: string
-    booking-extra:
-      oneOf:
-      - title: updateExistingExtra
-        type: object
-        additionalProperties: false
-        required:
-        - id
-        - quantity
-        properties:
-          id:
-            type: string
-            description: ID of an existing booking extra to update. Only quantity can be changed.
-          quantity:
-            $ref: '#/components/schemas/decimal'
-      - title: createNewExtra
-        type: object
-        additionalProperties: false
-        required:
-        - productId
-        - quantity
-        properties:
-          productId:
-            type: string
-            description: ID of a product to create a new booking extra from.
-          quantity:
-            $ref: '#/components/schemas/decimal'
-    decimal:
-      description: A decimal number.
-      type: string
-      pattern: ^-?\d+(\.\d+)?$
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    payment:
-      id: payment.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          additionalProperties: false
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-              enum:
-              - payments
-            attributes:
-              type: object
-              required:
-              - paymentProvider
-              - providerAttributes
-              - amount
-              additionalProperties: false
-              properties:
-                amount:
-                  $ref: '#/components/schemas/amount-with-currency'
-                paymentProvider:
-                  type: string
-                  enum:
-                  - stripe
-                  - paypal
-                providerAttributes:
-                  oneOf:
-                  - description: The client secret is returned by Stripe when creating a payment intent.
-                    type: object
-                    required:
-                    - paymentIntentClientSecret
-                    - paymentIntentId
-                    additionalProperties: false
-                    properties:
-                      paymentIntentClientSecret:
-                        type: string
-                      paymentIntentId:
-                        type: string
-                  - description: The client secret is returned by Stripe when creating a setup intent.
-                    type: object
-                    required:
-                    - setupIntentClientSecret
-                    - setupIntentId
-                    additionalProperties: false
-                    properties:
-                      setupIntentClientSecret:
-                        type: string
-                      setupIntentId:
-                        type: string
-                  - description: The order id is returned by PayPal when creating an Order.
-                    type: object
-                    required:
-                    - orderId
-                    additionalProperties: false
-                    properties:
-                      orderId:
-                        type: string
-            relationships:
-              type: object
-              required:
-              - paymentMethod
-              - space
-              additionalProperties: false
-              properties:
-                paymentMethod:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - paymentMethods
-                        id:
-                          type: string
-                space:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - spaces
-                        id:
-                          type: string
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    error:
-      type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    discount-relationship:
-      description: An optional discount to apply to the booking.
-      type: object
-      additionalProperties: false
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - id
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - discountCodes
-            id:
-              type: string
-    amount-with-currency:
-      description: An amount with a currency, no taxes.
-      type: object
-      required:
-      - value
-      - currency
-      additionalProperties: false
-      properties:
-        value:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
     date:
       description: A date in the form YYYY-MM-DD.
       type: string

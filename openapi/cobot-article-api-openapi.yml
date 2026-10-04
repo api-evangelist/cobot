@@ -110,6 +110,15 @@ paths:
                             type: spaces
 components:
   schemas:
+    article:
+      id: article.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-article-data'
     pagination-links:
       type: object
       required:
@@ -137,30 +146,6 @@ components:
         last:
           type: string
           description: Link to the last results page.
-    articles:
-      id: articles.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-article-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-    article:
-      id: article.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-article-data'
     pagination-meta:
       type: object
       additionalProperties: false
@@ -222,6 +207,21 @@ components:
                       type: string
                       enum:
                       - spaces
+    articles:
+      id: articles.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-article-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
   securitySchemes:
     OpenId:
       type: openIdConnect
