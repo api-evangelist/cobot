@@ -1,0 +1,12 @@
+{
+ "url": "https://dev.cobot.me/openapi.yaml",
+ "requested_url": "https://dev.cobot.me/openapi.yaml",
+ "status": 200,
+ "content_type": "yml",
+ "bytes": 865855,
+ "sha256": "974deb6a253604f8a67bc047f9bade6d537c9f54eadb8760f92b60391a1eb9ef",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.971), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
