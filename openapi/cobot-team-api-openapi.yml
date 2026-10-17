@@ -189,6 +189,39 @@ paths:
                             type: spaces
 components:
   schemas:
+    photo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri-reference
+        width:
+          type: number
+        height:
+          type: number
+      additionalProperties: false
+    avatar-photo:
+      type: object
+      properties:
+        thumb:
+          $ref: '#/components/schemas/photo'
+        small:
+          $ref: '#/components/schemas/photo'
+        large:
+          $ref: '#/components/schemas/photo'
+        xlarge:
+          $ref: '#/components/schemas/photo'
+        hd:
+          $ref: '#/components/schemas/photo'
+      additionalProperties: false
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     pagination-links:
       type: object
       required:
@@ -216,71 +249,17 @@ components:
         last:
           type: string
           description: Link to the last results page.
-    invoiceAddress:
+    linkage:
+      description: The "type" and "id" of a linked entity.
       type: object
-      additionalProperties: false
       required:
-      - name
-      - company
-      - fullAddress
-      - city
-      - postCode
-      - state
-      - street
-      - countryCode
+      - type
+      - id
       properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
+        type:
           type: string
-        street:
-          oneOf:
-          - type: string
-          - type: 'null'
-        postCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        countryCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        latitude:
-          type: number
-        longitude:
-          type: number
-      dependencies:
-        latitude:
-        - longitude
-        longitude:
-        - latitude
-    avatar-photo:
-      type: object
-      properties:
-        thumb:
-          $ref: '#/components/schemas/photo'
-        small:
-          $ref: '#/components/schemas/photo'
-        large:
-          $ref: '#/components/schemas/photo'
-        xlarge:
-          $ref: '#/components/schemas/photo'
-        hd:
-          $ref: '#/components/schemas/photo'
+        id:
+          type: string
       additionalProperties: false
     -team-data:
       id: -team-data.json#
@@ -339,35 +318,58 @@ components:
               properties:
                 data:
                   $ref: '#/components/schemas/linkage'
-    team:
-      id: team.json#
+    invoiceAddress:
       type: object
+      additionalProperties: false
       required:
-      - data
-      additionalProperties: false
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
       properties:
-        data:
-          $ref: '#/components/schemas/-team-data'
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
           type: string
-        id:
-          type: string
-      additionalProperties: false
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
           type: number
-        currentPage:
+        longitude:
           type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
     teams:
       id: teams.json#
       type: object
@@ -383,17 +385,15 @@ components:
           $ref: '#/components/schemas/pagination-links'
         meta:
           $ref: '#/components/schemas/pagination-meta'
-    photo:
+    team:
+      id: team.json#
       type: object
-      properties:
-        url:
-          type: string
-          format: uri-reference
-        width:
-          type: number
-        height:
-          type: number
+      required:
+      - data
       additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-team-data'
   securitySchemes:
     OpenId:
       type: openIdConnect

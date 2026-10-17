@@ -260,38 +260,7 @@ paths:
                             type: singlePageApps
 components:
   schemas:
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    navigation-links:
+    navigation-link:
       id: navigation-link.json#
       type: object
       required:
@@ -299,13 +268,15 @@ components:
       additionalProperties: false
       properties:
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-navigation-link-data'
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
+          $ref: '#/components/schemas/-navigation-link-data'
+    pagination-meta:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     create-navigation-link:
       id: create-navigation-link.json#
       type: object
@@ -386,7 +357,7 @@ components:
                           - singlePageApps
                         id:
                           type: string
-    navigation-link:
+    navigation-links:
       id: navigation-link.json#
       type: object
       required:
@@ -394,7 +365,13 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/-navigation-link-data'
+          type: array
+          items:
+            $ref: '#/components/schemas/-navigation-link-data'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
     link:
       description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
       oneOf:
@@ -411,61 +388,23 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    update-navigation-link:
-      id: update-navigation-link.json#
+    failure:
       type: object
       required:
-      - data
-      additionalProperties: false
+      - errors
       properties:
-        data:
-          type: object
-          required:
-          - type
-          - id
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - navigationLinks
-            id:
-              type: string
-            attributes:
-              type: object
-              additionalProperties: false
-              properties:
-                label:
-                  type: string
-                section:
-                  type: string
-                  enum:
-                  - admin/setup
-                  - admin/manage
-                  - admin/analyze
-                  - members
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
     -navigation-link-data:
       id: -navigation-link-data.json#
       type: object
@@ -549,22 +488,18 @@ components:
                       - singlePageApps
                     id:
                       type: string
-    failure:
+    links:
       type: object
-      required:
-      - errors
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
+        version:
+          type: string
         meta:
           $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
       additionalProperties: false
     error:
       type: object
@@ -598,6 +533,71 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
+    update-navigation-link:
+      id: update-navigation-link.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - id
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - navigationLinks
+            id:
+              type: string
+            attributes:
+              type: object
+              additionalProperties: false
+              properties:
+                label:
+                  type: string
+                section:
+                  type: string
+                  enum:
+                  - admin/setup
+                  - admin/manage
+                  - admin/analyze
+                  - members
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
   securitySchemes:
     OpenId:
       type: openIdConnect

@@ -133,39 +133,6 @@ paths:
                       stripe_payment_method_id: pm_sfcterzredz
 components:
   schemas:
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
     update-space-payment-method:
       id: update-space-payment-method.json#
       type: object
@@ -193,6 +160,22 @@ components:
                 stripe_payment_method_id:
                   description: The id of the Stripe payment method to attach, see https://stripe.com/docs/api/payment_methods/object
                   type: string
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
     failure:
       type: object
       required:
@@ -209,6 +192,19 @@ components:
           $ref: '#/components/schemas/jsonapi'
         links:
           $ref: '#/components/schemas/links'
+      additionalProperties: false
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
       additionalProperties: false
     error:
       type: object
@@ -322,6 +318,10 @@ components:
                 type: string
                 enum:
                 - gocardlessSpacePaymentMethods
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
   securitySchemes:
     OpenId:
       type: openIdConnect

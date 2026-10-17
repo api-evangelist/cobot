@@ -107,10 +107,105 @@ paths:
                     - detail: Refund rf_d23h64623h failed, action is required.
 components:
   schemas:
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+    refund:
+      id: refund.json#
       type: object
-      additionalProperties: true
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            attributes:
+              type: object
+              required:
+              - amount
+              - status
+              additionalProperties: false
+              properties:
+                amount:
+                  type: string
+                status:
+                  type: string
+            relationships:
+              type: object
+              additionalProperties: false
+              required:
+              - paymentMethod
+              - invoice
+              properties:
+                paymentMethod:
+                  $ref: '#/components/schemas/optional-relationship-linkage'
+                invoice:
+                  $ref: '#/components/schemas/relationship-linkage'
+    optional-relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
     create-refund:
       id: create-refund.json#
       type: object
@@ -181,117 +276,6 @@ components:
                           - paymentMethods
                         id:
                           type: string
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
-    refund:
-      id: refund.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          properties:
-            id:
-              type: string
-            type:
-              type: string
-            attributes:
-              type: object
-              required:
-              - amount
-              - status
-              additionalProperties: false
-              properties:
-                amount:
-                  type: string
-                status:
-                  type: string
-            relationships:
-              type: object
-              additionalProperties: false
-              required:
-              - paymentMethod
-              - invoice
-              properties:
-                paymentMethod:
-                  $ref: '#/components/schemas/optional-relationship-linkage'
-                invoice:
-                  $ref: '#/components/schemas/relationship-linkage'
     error:
       type: object
       properties:
@@ -324,6 +308,22 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
   securitySchemes:
     OpenId:
       type: openIdConnect

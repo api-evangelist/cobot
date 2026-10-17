@@ -307,59 +307,25 @@ paths:
                             type: dropInPassPurchases
 components:
   schemas:
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+    pagination-meta:
       type: object
-      additionalProperties: true
-    bookingTimes:
-      type: array
-      description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
-      items:
-        oneOf:
-        - type: object
-          additionalProperties: false
-          required:
-          - from
-          - to
-          - weekdays
-          properties:
-            from:
-              $ref: '#/components/schemas/hours-minutes'
-            to:
-              $ref: '#/components/schemas/hours-minutes'
-            weekdays:
-              description: If empty, times are valid on any weekday. 1 = monday, 7 = sunday (see ISO 8601).
-              type: array
-              items:
-                type: number
-                minimum: 1
-                maximum: 7
-        - type: object
-          additionalProperties: false
-          required:
-          - hours
-          - minutes
-          properties:
-            hours:
-              type: integer
-            minutes:
-              type: integer
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
     currency:
       description: ISO 4217 3 letter currency code.
       type: string
       pattern: ^[A-Z]{3}$
-    invoiceAddress:
+    decimal:
+      description: A decimal number.
+      type: string
+      pattern: ^-?\d+(\.\d+)?$
+    address:
       type: object
       additionalProperties: false
-      required:
-      - name
-      - company
-      - fullAddress
-      - city
-      - postCode
-      - state
-      - street
-      - countryCode
       properties:
         name:
           oneOf:
@@ -371,228 +337,57 @@ components:
           - type: 'null'
         fullAddress:
           type: string
-        street:
-          oneOf:
-          - type: string
-          - type: 'null'
-        postCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        countryCode:
-          oneOf:
-          - type: string
-          - type: 'null'
-        latitude:
-          type: number
-        longitude:
-          type: number
-      dependencies:
-        latitude:
-        - longitude
-        longitude:
-        - latitude
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    -drop-in-pass-data:
-      id: -drop-in-pass-data.json
+          description: Only admins can see it.
+    pagination-links:
       type: object
-      additionalProperties: false
       required:
-      - id
-      - type
+      - first
+      - self
+      - next
+      additionalProperties: false
       properties:
-        id:
+        first:
           type: string
-        type:
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
           type: string
-          enum:
-          - dropInPasses
-        attributes:
-          type: object
-          required:
-          - name
-          - email
-          - phone
-          - price
-          - comments
-          - taxId
-          - billingAddress
-          - validOn
-          - onboardingInstructions
-          - timeAvailability
-          - status
-          additionalProperties: false
-          properties:
-            name:
-              type: string
-            email:
-              type:
-              - string
-              - 'null'
-            phone:
-              type:
-              - string
-              - 'null'
-            price:
-              $ref: '#/components/schemas/price'
-            comments:
-              type:
-              - string
-              - 'null'
-            taxId:
-              type:
-              - string
-              - 'null'
-            billingAddress:
-              $ref: '#/components/schemas/address'
-            validOn:
-              $ref: '#/components/schemas/date'
-            onboardingInstructions:
-              type:
-              - string
-              - 'null'
-            timeAvailability:
-              $ref: '#/components/schemas/bookingTimes'
-            status:
-              type: string
-              enum:
-              - confirmed
-              - canceled
-        relationships:
-          type: object
-          additionalProperties: false
-          properties:
-            space:
-              type: object
-              additionalProperties: false
-              required:
-              - data
-              properties:
-                data:
-                  type: object
-                  required:
-                  - id
-                  - type
-                  additionalProperties: false
-                  properties:
-                    id:
-                      type: string
-                    type:
-                      type: string
-                      enum:
-                      - spaces
-            dropInPassTemplate:
-              type: object
-              additionalProperties: false
-              required:
-              - data
-              properties:
-                data:
-                  oneOf:
-                  - type: 'null'
-                  - type: object
-                    required:
-                    - id
-                    - type
-                    additionalProperties: false
-                    properties:
-                      id:
-                        type: string
-                      type:
-                        type: string
-                        enum:
-                        - dropInPassTemplates
-            invoices:
-              type: object
-              additionalProperties: false
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - id
-                    - type
-                    additionalProperties: false
-                    properties:
-                      id:
-                        type: string
-                      type:
-                        type: string
-                        enum:
-                        - invoices
-            contact:
-              type: object
-              additionalProperties: false
-              required:
-              - data
-              properties:
-                data:
-                  oneOf:
-                  - type: 'null'
-                  - type: object
-                    required:
-                    - id
-                    - type
-                    additionalProperties: false
-                    properties:
-                      id:
-                        type: string
-                      type:
-                        type: string
-                        enum:
-                        - contacts
-            dropInPassPurchase:
-              type: object
-              additionalProperties: false
-              required:
-              - data
-              properties:
-                data:
-                  oneOf:
-                  - type: 'null'
-                  - type: object
-                    required:
-                    - id
-                    - type
-                    additionalProperties: false
-                    properties:
-                      id:
-                        type: string
-                      type:
-                        type: string
-                        enum:
-                        - dropInPassPurchases
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    drop-in-passes:
+      id: drop-in-passes.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-drop-in-pass-data'
+        meta:
+          $ref: '#/components/schemas/pagination-meta'
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        included:
+          type: array
+          items:
+            $ref: '#/components/schemas/-invoice-data'
     links:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/link'
-    hours-minutes:
-      type: string
-      pattern: ^\d{2}:\d{2}$
     -invoice-data:
       id: -invoice-data.json
       type: object
@@ -929,57 +724,32 @@ components:
                     related:
                       type: string
                       format: uri
-    drop-in-passes:
-      id: drop-in-passes.json#
+    drop-in-pass:
+      id: drop-in-pass.json#
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-drop-in-pass-data'
-        meta:
-          $ref: '#/components/schemas/pagination-meta'
-        links:
-          $ref: '#/components/schemas/pagination-links'
+          $ref: '#/components/schemas/-drop-in-pass-data'
         included:
           type: array
           items:
             $ref: '#/components/schemas/-invoice-data'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    address:
+    hours-minutes:
+      type: string
+      pattern: ^\d{2}:\d{2}$
+    tax:
       type: object
       additionalProperties: false
       properties:
         name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company:
-          oneOf:
-          - type: string
-          - type: 'null'
-        fullAddress:
           type: string
-          description: Only admins can see it.
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
     price:
       description: Price including net/gross value and all taxes.
       type: object
@@ -1000,17 +770,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/tax'
-    cost-center:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
+    bookingTimes:
+      type: array
+      description: Times/days or durations for which the resource can be booked. If empty, resource can be booked at any time.
+      items:
+        oneOf:
+        - type: object
+          additionalProperties: false
+          required:
+          - from
+          - to
+          - weekdays
+          properties:
+            from:
+              $ref: '#/components/schemas/hours-minutes'
+            to:
+              $ref: '#/components/schemas/hours-minutes'
+            weekdays:
+              description: If empty, times are valid on any weekday. 1 = monday, 7 = sunday (see ISO 8601).
+              type: array
+              items:
+                type: number
+                minimum: 1
+                maximum: 7
+        - type: object
+          additionalProperties: false
+          required:
+          - hours
+          - minutes
+          properties:
+            hours:
+              type: integer
+            minutes:
+              type: integer
     revenue-account:
       type: object
       additionalProperties: false
@@ -1022,33 +814,50 @@ components:
           type: string
         number:
           type: string
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    drop-in-pass:
-      id: drop-in-pass.json#
+    cost-center:
       type: object
+      additionalProperties: false
       required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/-drop-in-pass-data'
-        included:
-          type: array
-          items:
-            $ref: '#/components/schemas/-invoice-data'
-    tax:
-      type: object
-      additionalProperties: false
+      - name
+      - number
       properties:
         name:
           type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
+        number:
+          type: string
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
     jsonapi:
       description: An object describing the server's implementation
       type: object
@@ -1058,14 +867,6 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
-    pagination-meta:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        currentPage:
-          type: number
     error:
       type: object
       properties:
@@ -1098,37 +899,236 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
-    decimal:
-      description: A decimal number.
+    date:
+      description: A date in the form YYYY-MM-DD.
       type: string
-      pattern: ^-?\d+(\.\d+)?$
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    -drop-in-pass-data:
+      id: -drop-in-pass-data.json
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - dropInPasses
+        attributes:
+          type: object
+          required:
+          - name
+          - email
+          - phone
+          - price
+          - comments
+          - taxId
+          - billingAddress
+          - validOn
+          - onboardingInstructions
+          - timeAvailability
+          - status
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+            email:
+              type:
+              - string
+              - 'null'
+            phone:
+              type:
+              - string
+              - 'null'
+            price:
+              $ref: '#/components/schemas/price'
+            comments:
+              type:
+              - string
+              - 'null'
+            taxId:
+              type:
+              - string
+              - 'null'
+            billingAddress:
+              $ref: '#/components/schemas/address'
+            validOn:
+              $ref: '#/components/schemas/date'
+            onboardingInstructions:
+              type:
+              - string
+              - 'null'
+            timeAvailability:
+              $ref: '#/components/schemas/bookingTimes'
+            status:
+              type: string
+              enum:
+              - confirmed
+              - canceled
+        relationships:
+          type: object
+          additionalProperties: false
+          properties:
+            space:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  type: object
+                  required:
+                  - id
+                  - type
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - spaces
+            dropInPassTemplate:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  oneOf:
+                  - type: 'null'
+                  - type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - dropInPassTemplates
+            invoices:
+              type: object
+              additionalProperties: false
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - invoices
+            contact:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  oneOf:
+                  - type: 'null'
+                  - type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - contacts
+            dropInPassPurchase:
+              type: object
+              additionalProperties: false
+              required:
+              - data
+              properties:
+                data:
+                  oneOf:
+                  - type: 'null'
+                  - type: object
+                    required:
+                    - id
+                    - type
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - dropInPassPurchases
+    invoiceAddress:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - company
+      - fullAddress
+      - city
+      - postCode
+      - state
+      - street
+      - countryCode
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company:
+          oneOf:
+          - type: string
+          - type: 'null'
+        fullAddress:
+          type: string
+        street:
+          oneOf:
+          - type: string
+          - type: 'null'
+        postCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        countryCode:
+          oneOf:
+          - type: string
+          - type: 'null'
+        latitude:
+          type: number
+        longitude:
+          type: number
+      dependencies:
+        latitude:
+        - longitude
+        longitude:
+        - latitude
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
   securitySchemes:
     OpenId:
       type: openIdConnect

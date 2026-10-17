@@ -1168,14 +1168,14 @@ paths:
                           data: null
 components:
   schemas:
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+    resource-paid-time-cap:
       type: object
-      additionalProperties: true
-    currency:
-      description: ISO 4217 3 letter currency code.
-      type: string
-      pattern: ^[A-Z]{3}$
+      required:
+      - maximumDuration
+      properties:
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+      additionalProperties: false
     bookings:
       id: bookings.json#
       type: object
@@ -1207,807 +1207,6 @@ components:
           type: array
           items:
             type: object
-    recurrence-weekdays:
-      description: 'Only when frequency is weekly: Allows to repeat a booking on multiple weekdays. 1 is Monday, 7 is Sunday.'
-      oneOf:
-      - type: array
-        items:
-          type: integer
-          minimum: 1
-          maximum: 7
-      - type: 'null'
-    link:
-      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
-      oneOf:
-      - description: A string containing the link's URL.
-        type: string
-        format: uri-reference
-      - type: object
-        required:
-        - href
-        properties:
-          href:
-            description: A string containing the link's URL.
-            type: string
-            format: uri-reference
-          meta:
-            $ref: '#/components/schemas/meta'
-    booking-previews:
-      id: booking-previews.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        meta:
-          type: object
-          additionalProperties: false
-          properties:
-            totalPages:
-              type: number
-            currentPage:
-              type: number
-            totalBookings:
-              type: number
-            totalPrice:
-              type: string
-        links:
-          $ref: '#/components/schemas/pagination-links'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/-booking-preview-data'
-        included:
-          type: array
-          items:
-            type: object
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    failure:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/error'
-          uniqueItems: true
-        meta:
-          $ref: '#/components/schemas/meta'
-        jsonapi:
-          $ref: '#/components/schemas/jsonapi'
-        links:
-          $ref: '#/components/schemas/links'
-      additionalProperties: false
-    resource-discount:
-      type: object
-      required:
-      - pricePerHour
-      - minimumDuration
-      additionalProperties: false
-      properties:
-        pricePerHour:
-          $ref: '#/components/schemas/price'
-        minimumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-    money:
-      type: object
-      required:
-      - net
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-    recurrence-2:
-      type: object
-      required:
-      - rule
-      additionalProperties: false
-      properties:
-        rule:
-          type: object
-          additionalProperties: false
-          required:
-          - frequency
-          - from
-          - until
-          - interval
-          - count
-          - weekdays
-          properties:
-            frequency:
-              enum:
-              - daily
-              - weekly
-              - monthly
-              - yearly
-            from:
-              $ref: '#/components/schemas/date'
-            until:
-              oneOf:
-              - $ref: '#/components/schemas/date'
-              - type: 'null'
-            interval:
-              type: integer
-              minimum: 1
-            count:
-              oneOf:
-              - type: integer
-                minimum: 1
-              - type: 'null'
-            weekdays:
-              $ref: '#/components/schemas/recurrence-weekdays'
-    price:
-      description: Price including net/gross value and all taxes.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-    create-booking:
-      id: create-booking.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              pattern: bookings
-            attributes:
-              type: object
-              required:
-              - from
-              - to
-              additionalProperties: false
-              properties:
-                units:
-                  type: integer
-                  minimum: 1
-                from:
-                  type: string
-                  format: date-time
-                to:
-                  type: string
-                  format: date-time
-                title:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                url:
-                  description: Optional link related to the booking (e.g. meeting or video call).
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                customPrice:
-                  description: When set by an admin it overwrites price calculation and uses the set price
-                  oneOf:
-                  - $ref: '#/components/schemas/money'
-                  - type: 'null'
-                comments:
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                attendeesMessage:
-                  description: Message to be sent to additional attendees (see attendees attribute).
-                  oneOf:
-                  - type: string
-                  - type: 'null'
-                recurrence:
-                  $ref: '#/components/schemas/recurrence'
-                bookingExtras:
-                  description: Extras to be booked with this booking. They have to be linked with the associated resource.
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/booking-extra'
-                attendees:
-                  description: Optional list of additional attendees for this booking.
-                  type: array
-                  items:
-                    type: object
-                    additionalProperties: false
-                    required:
-                    - email
-                    properties:
-                      email:
-                        type: string
-                        format: email
-            relationships:
-              type: object
-              required:
-              - resource
-              additionalProperties: false
-              properties:
-                resource:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - resources
-                        id:
-                          type: string
-                membership:
-                  type: object
-                  additionalProperties: false
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      additionalProperties: false
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - memberships
-                        id:
-                          type: string
-    related-link:
-      type: object
-      required:
-      - links
-      additionalProperties: false
-      properties:
-        links:
-          type: object
-          required:
-          - related
-          additionalProperties: false
-          properties:
-            related:
-              type: string
-              format: uri-reference
-    optional-relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          oneOf:
-          - $ref: '#/components/schemas/linkage'
-          - type: 'null'
-    fixed-rate-count:
-      type: object
-      required:
-      - price
-      - maximumDuration
-      - count
-      properties:
-        price:
-          type: string
-        maximumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-        count:
-          type: integer
-      additionalProperties: false
-    -booking-data:
-      id: -booking-data.json
-      type: object
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-        attributes:
-          type: object
-          required:
-          - from
-          - to
-          - canUpdate
-          - cancellationPeriod
-          - units
-          additionalProperties: false
-          properties:
-            name:
-              description: Name of the membership the booking belongs to if any.
-              oneOf:
-              - type: string
-              - type: 'null'
-            title:
-              oneOf:
-              - type: string
-              - type: 'null'
-            url:
-              description: Optional link related to the booking (e.g. meeting or video call).
-              oneOf:
-              - type: string
-              - type: 'null'
-            comments:
-              oneOf:
-              - type: string
-              - type: 'null'
-            attendeesMessage:
-              description: Message sent to additional attendees.
-              oneOf:
-              - type: string
-              - type: 'null'
-            hasCustomPrice:
-              description: Indicates that the booking has a fixed price set that does not change with the resource or duration
-              type: boolean
-            price:
-              $ref: '#/components/schemas/price'
-            estimatedPayablePrice:
-              $ref: '#/components/schemas/estimated-payable-price'
-            recurrence:
-              $ref: '#/components/schemas/recurrence-2'
-            recurringId:
-              type: string
-              description: Only present if booking is part of a recurring booking. All recurring bookings created together have the same recurring id.
-            from:
-              type: string
-              format: date-time
-            to:
-              type: string
-              format: date-time
-            units:
-              type: integer
-              description: Number of units booked of the resource
-            canUpdate:
-              description: Whether the current user is allowed to make changes to this booking.
-              type: boolean
-            cancellationPeriod:
-              description: This limits how many hours in advance of a booking's start time it can still be edited or canceled by members.
-              type: number
-            bookingCredits:
-              type: object
-              description: The estimated amount of booking credits used, split into time and amount based credits.
-              properties:
-                estimatedMinutesUsed:
-                  type: integer
-                estimatedAmountUsed:
-                  $ref: '#/components/schemas/price'
-              additionalProperties: false
-            bookingPasses:
-              type: object
-              properties:
-                estimatedMinutesUsed:
-                  type: integer
-                  description: No. of booking passes minutes used.
-              additionalProperties: false
-            bookingExtras:
-              type: array
-              description: Extras booked with this booking.
-              items:
-                $ref: '#/components/schemas/-booking-extra-data'
-            attendees:
-              type: array
-              description: Attendees of this booking.
-              items:
-                type: object
-                additionalProperties: false
-                required:
-                - email
-                properties:
-                  email:
-                    type: string
-                    format: email
-        relationships:
-          type: object
-          required:
-          - resource
-          - space
-          - externalBooking
-          additionalProperties: false
-          properties:
-            membership:
-              oneOf:
-              - $ref: '#/components/schemas/relationship-linkage'
-              - type: object
-                additionalProperties: false
-                properties:
-                  data:
-                    type: 'null'
-            space:
-              $ref: '#/components/schemas/relationship-linkage'
-            resource:
-              $ref: '#/components/schemas/relationship-linkage'
-            event:
-              $ref: '#/components/schemas/relationship-linkage'
-            externalBooking:
-              $ref: '#/components/schemas/optional-relationship-linkage'
-            recurringBookings:
-              $ref: '#/components/schemas/related-link'
-            followingRecurringBookings:
-              $ref: '#/components/schemas/related-link'
-        meta:
-          type: object
-    recurrence:
-      type: object
-      required:
-      - rule
-      additionalProperties: false
-      properties:
-        rule:
-          type: object
-          additionalProperties: false
-          required:
-          - frequency
-          properties:
-            frequency:
-              enum:
-              - daily
-              - weekly
-              - monthly
-              - yearly
-            from:
-              $ref: '#/components/schemas/date'
-            until:
-              $ref: '#/components/schemas/date'
-            count:
-              type: integer
-              minimum: 1
-              maximum: 200
-              description: How many times the booking should repeat. You have to provie `count` or `until` but not both.
-            interval:
-              type: integer
-              minimum: 1
-              default: 1
-            weekdays:
-              $ref: '#/components/schemas/recurrence-weekdays'
-    date:
-      description: A date in the form YYYY-MM-DD.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
-    tax:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        rate:
-          $ref: '#/components/schemas/decimal'
-        amount:
-          $ref: '#/components/schemas/decimal'
-    linkage:
-      description: The "type" and "id" of a linked entity.
-      type: object
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      additionalProperties: false
-    relationship-linkage:
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/linkage'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    create-bookings-preview:
-      id: create-bookings-preview.json#
-      type: object
-      required:
-      - data
-      additionalProperties: false
-      properties:
-        data:
-          type: object
-          required:
-          - type
-          - attributes
-          - relationships
-          additionalProperties: false
-          properties:
-            type:
-              type: string
-              enum:
-              - bookingPreviews
-            attributes:
-              type: object
-              required:
-              - from
-              - to
-              properties:
-                from:
-                  type: string
-                  format: date-time
-                to:
-                  type: string
-                  format: date-time
-                units:
-                  type: integer
-                  minimum: 1
-                recurrence:
-                  $ref: '#/components/schemas/recurrence'
-                bookingExtras:
-                  description: Extras to be booked with this booking. They have to be linked with the associated resource.
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/booking-extra'
-              additionalProperties: false
-            relationships:
-              type: object
-              required:
-              - resources
-              additionalProperties: false
-              properties:
-                resources:
-                  type: object
-                  properties:
-                    data:
-                      type: array
-                      minItems: 1
-                      items:
-                        type: object
-                        required:
-                        - id
-                        - type
-                        properties:
-                          type:
-                            type: string
-                            const: resources
-                          id:
-                            type: string
-                        additionalProperties: false
-                  additionalProperties: false
-                membership:
-                  description: When creating a preview for a network membership, pass it here so Cobot can choose the correct network membership of possibly multiple
-                  type: object
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - memberships
-                        id:
-                          type: string
-                      additionalProperties: false
-                  additionalProperties: false
-                booking:
-                  description: When updating an existing booking, pass it here so Cobot can calculate the correct number of booking credits.
-                  type: object
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                      - id
-                      - type
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                          - bookings
-                        id:
-                          type: string
-                      additionalProperties: false
-                  additionalProperties: false
-    resource-paid-time-cap:
-      type: object
-      required:
-      - maximumDuration
-      properties:
-        maximumDuration:
-          $ref: '#/components/schemas/hours-minutes-object'
-      additionalProperties: false
-    -booking-extra-data:
-      id: -booking-extra-data.json
-      type: object
-      required:
-      - name
-      - pricing
-      - accountingCode
-      - description
-      - id
-      - productId
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        accountingCode:
-          type:
-          - string
-          - 'null'
-        id:
-          type: string
-          description: Unique ID for this booking extra. Use this to update the extra.
-        productId:
-          type: string
-          description: ID of the product this extra was created from.
-        pricing:
-          type: object
-          properties:
-            amount:
-              $ref: '#/components/schemas/price'
-            totalAmount:
-              $ref: '#/components/schemas/price'
-            unit:
-              type: string
-              enum:
-              - fixed
-              - minute
-              - person
-              - item
-            quantity:
-              $ref: '#/components/schemas/decimal'
-          additionalProperties: false
-    estimated-payable-price:
-      description: Estimated price to be payable after any credits or discounts are applied upon invoicing for that item.
-      type: object
-      required:
-      - net
-      - gross
-      - currency
-      - taxes
-      additionalProperties: false
-      properties:
-        net:
-          $ref: '#/components/schemas/decimal'
-        gross:
-          $ref: '#/components/schemas/decimal'
-        currency:
-          $ref: '#/components/schemas/currency'
-        taxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax'
-    booking-extra:
-      oneOf:
-      - title: updateExistingExtra
-        type: object
-        additionalProperties: false
-        required:
-        - id
-        - quantity
-        properties:
-          id:
-            type: string
-            description: ID of an existing booking extra to update. Only quantity can be changed.
-          quantity:
-            $ref: '#/components/schemas/decimal'
-      - title: createNewExtra
-        type: object
-        additionalProperties: false
-        required:
-        - productId
-        - quantity
-        properties:
-          productId:
-            type: string
-            description: ID of a product to create a new booking extra from.
-          quantity:
-            $ref: '#/components/schemas/decimal'
-    error:
-      type: object
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-        links:
-          $ref: '#/components/schemas/links'
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    hours-minutes-object:
-      type: object
-      required:
-      - hours
-      - minutes
-      additionalProperties: false
-      properties:
-        hours:
-          type: integer
-          minimum: 0
-        minutes:
-          type: integer
-          minimum: 0
-          maximum: 59
-    pagination-links:
-      type: object
-      required:
-      - first
-      - self
-      - next
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-          description: Link to the first results page.
-        prev:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the previous results page. Null when on the first page.
-        self:
-          type: string
-          description: Link to the current results page.
-        next:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Link to the next results page. Null when on the last page.
-        last:
-          type: string
-          description: Link to the last results page.
     update-booking:
       id: update-booking.json#
       type: object
@@ -2275,10 +1474,402 @@ components:
               $ref: '#/components/schemas/related-link'
         meta:
           type: object
+    create-bookings-preview:
+      id: create-bookings-preview.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          - relationships
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              enum:
+              - bookingPreviews
+            attributes:
+              type: object
+              required:
+              - from
+              - to
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                units:
+                  type: integer
+                  minimum: 1
+                recurrence:
+                  $ref: '#/components/schemas/recurrence'
+                bookingExtras:
+                  description: Extras to be booked with this booking. They have to be linked with the associated resource.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/booking-extra'
+              additionalProperties: false
+            relationships:
+              type: object
+              required:
+              - resources
+              additionalProperties: false
+              properties:
+                resources:
+                  type: object
+                  properties:
+                    data:
+                      type: array
+                      minItems: 1
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        properties:
+                          type:
+                            type: string
+                            const: resources
+                          id:
+                            type: string
+                        additionalProperties: false
+                  additionalProperties: false
+                membership:
+                  description: When creating a preview for a network membership, pass it here so Cobot can choose the correct network membership of possibly multiple
+                  type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                        id:
+                          type: string
+                      additionalProperties: false
+                  additionalProperties: false
+                booking:
+                  description: When updating an existing booking, pass it here so Cobot can calculate the correct number of booking credits.
+                  type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - bookings
+                        id:
+                          type: string
+                      additionalProperties: false
+                  additionalProperties: false
+    booking:
+      id: booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/-booking-data'
+        included:
+          type: array
+          items:
+            type: object
+    create-booking:
+      id: create-booking.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+          - type
+          - attributes
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              pattern: bookings
+            attributes:
+              type: object
+              required:
+              - from
+              - to
+              additionalProperties: false
+              properties:
+                units:
+                  type: integer
+                  minimum: 1
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                title:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                url:
+                  description: Optional link related to the booking (e.g. meeting or video call).
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                customPrice:
+                  description: When set by an admin it overwrites price calculation and uses the set price
+                  oneOf:
+                  - $ref: '#/components/schemas/money'
+                  - type: 'null'
+                comments:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                attendeesMessage:
+                  description: Message to be sent to additional attendees (see attendees attribute).
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                recurrence:
+                  $ref: '#/components/schemas/recurrence'
+                bookingExtras:
+                  description: Extras to be booked with this booking. They have to be linked with the associated resource.
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/booking-extra'
+                attendees:
+                  description: Optional list of additional attendees for this booking.
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - email
+                    properties:
+                      email:
+                        type: string
+                        format: email
+            relationships:
+              type: object
+              required:
+              - resource
+              additionalProperties: false
+              properties:
+                resource:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - resources
+                        id:
+                          type: string
+                membership:
+                  type: object
+                  additionalProperties: false
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      additionalProperties: false
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - memberships
+                        id:
+                          type: string
+    currency:
+      description: ISO 4217 3 letter currency code.
+      type: string
+      pattern: ^[A-Z]{3}$
     decimal:
       description: A decimal number.
       type: string
       pattern: ^-?\d+(\.\d+)?$
+    -booking-extra-data:
+      id: -booking-extra-data.json
+      type: object
+      required:
+      - name
+      - pricing
+      - accountingCode
+      - description
+      - id
+      - productId
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        accountingCode:
+          type:
+          - string
+          - 'null'
+        id:
+          type: string
+          description: Unique ID for this booking extra. Use this to update the extra.
+        productId:
+          type: string
+          description: ID of the product this extra was created from.
+        pricing:
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/price'
+            totalAmount:
+              $ref: '#/components/schemas/price'
+            unit:
+              type: string
+              enum:
+              - fixed
+              - minute
+              - person
+              - item
+            quantity:
+              $ref: '#/components/schemas/decimal'
+          additionalProperties: false
+    pagination-links:
+      type: object
+      required:
+      - first
+      - self
+      - next
+      additionalProperties: false
+      properties:
+        first:
+          type: string
+          description: Link to the first results page.
+        prev:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the previous results page. Null when on the first page.
+        self:
+          type: string
+          description: Link to the current results page.
+        next:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Link to the next results page. Null when on the last page.
+        last:
+          type: string
+          description: Link to the last results page.
+    fixed-rate-count:
+      type: object
+      required:
+      - price
+      - maximumDuration
+      - count
+      properties:
+        price:
+          type: string
+        maximumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+        count:
+          type: integer
+      additionalProperties: false
+    recurrence:
+      type: object
+      required:
+      - rule
+      additionalProperties: false
+      properties:
+        rule:
+          type: object
+          additionalProperties: false
+          required:
+          - frequency
+          properties:
+            frequency:
+              enum:
+              - daily
+              - weekly
+              - monthly
+              - yearly
+            from:
+              $ref: '#/components/schemas/date'
+            until:
+              $ref: '#/components/schemas/date'
+            count:
+              type: integer
+              minimum: 1
+              maximum: 200
+              description: How many times the booking should repeat. You have to provie `count` or `until` but not both.
+            interval:
+              type: integer
+              minimum: 1
+              default: 1
+            weekdays:
+              $ref: '#/components/schemas/recurrence-weekdays'
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    hours-minutes-object:
+      type: object
+      required:
+      - hours
+      - minutes
+      additionalProperties: false
+      properties:
+        hours:
+          type: integer
+          minimum: 0
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 59
+    linkage:
+      description: The "type" and "id" of a linked entity.
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      additionalProperties: false
     recurring-bookings:
       id: recurring-bookings.json#
       type: object
@@ -2308,19 +1899,428 @@ components:
           type: array
           items:
             type: object
-    booking:
-      id: booking.json#
+    booking-extra:
+      oneOf:
+      - title: updateExistingExtra
+        type: object
+        additionalProperties: false
+        required:
+        - id
+        - quantity
+        properties:
+          id:
+            type: string
+            description: ID of an existing booking extra to update. Only quantity can be changed.
+          quantity:
+            $ref: '#/components/schemas/decimal'
+      - title: createNewExtra
+        type: object
+        additionalProperties: false
+        required:
+        - productId
+        - quantity
+        properties:
+          productId:
+            type: string
+            description: ID of a product to create a new booking extra from.
+          quantity:
+            $ref: '#/components/schemas/decimal'
+    tax:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        rate:
+          $ref: '#/components/schemas/decimal'
+        amount:
+          $ref: '#/components/schemas/decimal'
+    price:
+      description: Price including net/gross value and all taxes.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    recurrence-2:
+      type: object
+      required:
+      - rule
+      additionalProperties: false
+      properties:
+        rule:
+          type: object
+          additionalProperties: false
+          required:
+          - frequency
+          - from
+          - until
+          - interval
+          - count
+          - weekdays
+          properties:
+            frequency:
+              enum:
+              - daily
+              - weekly
+              - monthly
+              - yearly
+            from:
+              $ref: '#/components/schemas/date'
+            until:
+              oneOf:
+              - $ref: '#/components/schemas/date'
+              - type: 'null'
+            interval:
+              type: integer
+              minimum: 1
+            count:
+              oneOf:
+              - type: integer
+                minimum: 1
+              - type: 'null'
+            weekdays:
+              $ref: '#/components/schemas/recurrence-weekdays'
+    related-link:
+      type: object
+      required:
+      - links
+      additionalProperties: false
+      properties:
+        links:
+          type: object
+          required:
+          - related
+          additionalProperties: false
+          properties:
+            related:
+              type: string
+              format: uri-reference
+    -booking-data:
+      id: -booking-data.json
+      type: object
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        attributes:
+          type: object
+          required:
+          - from
+          - to
+          - canUpdate
+          - cancellationPeriod
+          - units
+          additionalProperties: false
+          properties:
+            name:
+              description: Name of the membership the booking belongs to if any.
+              oneOf:
+              - type: string
+              - type: 'null'
+            title:
+              oneOf:
+              - type: string
+              - type: 'null'
+            url:
+              description: Optional link related to the booking (e.g. meeting or video call).
+              oneOf:
+              - type: string
+              - type: 'null'
+            comments:
+              oneOf:
+              - type: string
+              - type: 'null'
+            attendeesMessage:
+              description: Message sent to additional attendees.
+              oneOf:
+              - type: string
+              - type: 'null'
+            hasCustomPrice:
+              description: Indicates that the booking has a fixed price set that does not change with the resource or duration
+              type: boolean
+            price:
+              $ref: '#/components/schemas/price'
+            estimatedPayablePrice:
+              $ref: '#/components/schemas/estimated-payable-price'
+            recurrence:
+              $ref: '#/components/schemas/recurrence-2'
+            recurringId:
+              type: string
+              description: Only present if booking is part of a recurring booking. All recurring bookings created together have the same recurring id.
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+            units:
+              type: integer
+              description: Number of units booked of the resource
+            canUpdate:
+              description: Whether the current user is allowed to make changes to this booking.
+              type: boolean
+            cancellationPeriod:
+              description: This limits how many hours in advance of a booking's start time it can still be edited or canceled by members.
+              type: number
+            bookingCredits:
+              type: object
+              description: The estimated amount of booking credits used, split into time and amount based credits.
+              properties:
+                estimatedMinutesUsed:
+                  type: integer
+                estimatedAmountUsed:
+                  $ref: '#/components/schemas/price'
+              additionalProperties: false
+            bookingPasses:
+              type: object
+              properties:
+                estimatedMinutesUsed:
+                  type: integer
+                  description: No. of booking passes minutes used.
+              additionalProperties: false
+            bookingExtras:
+              type: array
+              description: Extras booked with this booking.
+              items:
+                $ref: '#/components/schemas/-booking-extra-data'
+            attendees:
+              type: array
+              description: Attendees of this booking.
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    format: email
+        relationships:
+          type: object
+          required:
+          - resource
+          - space
+          - externalBooking
+          additionalProperties: false
+          properties:
+            membership:
+              oneOf:
+              - $ref: '#/components/schemas/relationship-linkage'
+              - type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: 'null'
+            space:
+              $ref: '#/components/schemas/relationship-linkage'
+            resource:
+              $ref: '#/components/schemas/relationship-linkage'
+            event:
+              $ref: '#/components/schemas/relationship-linkage'
+            externalBooking:
+              $ref: '#/components/schemas/optional-relationship-linkage'
+            recurringBookings:
+              $ref: '#/components/schemas/related-link'
+            followingRecurringBookings:
+              $ref: '#/components/schemas/related-link'
+        meta:
+          type: object
+    optional-relationship-linkage:
       type: object
       required:
       - data
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/-booking-data'
+          oneOf:
+          - $ref: '#/components/schemas/linkage'
+          - type: 'null'
+    money:
+      type: object
+      required:
+      - net
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+    recurrence-weekdays:
+      description: 'Only when frequency is weekly: Allows to repeat a booking on multiple weekdays. 1 is Monday, 7 is Sunday.'
+      oneOf:
+      - type: array
+        items:
+          type: integer
+          minimum: 1
+          maximum: 7
+      - type: 'null'
+    relationship-linkage:
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/linkage'
+    estimated-payable-price:
+      description: Estimated price to be payable after any credits or discounts are applied upon invoicing for that item.
+      type: object
+      required:
+      - net
+      - gross
+      - currency
+      - taxes
+      additionalProperties: false
+      properties:
+        net:
+          $ref: '#/components/schemas/decimal'
+        gross:
+          $ref: '#/components/schemas/decimal'
+        currency:
+          $ref: '#/components/schemas/currency'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax'
+    link:
+      description: 'A link **MUST** be represented as either: a string containing the link''s URL or a link object.'
+      oneOf:
+      - description: A string containing the link's URL.
+        type: string
+        format: uri-reference
+      - type: object
+        required:
+        - href
+        properties:
+          href:
+            description: A string containing the link's URL.
+            type: string
+            format: uri-reference
+          meta:
+            $ref: '#/components/schemas/meta'
+    failure:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+          uniqueItems: true
+        meta:
+          $ref: '#/components/schemas/meta'
+        jsonapi:
+          $ref: '#/components/schemas/jsonapi'
+        links:
+          $ref: '#/components/schemas/links'
+      additionalProperties: false
+    booking-previews:
+      id: booking-previews.json#
+      type: object
+      required:
+      - data
+      additionalProperties: false
+      properties:
+        meta:
+          type: object
+          additionalProperties: false
+          properties:
+            totalPages:
+              type: number
+            currentPage:
+              type: number
+            totalBookings:
+              type: number
+            totalPrice:
+              type: string
+        links:
+          $ref: '#/components/schemas/pagination-links'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/-booking-preview-data'
         included:
           type: array
           items:
             type: object
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    resource-discount:
+      type: object
+      required:
+      - pricePerHour
+      - minimumDuration
+      additionalProperties: false
+      properties:
+        pricePerHour:
+          $ref: '#/components/schemas/price'
+        minimumDuration:
+          $ref: '#/components/schemas/hours-minutes-object'
+    error:
+      type: object
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        meta:
+          $ref: '#/components/schemas/meta'
+      additionalProperties: false
+    date:
+      description: A date in the form YYYY-MM-DD.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
   securitySchemes:
     OpenId:
       type: openIdConnect

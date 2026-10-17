@@ -97,10 +97,6 @@ paths:
                       detail: The code has expired..
 components:
   schemas:
-    meta:
-      description: Non-standard meta-information that can not be represented as an attribute or relationship.
-      type: object
-      additionalProperties: true
     discount-code:
       id: discount-code.json#
       type: object
@@ -126,51 +122,6 @@ components:
             format: uri-reference
           meta:
             $ref: '#/components/schemas/meta'
-    jsonapi:
-      description: An object describing the server's implementation
-      type: object
-      properties:
-        version:
-          type: string
-        meta:
-          $ref: '#/components/schemas/meta'
-      additionalProperties: false
-    links:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/link'
-    -discount-code-data:
-      id: -discount-code-data.json
-      type: object
-      required:
-      - id
-      - type
-      - attributes
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - discountCodes
-        attributes:
-          type: object
-          required:
-          - name
-          - unit
-          - value
-          additionalProperties: false
-          properties:
-            name:
-              type: string
-            unit:
-              type: string
-              enum:
-              - percentage
-              - amount
-            value:
-              type: string
     failure:
       type: object
       required:
@@ -187,6 +138,19 @@ components:
           $ref: '#/components/schemas/jsonapi'
         links:
           $ref: '#/components/schemas/links'
+      additionalProperties: false
+    links:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+    jsonapi:
+      description: An object describing the server's implementation
+      type: object
+      properties:
+        version:
+          type: string
+        meta:
+          $ref: '#/components/schemas/meta'
       additionalProperties: false
     error:
       type: object
@@ -220,6 +184,42 @@ components:
         meta:
           $ref: '#/components/schemas/meta'
       additionalProperties: false
+    -discount-code-data:
+      id: -discount-code-data.json
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - discountCodes
+        attributes:
+          type: object
+          required:
+          - name
+          - unit
+          - value
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+            unit:
+              type: string
+              enum:
+              - percentage
+              - amount
+            value:
+              type: string
+    meta:
+      description: Non-standard meta-information that can not be represented as an attribute or relationship.
+      type: object
+      additionalProperties: true
   securitySchemes:
     OpenId:
       type: openIdConnect
