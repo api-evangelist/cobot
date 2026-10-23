@@ -333,3 +333,9 @@ components:
             write_space_payment_method: Update a space's payment method used to pay for the space's Cobot subscription.
             write_space_subscriptions: Change a space's subscription. Only trusted clients can request this scope. Contact support.
             write_terms_approvals: Approve different kinds of terms as a member.
+x-provenance:
+  method: harvested
+  publisher: Cobot
+  source: https://dev.cobot.me/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
